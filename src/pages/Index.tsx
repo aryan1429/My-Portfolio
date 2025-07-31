@@ -17,7 +17,7 @@ const Index = () => {
   const achievements = [
     { title: "Video Editing Projects Completed", count: "100+", icon: "🎯" },
     { title: "Content Creation Experience", count: "3+ Years", icon: "📅" },
-    { title: "Won 5+ Hackathons(Web Dev Competetion)", count: "98%", icon: "⭐" },
+    { title: "Won Multiple Hackathons(Web Dev Competetion)", count: "5+", icon: "⭐" },
     { title: "Experienced in running YT channels", count: "3+", icon: "📱" }
   ];
 

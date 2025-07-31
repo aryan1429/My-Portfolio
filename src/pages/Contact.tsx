@@ -27,34 +27,63 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission - Replace with actual backend integration
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
+    try {
+      const response = await fetch('http://localhost:5001/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-      setFormData({ name: '', email: '', message: '' });
+
+      if (response.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you soon.",
+        });
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        const data = await response.json();
+        toast({
+          title: "Error",
+          description: data.error || "Failed to send message.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   const socialLinks = [
     {
-      name: 'YouTube',
+      name: 'YouTube 1',
       icon: Youtube,
-      url: '#',
+      url: 'https://www.youtube.com/channel/UCI9AbEEqmdTg7chkgEZn3LQ',
+      color: 'hover:text-red-500'
+    },
+    {
+      name: 'YouTube 2',
+      icon: Youtube,
+      url: 'https://www.youtube.com/channel/UCSNHR0ANWTojOWDlMDQEucw',
       color: 'hover:text-red-500'
     },
     {
       name: 'Instagram', 
       icon: Instagram,
-      url: '#',
+      url: 'https://www.instagram.com/aryan_alej_ali?igsh=MTJ2Z2lpYjBidWJreA==',
       color: 'hover:text-pink-500'
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
-      url: '#',
+      url: 'https://www.linkedin.com/in/aryan-aligeti-099ab825b/',
       color: 'hover:text-blue-500'
     }
   ];
@@ -131,7 +160,7 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleInputChange}
                     className="bg-muted border-border focus:ring-primary resize-none"
-                    placeholder="Tell me about your project or how I can help you..."
+                    placeholder="Express your feelings for me"
                   />
                 </div>
 
@@ -172,7 +201,7 @@ const Contact = () => {
                       href="mailto:your.email@gmail.com" 
                       className="text-primary hover:text-primary-glow transition-colors"
                     >
-                      your.email@gmail.com
+                      aryanaligetibusiness@gmail.com
                     </a>
                   </div>
                 </div>
@@ -195,6 +224,8 @@ const Contact = () => {
                       <a
                         key={social.name}
                         href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className={`flex items-center gap-3 p-4 bg-muted rounded-lg transition-all duration-300 hover:bg-muted/80 ${social.color} group`}
                       >
                         <Icon className="h-5 w-5 transition-transform group-hover:scale-110" />
