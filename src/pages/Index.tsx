@@ -6,19 +6,19 @@ import profileHero from '@/assets/profile-pic.jpeg';
 
 const Index = () => {
   const skills = [
-    { name: "DaVinci Resolve", level: "Expert", icon: "🎬" },
-    { name: "Adobe After Effects", level: "Advanced", icon: "✨" },
-    { name: "Adobe Photoshop", level: "Advanced", icon: "🖼️" },
+    { name: "Adobe After Effects", level: "Advanced", icon: "🎬" },
+    { name: "Davinci Resolve", level: "Intermediate", icon: "✨" },
+    { name: "Content Creation Script Writing", level: "Expert", icon: "🖼️" },
     { name: "YouTube Content Creation", level: "Expert", icon: "📺" },
-    { name: "Color Grading", level: "Advanced", icon: "🎨" },
-    { name: "Motion Graphics", level: "Intermediate", icon: "🌟" }
+    { name: "Front-End Developiing", level: "Intermediate", icon: "🎨" },
+   //{ name: "", level: "Intermediate", icon: "🌟" }
   ];
 
   const achievements = [
     { title: "Video Editing Projects Completed", count: "100+", icon: "🎯" },
     { title: "Content Creation Experience", count: "3+ Years", icon: "📅" },
-    { title: "Client Satisfaction Rate", count: "98%", icon: "⭐" },
-    { title: "Social Media Reach", count: "10K+", icon: "📱" }
+    { title: "Won 5+ Hackathons(Web Dev Competetion)", count: "98%", icon: "⭐" },
+    { title: "Experienced in running YT channels", count: "3+", icon: "📱" }
   ];
 
   const scrollToSection = (sectionId: string) => {
