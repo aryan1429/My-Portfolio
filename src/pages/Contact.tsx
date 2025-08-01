@@ -65,7 +65,7 @@ const Contact = () => {
     {
       name: 'YouTube 1',
       icon: Youtube,
-      url: 'https://www.youtube.com/channel/UCI9AbEEqmdTg7chkgEZn3LQ',
+      url: 'https://www.youtube.com/channel/UCqJLSH1DtEDUdJmJz1mk8gQ',
       color: 'hover:text-red-500'
     },
     {
