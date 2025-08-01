@@ -102,10 +102,12 @@ const TechProjects = () => {
           <p className="text-muted-foreground mb-6">
             Check out my GitHub for additional projects and contributions.
           </p>
-          <Button variant="default" size="lg" className="shadow-glow">
-            <Github className="h-5 w-5 mr-2" />
-            View GitHub Profile
-          </Button>
+          <a href="https://github.com/aryan1429" target="_blank" rel="noopener noreferrer">
+            <Button variant="default" size="lg" className="shadow-glow">
+              <Github className="h-5 w-5 mr-2" />
+              View GitHub Profile
+            </Button>
+          </a>
         </div>
       </div>
     </div>
