@@ -7,7 +7,9 @@ import Wolverine from '@/assets/WolverineFinal.mp4' ;
 import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png' ;
 import moon_thumbnail from '@/assets/moon_thumbnail.png' ;
 import ironman_edit from '@/assets/Ironman-edit.mp4' ;
-import ironman_thumbnail from '@/assets/Ironman.jpg'
+import ironman_thumbnail from '@/assets/Ironman.jpg' ;
+import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg' ;
+import spiderman_edit from '@/assets/spiderman_edit.mp4' ;
 
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -40,6 +42,13 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: ironman_thumbnail,
       videoUrl: ironman_edit
+    },
+    {
+      id: 4,
+      title: "Spiderman Edit",
+      category: "edits",
+      thumbnail: spiderman_thumbnail,
+      videoUrl: spiderman_edit
     },
   ];
 
