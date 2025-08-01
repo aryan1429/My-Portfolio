@@ -97,8 +97,7 @@ const Contact = () => {
             Let's Work Together
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Ready to bring your vision to life? Whether it's video editing, content creation, 
-            or a technical project, I'm here to help create something amazing.
+            Contact me if you want to any video editor or any content creation collaboration.
           </p>
         </div>
 
