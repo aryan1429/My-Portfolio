@@ -1,17 +1,19 @@
 import { Github, ExternalLink, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import expense from '@/assets/expense.png';
+import ironman from '@/assets/Ironman.jpg';
 
 const TechProjects = () => {
   const projects = [
     {
       id: 1,
-      title: "Project Name 1",
-      description: "Add your project description here. This is a placeholder for your technical project.",
-      technologies: ["React", "TypeScript", "Tailwind"],
-      githubUrl: "#",
-      liveUrl: "#",
-      image: null
+      title: "Expense Tracker",
+      description: "This is a full-stack personal expense tracker built with the MERN (MongoDB, Express, React, Node.js) stack. It allows users to add, view, and delete their daily expenses, which are then visualized in a chart to show spending by category.",
+      technologies: ["React", "MongoDb", "Express","Node.js"],
+      githubUrl: "https://github.com/aryan1429/Expense_tracker.git",
+      liveUrl: "https://expense-tracker-sigma-green.vercel.app/",
+      image: expense
     },
     {
       id: 2,
@@ -56,8 +58,16 @@ const TechProjects = () => {
               style={{ animationDelay: `${index * 200}ms` }}
             >
               <CardHeader>
-                <div className="w-full h-48 bg-muted rounded-lg mb-4 flex items-center justify-center">
-                  <Code className="h-16 w-16 text-primary" />
+                <div className="w-full h-48 bg-muted rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                  {project.image ? (
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Code className="h-16 w-16 text-primary" />
+                  )}
                 </div>
                 <CardTitle className="text-xl group-hover:text-primary transition-colors">
                   {project.title}
@@ -82,14 +92,28 @@ const TechProjects = () => {
 
                 {/* Actions */}
                 <div className="flex gap-3">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <Github className="h-4 w-4 mr-2" />
-                    Code
-                  </Button>
-                  <Button variant="default" size="sm" className="flex-1">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Live Demo
-                  </Button>
+                  <a 
+                    href={project.githubUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex-1"
+                  >
+                    <Button variant="outline" size="sm" className="w-full">
+                      <Github className="h-4 w-4 mr-2" />
+                      Code
+                    </Button>
+                  </a>
+                  <a 
+                    href={project.liveUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex-1"
+                  >
+                    <Button variant="default" size="sm" className="w-full">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Live Demo
+                    </Button>
+                  </a>
                 </div>
               </CardContent>
             </Card>

@@ -10,6 +10,8 @@ import ironman_edit from '@/assets/Ironman-edit.mp4' ;
 import ironman_thumbnail from '@/assets/Ironman.jpg' ;
 import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg' ;
 import spiderman_edit from '@/assets/spiderman_edit.mp4' ;
+import salesman from '@/assets/Salesman2.mp4' ;
+import salesman_thumbnail from '@/assets/salesman2.avif' ;
 
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -49,6 +51,13 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: spiderman_thumbnail,
       videoUrl: spiderman_edit
+    },
+    {
+      id: 5,
+      title: "Salesman Edit",
+      category: "edits",
+      thumbnail: salesman_thumbnail,
+      videoUrl: salesman
     },
   ];
 

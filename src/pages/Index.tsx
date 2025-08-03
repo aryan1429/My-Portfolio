@@ -10,7 +10,7 @@ const Index = () => {
     { name: "Davinci Resolve", level: "Intermediate", icon: "✨" },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🖼️" },
     { name: "YouTube Content Creation", level: "Expert", icon: "📺" },
-    { name: "Front-End Developiing", level: "Intermediate", icon: "🎨" },
+    { name: "Front-End Development", level: "Intermediate", icon: "🎨" },
    //{ name: "", level: "Intermediate", icon: "🌟" }
   ];
 
