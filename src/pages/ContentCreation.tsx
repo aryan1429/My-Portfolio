@@ -2,15 +2,18 @@ import { useState } from 'react';
 import { Play, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import MoonFinal from '@/assets/MoonFinal.mp4';
-import Wolverine from '@/assets/WolverineFinal.mp4' ;
+
+// Temporarily using placeholder URLs while videos are being migrated to Cloudinary
+// TODO: Replace with actual Cloudinary URLs after migration
+const MoonFinal = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/moon-final";
+const Wolverine = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/wolverine-final";
 import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png' ;
 import moon_thumbnail from '@/assets/moon_thumbnail.png' ;
-import ironman_edit from '@/assets/Ironman-edit.mp4' ;
+const ironman_edit = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/ironman-edit";
 import ironman_thumbnail from '@/assets/Ironman.jpg' ;
 import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg' ;
-import spiderman_edit from '@/assets/spiderman_edit.mp4' ;
-import salesman from '@/assets/Salesman2.mp4' ;
+const spiderman_edit = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/spiderman-edit";
+const salesman = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/salesman-story";
 import salesman_thumbnail from '@/assets/salesman2.avif' ;
 
 const ContentCreation = () => {
