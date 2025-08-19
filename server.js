@@ -1,13 +1,30 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import nodemailer from 'nodemailer';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve static files from uploads directory (for backward compatibility)
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'media', 'uploads')));
+
+// API Routes
+import apiRoutes from './server/api.js';
+app.use('/api', apiRoutes);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
