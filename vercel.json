@@ -9,12 +9,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "redirects": [
-    {
-      "source": "https://www.aryanaligeti.dev/(.*)",
-      "destination": "https://aryanaligeti.dev/$1",
-      "permanent": true
-    }
   ]
 }
