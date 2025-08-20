@@ -1,13 +1,11 @@
 // Portfolio data service for React frontend
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '' // Use relative URLs in production
-  : 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 class PortfolioService {
   async fetchData(endpoint) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api${endpoint}`);
+      const response = await fetch(`${API_BASE_URL}${endpoint}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -86,7 +84,7 @@ class PortfolioService {
   // Contact form
   async sendContactMessage(data) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/contact`, {
+      const response = await fetch(`${API_BASE_URL}/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
