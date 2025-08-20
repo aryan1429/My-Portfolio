@@ -17,6 +17,7 @@
 - **Environment**: `Node`
 - **Region**: Choose the closest to your users
 - **Branch**: `master` (or your main branch)
+- **Root Directory**: `/` (leave blank or use `/` - this is the repository root)
 - **Build Command**: `./render-build.sh`
 - **Start Command**: `node server.js`
 
@@ -48,5 +49,11 @@ Update your Vercel deployment's environment variables:
 
 ## Testing
 Once deployed, test your API endpoints:
-- Health check: `https://your-service-name.onrender.com/api/health`
-- Contact form: `https://your-service-name.onrender.com/api/contact`
+- Health check: `https://portfolio-backend-o1o3.onrender.com/api/health`
+- Contact form: `https://portfolio-backend-o1o3.onrender.com/api/contact`
+
+## Your Deployed Backend URL
+Your backend is now live at: `https://portfolio-backend-o1o3.onrender.com`
+
+Make sure to update your Vercel frontend environment variables:
+- Set `VITE_API_URL` to: `https://portfolio-backend-o1o3.onrender.com/api`
