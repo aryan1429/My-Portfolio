@@ -1,5 +1,11 @@
 import express from 'express';
-import nodemailer from 'nodemailer';
+iconst transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER || process.env.VITE_EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});odemailer from 'nodemailer';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -21,6 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve static files from uploads directory (for backward compatibility)
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'media', 'uploads')));
+
+// Health check endpoint for Render
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Server is running' });
+});
 
 // API Routes
 import apiRoutes from './server/api.js';
