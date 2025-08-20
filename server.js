@@ -1,11 +1,5 @@
 import express from 'express';
-iconst transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER || process.env.VITE_EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});odemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -40,7 +34,7 @@ app.use('/api', apiRoutes);
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
+    user: process.env.EMAIL_USER || process.env.VITE_EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
