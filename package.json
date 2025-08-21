@@ -18,8 +18,7 @@
     "gcp:build": "gcloud builds submit",
     "gcp:logs": "gcloud app logs tail -s default",
     "gcp:logs:cloud-run": "gcloud run services logs read portfolio --region us-central1",
-    "gcp:setup": "npm install @google-cloud/storage @google-cloud/firestore @google-cloud/logging && npm run gcp:migrate",
-    "test:gcp": "node test-gcp-services.js"
+    "gcp:setup": "npm install @google-cloud/storage @google-cloud/firestore @google-cloud/logging && npm run gcp:migrate"
   },
   "dependencies": {
     "@google-cloud/firestore": "^7.11.3",
