@@ -6,7 +6,10 @@ import path from "path";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 8081, // Use port 8081 since 8080 is taken by backend
+    hmr: {
+      port: 8081, // Use the same port for HMR
+    },
   },
   plugins: [
     react(),

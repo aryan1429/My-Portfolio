@@ -3,17 +3,16 @@ import { Play, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Temporarily using placeholder URLs while videos are being migrated to Cloudinary
-// TODO: Replace with actual Cloudinary URLs after migration
-const MoonFinal = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/moon-final";
-const Wolverine = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/wolverine-final";
+// Video URLs with local fallbacks for videos that couldn't be uploaded to Cloudinary
+const MoonFinal = "/media/projects/MoonFinal.mp4"; // Fallback to local
+const Wolverine = "/media/projects/WolverineFinal.mp4"; // Fallback to local
 import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png' ;
 import moon_thumbnail from '@/assets/moon_thumbnail.png' ;
-const ironman_edit = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/ironman-edit";
+const ironman_edit = "https://res.cloudinary.com/dwol4czfp/video/upload/v1755673343/portfolio/ironman-edit.mp4"; // Successfully uploaded
 import ironman_thumbnail from '@/assets/Ironman.jpg' ;
 import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg' ;
-const spiderman_edit = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/spiderman-edit";
-const salesman = "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/salesman-story";
+const spiderman_edit = "/media/projects/Spiderman_edit.mp4"; // Fallback to local
+const salesman = "/media/projects/Salesman2.mp4"; // Fallback to local
 import salesman_thumbnail from '@/assets/salesman2.avif' ;
 
 const ContentCreation = () => {
