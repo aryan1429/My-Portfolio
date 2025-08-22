@@ -1,6 +1,6 @@
 // Cloud Media Service - supports AWS S3 and Azure Blob Storage
 interface CloudMediaConfig {
-  provider: 'aws' | 'azure';
+  provider: 'aws' | 'azure' | 'gcp';
   baseUrl: string;
   bucket?: string; // for AWS
   container?: string; // for Azure
@@ -57,30 +57,22 @@ class CloudMediaService {
 }
 
 // AWS S3 Configuration (Free tier: 5GB storage, 20K GET requests/month)
-const awsConfig: CloudMediaConfig = {
-  provider: 'aws',
-  baseUrl: 'https://YOUR_BUCKET_NAME.s3.YOUR_REGION.amazonaws.com',
-  bucket: 'my-portfolio-media'
+// GCP Storage Configuration
+const gcpConfig: CloudMediaConfig = {
+  provider: 'gcp',
+  baseUrl: `https://storage.googleapis.com/${process.env.GCP_BUCKET_NAME || 'my-portfolio-69'}`
 };
 
-// Azure Blob Storage Configuration (Free tier: 5GB storage, lots of requests)
-const azureConfig: CloudMediaConfig = {
-  provider: 'azure',
-  baseUrl: 'https://YOUR_STORAGE_ACCOUNT.blob.core.windows.net/portfolio-media',
-  container: 'portfolio-media'
-};
-
-// Create service instance based on your choice
-// Change this to azureConfig if you prefer Azure
-export const cloudMediaService = new CloudMediaService(awsConfig);
+// Create service instance for GCP
+export const cloudMediaService = new CloudMediaService(gcpConfig);
 
 // Video asset mappings
 export const videoAssets = {
-  ironman: 'ironman-edit.mp4',
-  moon: 'moon-final.mp4',
-  spiderman: 'spiderman-edit.mp4',
-  wolverine: 'wolverine-final.mp4',
-  salesman: 'salesman-story.mp4'
+  ironman: 'Ironman-edit.mp4',
+  moon: 'MoonFinal.mp4',
+  spiderman: 'Spiderman_edit.mp4',
+  wolverine: 'WolverineFinal.mp4',
+  salesman: 'Salesman2.mp4'
 };
 
 // Image asset mappings
