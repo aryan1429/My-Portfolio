@@ -34,3 +34,4 @@ dist-ssr
 src/assets/*.mp4
 public/media/**/*.mp4
 .vercel
+node-mailer-project-467613-33455f25e5c6.json
