@@ -50,25 +50,25 @@ const Contact = () => {
     {
       name: 'YouTube 1',
       icon: Youtube,
-      url: 'https://www.youtube.com/channel/UCqJLSH1DtEDUdJmJz1mk8gQ',
+      url: '#',
       color: 'hover:text-red-500'
     },
     {
       name: 'YouTube 2',
       icon: Youtube,
-      url: 'https://www.youtube.com/channel/UCSNHR0ANWTojOWDlMDQEucw',
+      url: '#',
       color: 'hover:text-red-500'
     },
     {
       name: 'Instagram', 
       icon: Instagram,
-      url: 'https://www.instagram.com/aryan_alej_ali?igsh=MTJ2Z2lpYjBidWJreA==',
+      url: '#',
       color: 'hover:text-pink-500'
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
-      url: 'https://www.linkedin.com/in/aryan-aligeti-099ab825b/',
+      url: '#',
       color: 'hover:text-blue-500'
     }
   ];
