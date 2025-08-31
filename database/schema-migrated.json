@@ -11,10 +11,10 @@
         "WebGL"
       ],
       "media": {
-        "thumbnail": "https://res.cloudinary.com/dwol4czfp/image/upload/q_auto,f_auto/portfolio/ironman-hero",
-        "video": "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/ironman-edit",
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/ironman-hero.jpg",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/ironman-edit.mp4",
         "images": [
-          "https://res.cloudinary.com/dwol4czfp/image/upload/q_auto,f_auto/portfolio/ironman-hero"
+          "https://storage.googleapis.com/your-bucket/portfolio/ironman-hero.jpg"
         ]
       },
       "featured": true,
@@ -31,9 +31,9 @@
         "WebGL",
         "JavaScript"
       ],
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/dwol4czfp/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/moon-thumbnail",
-        "video": "https://res.cloudinary.com/dwol4czfp/video/upload/q_auto,f_auto/portfolio/moon-final",
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/moon-thumbnail.png",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/moon-final.mp4",
         "images": []
       },
       "featured": true,
@@ -50,11 +50,11 @@
         "Node.js",
         "MongoDB"
       ],
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/dwol4czfp/image/upload/q_auto,f_auto/portfolio/expense-app",
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/expense-app.jpg",
         "video": "",
         "images": [
-          "https://res.cloudinary.com/dwol4czfp/image/upload/q_auto,f_auto/portfolio/expense-app"
+          "https://storage.googleapis.com/your-bucket/portfolio/expense-app.jpg"
         ]
       },
       "featured": false,

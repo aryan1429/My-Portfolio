@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { cloudinaryService } from '@/services/cloudinaryService';
+import gcpStorageService from '@/services/gcpStorageService';
 
 interface VideoPlayerProps {
-  publicId: string;
+  // accept either a GCS object path (e.g. 'folder/file.mp4') or an absolute URL
+  objectPath: string;
   title: string;
   thumbnail?: string;
   width?: number;
@@ -15,7 +16,7 @@ interface VideoPlayerProps {
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
-  publicId,
+  objectPath,
   title,
   thumbnail,
   width = 800,
@@ -29,19 +30,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  // Generate optimized video URL
-  const videoUrl = cloudinaryService.generateVideoUrl(publicId, {
-    quality: 'auto',
-    format: 'auto',
-    width,
-    height
-  });
-
-  // Generate thumbnail if not provided
-  const thumbnailUrl = thumbnail || cloudinaryService.generateVideoThumbnail(publicId, {
-    width,
-    height
-  });
+  // Generate GCS or absolute video URL
+  const videoUrl = gcpStorageService.generateVideoUrl(objectPath);
+  const thumbnailUrl = thumbnail || gcpStorageService.generateImageUrl(objectPath.replace(/\.[^.]+$/, '') + '.jpg');
 
   const handleLoadStart = () => {
     setIsLoading(true);
@@ -102,7 +93,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 };
 
 interface OptimizedImageProps {
-  publicId: string;
+  // accept either a GCS object path or an absolute URL
+  objectPath: string;
   alt: string;
   width?: number;
   height?: number;
@@ -114,7 +106,7 @@ interface OptimizedImageProps {
 }
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
-  publicId,
+  objectPath,
   alt,
   width,
   height,
@@ -127,13 +119,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const imageUrl = cloudinaryService.generateImageUrl(publicId, {
-    quality,
-    format,
-    width,
-    height,
-    crop
-  });
+  const imageUrl = gcpStorageService.generateImageUrl(objectPath);
 
   const handleLoad = () => {
     setIsLoading(false);

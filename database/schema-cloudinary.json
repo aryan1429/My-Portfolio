@@ -7,9 +7,9 @@
       "category": "tech",
       "technologies": ["React", "Three.js", "WebGL"],
       "media": {
-        "thumbnail": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/ironman-thumbnail",
-        "video": "https://res.cloudinary.com/your-cloud-name/video/upload/q_auto,f_auto/portfolio/ironman-edit",
-        "images": ["https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto/portfolio/ironman-hero"]
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/ironman-thumbnail.jpg",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/ironman-edit.mp4",
+        "images": ["https://storage.googleapis.com/your-bucket/portfolio/ironman-hero.jpg"]
       },
       "featured": true,
       "createdAt": "2024-01-15T00:00:00Z",
@@ -21,9 +21,9 @@
       "description": "3D recreation of the Apollo moon landing using modern web technologies",
       "category": "tech",
       "technologies": ["Three.js", "WebGL", "JavaScript"],
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/moon-thumbnail",
-        "video": "https://res.cloudinary.com/your-cloud-name/video/upload/q_auto,f_auto/portfolio/moon-final",
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/moon-thumbnail.png",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/moon-final.mp4",
         "images": []
       },
       "featured": true,
@@ -36,10 +36,10 @@
       "description": "A comprehensive expense tracking application with data visualization",
       "category": "tech",
       "technologies": ["React", "Chart.js", "Node.js"],
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/expense-thumbnail",
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/expense-thumbnail.png",
         "video": "",
-        "images": ["https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto/portfolio/expense-app"]
+        "images": ["https://storage.googleapis.com/your-bucket/portfolio/expense-app.jpg"]
       },
       "featured": false,
       "createdAt": "2024-03-01T00:00:00Z",
@@ -52,9 +52,9 @@
       "title": "Spider-Man Edit",
       "description": "Action-packed Spider-Man video edit with advanced effects",
       "category": "video-editing",
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/spiderman-thumbnail",
-        "video": "https://res.cloudinary.com/your-cloud-name/video/upload/q_auto,f_auto/portfolio/spiderman-edit",
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/spiderman-thumbnail.jpg",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/spiderman-edit.mp4",
         "images": []
       },
       "featured": true,
@@ -66,9 +66,9 @@
       "title": "Wolverine Final Cut",
       "description": "Epic Wolverine compilation with cinematic effects",
       "category": "video-editing",
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/wolverine-thumbnail",
-        "video": "https://res.cloudinary.com/your-cloud-name/video/upload/q_auto,f_auto/portfolio/wolverine-final",
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/wolverine-thumbnail.png",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/wolverine-final.mp4",
         "images": []
       },
       "featured": true,
@@ -80,10 +80,10 @@
       "title": "Salesman Story",
       "description": "Professional promotional video with storytelling elements",
       "category": "content-creation",
-      "media": {
-        "thumbnail": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_400,h_300,c_fill/portfolio/salesman-thumbnail",
-        "video": "https://res.cloudinary.com/your-cloud-name/video/upload/q_auto,f_auto/portfolio/salesman-story",
-        "images": ["https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto/portfolio/salesman-behind-scenes"]
+        "media": {
+        "thumbnail": "https://storage.googleapis.com/your-bucket/portfolio/salesman-thumbnail.avif",
+        "video": "https://storage.googleapis.com/your-bucket/portfolio/salesman-story.mp4",
+        "images": ["https://storage.googleapis.com/your-bucket/portfolio/salesman-behind-scenes.jpg"]
       },
       "featured": false,
       "createdAt": "2024-03-05T00:00:00Z",
@@ -96,8 +96,8 @@
     "bio": "Passionate video editor and content creator with 3+ years of experience in creating engaging visual content for YouTube and social media platforms.",
     "email": "aryan@example.com",
     "location": "Your Location",
-    "profilePic": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto,w_300,h_300,c_fill/portfolio/profile-pic",
-    "heroImage": "https://res.cloudinary.com/your-cloud-name/image/upload/q_auto,f_auto/portfolio/profile-hero"
+  "profilePic": "https://storage.googleapis.com/your-bucket/portfolio/profile-pic.jpg",
+  "heroImage": "https://storage.googleapis.com/your-bucket/portfolio/profile-hero.jpg"
   },
   "settings": {
     "siteTitle": "Aryan Visuals Studio",

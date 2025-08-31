@@ -1,34 +1,9 @@
-/**
- * Google Firestore Service
- * Handles database operations with Google Firestore
- */
+// Client-side stub for Firestore service.
+// Use the server implementation at /server/services/firestoreService.server.js when running on Node.
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-class FirestoreService {
-  constructor() {
-    this.db = null;
-    this.initialized = false;
-  }
-
-  async initialize() {
-    if (this.initialized) return;
-    
-    try {
-      const { Firestore } = await import('@google-cloud/firestore');
-      this.db = new Firestore({
-        projectId: process.env.GCP_PROJECT_ID,
-        keyFilename: process.env.GCP_KEY_FILE
-      });
-      this.initialized = true;
-      console.log('✅ Firestore Service initialized');
-    } catch (error) {
-      console.error('❌ Failed to initialize Firestore:', error);
-      throw error;
-    }
-  }
+export default function firestoreStub() {
+  throw new Error('Server-only Firestore service. Import from /server/services/firestoreService.server.js on the server.');
+}
 
   // Portfolio Profile Operations
   async getProfile() {
@@ -315,4 +290,4 @@ class FirestoreService {
   }
 }
 
-export default FirestoreService;
+

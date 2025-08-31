@@ -14,8 +14,8 @@ import multer from 'multer';
 // Import GCP services (only if available)
 let GCPStorageService, FirestoreService;
 try {
-  const gcpStorage = await import('./src/services/gcpStorageService.js');
-  const firestore = await import('./src/services/firestoreService.js');
+  const gcpStorage = await import('./server/services/gcpStorageService.server.js');
+  const firestore = await import('./server/services/firestoreService.server.js');
   GCPStorageService = gcpStorage.default;
   FirestoreService = firestore.default;
 } catch (error) {

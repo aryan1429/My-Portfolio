@@ -3,12 +3,13 @@ import { Play, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Video URLs with local fallbacks for videos that couldn't be uploaded to Cloudinary
+// Video URLs with local fallbacks — migrated from Cloudinary to Google Cloud Storage
 const MoonFinal = "/media/projects/MoonFinal.mp4"; // Fallback to local
 const Wolverine = "/media/projects/WolverineFinal.mp4"; // Fallback to local
 import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png' ;
 import moon_thumbnail from '@/assets/moon_thumbnail.png' ;
-const ironman_edit = "https://res.cloudinary.com/dwol4czfp/video/upload/v1755673343/portfolio/ironman-edit.mp4"; // Successfully uploaded
+import gcpStorageService from '@/services/gcpStorageService';
+const ironman_edit = gcpStorageService.generateVideoUrl('portfolio/ironman-edit.mp4'); // GCS public object
 import ironman_thumbnail from '@/assets/Ironman.jpg' ;
 import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg' ;
 const spiderman_edit = "/media/projects/Spiderman_edit.mp4"; // Fallback to local

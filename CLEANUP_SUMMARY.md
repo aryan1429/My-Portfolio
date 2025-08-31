@@ -5,8 +5,6 @@
 ### Migration Files (Other Platforms)
 - ❌ `migrate-to-aws.js`
 - ❌ `migrate-to-azure.js`
-- ❌ `migrate-to-cloudinary.js`
-- ❌ `migrate-to-cloudinary.cjs`
 - ❌ `migrate.js`
 
 ### Deployment Configurations (Other Platforms)

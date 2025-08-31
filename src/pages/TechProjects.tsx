@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import expense from '@/assets/expense.png';
 import ironman from '@/assets/Ironman.jpg';
+import textmood from '@/assets/textmood.png';
 
 const TechProjects = () => {
   const projects = [
@@ -17,12 +18,12 @@ const TechProjects = () => {
     },
     {
       id: 2,
-      title: "Project Name 2", 
-      description: "Another placeholder project description. Replace with your actual project details.",
-      technologies: ["Node.js", "Express", "MongoDB"],
-      githubUrl: "#",
-      liveUrl: "#",
-      image: null
+      title: "TextMoodDJ", 
+      description: "ABuilt an AI-powered mood-based music assistant that detects emotions from text or voice and recommends matching songs/memes using sentiment analysis, speech-to-text, and YouTube Music API, with a dynamic React UI for an engaging experience.",
+      technologies: ["Python","Flask/FastAPI","React.js","Tailwind CSS","Hugging Face Transformers","YouTube Music API (ytmusicapi)","Redis / SQLite",],
+      githubUrl: "https://github.com/aryan1429/Text-MoodDJ.git",
+      liveUrl: "https://github.com/aryan1429/Text-MoodDJ.git",
+      image: textmood
     },
     {
       id: 3,
