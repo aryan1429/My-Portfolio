@@ -21,8 +21,8 @@ const TechProjects = () => {
       title: "TextMoodDJ", 
       description: "ABuilt an AI-powered mood-based music assistant that detects emotions from text or voice and recommends matching songs/memes using sentiment analysis, speech-to-text, and YouTube Music API, with a dynamic React UI for an engaging experience.",
       technologies: ["Python","Flask/FastAPI","React.js","Tailwind CSS","Hugging Face Transformers","YouTube Music API (ytmusicapi)","Redis / SQLite",],
-      githubUrl: "https://github.com/aryan1429/Text-MoodDJ.g",
-      liveUrl: "https://github.com/aryan1429/Text-MoodDJ.git",
+      githubUrl: "https://github.com/aryan1429/Text-MoodDJ.git",
+      liveUrl: "https://text-mood-dj.vercel.app/",
       image: textmood
     },
     {
