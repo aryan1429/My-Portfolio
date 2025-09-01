@@ -21,6 +21,12 @@
 - ❌ `ISSUES_FIXED.md`
 - ❌ `GCP_MIGRATION_COMPLETE.md`
 
+### Cloudinary Legacy Files (Removed)
+- ❌ `src/services/cloudinaryService.ts`
+- ❌ `src/components/CloudinaryMedia.tsx` (renamed to `MediaComponents.tsx`)
+- ❌ `database/schema-cloudinary.json`
+- ❌ `src/services/cloudMediaService.ts`
+
 ### Backend Directories (Redundant)
 - ❌ `backend/` directory
 - ❌ `routes/` directory

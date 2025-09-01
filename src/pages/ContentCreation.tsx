@@ -3,18 +3,20 @@ import { Play, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Video URLs with local fallbacks — migrated from Cloudinary to Google Cloud Storage
-const MoonFinal = "/media/projects/MoonFinal.mp4"; // Fallback to local
-const Wolverine = "/media/projects/WolverineFinal.mp4"; // Fallback to local
-import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png' ;
-import moon_thumbnail from '@/assets/moon_thumbnail.png' ;
+// Video URLs using Google Cloud Storage
 import gcpStorageService from '@/services/gcpStorageService';
-const ironman_edit = gcpStorageService.generateVideoUrl('portfolio/ironman-edit.mp4'); // GCS public object
-import ironman_thumbnail from '@/assets/Ironman.jpg' ;
-import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg' ;
-const spiderman_edit = "/media/projects/Spiderman_edit.mp4"; // Fallback to local
-const salesman = "/media/projects/Salesman2.mp4"; // Fallback to local
-import salesman_thumbnail from '@/assets/salesman2.avif' ;
+const MoonFinal = gcpStorageService.generateVideoUrl('projects/MoonFinal.mp4');
+const Wolverine = gcpStorageService.generateVideoUrl('projects/WolverineFinal.mp4');
+const ironman_edit = gcpStorageService.generateVideoUrl('projects/Ironman-edit.mp4');
+const spiderman_edit = gcpStorageService.generateVideoUrl('projects/Spiderman_edit.mp4');
+const salesman = gcpStorageService.generateVideoUrl('projects/Salesman2.mp4');
+
+// Import thumbnails
+import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png';
+import moon_thumbnail from '@/assets/moon_thumbnail.png';
+import ironman_thumbnail from '@/assets/Ironman.jpg';
+import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg';
+import salesman_thumbnail from '@/assets/salesman2.avif';
 
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -70,13 +72,13 @@ const ContentCreation = () => {
 
   // --- NEW STATE FOR VIDEO THUMBNAIL LOGIC ---
   const [videoStates, setVideoStates] = useState(
-    videos.map(() => ({ playing: false, hovered: false, ended: false }))
+    videos.map(() => ({ playing: false, hovered: false, ended: false, loading: false }))
   );
 
   const handlePlay = (idx: number) => {
     setVideoStates(states =>
       states.map((s, i) =>
-        i === idx ? { ...s, playing: true, ended: false } : s
+        i === idx ? { ...s, playing: true, ended: false, loading: true } : s
       )
     );
   };
@@ -84,7 +86,7 @@ const ContentCreation = () => {
   const handlePause = (idx: number) => {
     setVideoStates(states =>
       states.map((s, i) =>
-        i === idx ? { ...s, playing: false } : s
+        i === idx ? { ...s, playing: false, loading: false } : s
       )
     );
   };
@@ -92,7 +94,57 @@ const ContentCreation = () => {
   const handleEnded = (idx: number) => {
     setVideoStates(states =>
       states.map((s, i) =>
-        i === idx ? { ...s, playing: false, ended: true } : s
+        i === idx ? { ...s, playing: false, ended: true, loading: false } : s
+      )
+    );
+  };
+
+  const handleCanPlay = (idx: number) => {
+    setVideoStates(states =>
+      states.map((s, i) =>
+        i === idx ? { ...s, loading: false } : s
+      )
+    );
+  };
+
+  const handleError = (idx: number) => {
+    setVideoStates(states =>
+      states.map((s, i) =>
+        i === idx ? { ...s, playing: false, loading: false } : s
+      )
+    );
+    console.error(`Error loading video ${idx}: ${videos[idx].title}`);
+    // Could add retry logic here
+  };
+
+  const handleLoadStart = (idx: number) => {
+    setVideoStates(states =>
+      states.map((s, i) =>
+        i === idx ? { ...s, loading: true } : s
+      )
+    );
+  };
+
+  const handleLoadedData = (idx: number) => {
+    setVideoStates(states =>
+      states.map((s, i) =>
+        i === idx ? { ...s, loading: false } : s
+      )
+    );
+  };
+
+  const handleWaiting = (idx: number) => {
+    setVideoStates(states =>
+      states.map((s, i) =>
+        i === idx ? { ...s, loading: true } : s
+      )
+    );
+  };
+
+  const handlePlaying = (idx: number) => {
+    setVideoStates(states =>
+      states.map((s, i) =>
+        i === idx ? { ...s, loading: false } : s
       )
     );
   };
@@ -169,8 +221,29 @@ const ContentCreation = () => {
                       onPlay={() => handlePlay(originalIdx)}
                       onPause={() => handlePause(originalIdx)}
                       onEnded={() => handleEnded(originalIdx)}
-                      style={{ backgroundColor: "black" }}
-                    />
+                      onCanPlay={() => handleCanPlay(originalIdx)}
+                      onError={() => handleError(originalIdx)}
+                      onLoadStart={() => handleLoadStart(originalIdx)}
+                      onLoadedData={() => handleLoadedData(originalIdx)}
+                      onWaiting={() => handleWaiting(originalIdx)}
+                      onPlaying={() => handlePlaying(originalIdx)}
+                      preload="metadata"
+                      playsInline
+                      muted
+                      style={{ 
+                        backgroundColor: "black",
+                        imageRendering: "auto",
+                        willChange: "transform"
+                      }}
+                    >
+                      <source src={video.videoUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    {state.loading && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                      </div>
+                    )}
                     {showThumbnail && (
                       <>
                         <img

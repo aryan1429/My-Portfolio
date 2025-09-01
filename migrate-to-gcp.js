@@ -67,25 +67,73 @@ class GCPMigration {
     }
   }
 
+  async makeBucketPublic() {
+    try {
+      console.log('🔓 Making bucket public...');
+      
+      // Grant public read access to all objects in the bucket
+      await this.bucket.iam.setPolicy({
+        bindings: [
+          {
+            role: 'roles/storage.objectViewer',
+            members: ['allUsers']
+          }
+        ]
+      });
+      
+      console.log('✅ Bucket is now public');
+    } catch (error) {
+      console.error('❌ Failed to make bucket public:', error.message);
+      throw error;
+    }
+  }
+
   async uploadMediaFiles() {
     const mediaDir = path.join(__dirname, 'public', 'media');
     const uploadPromises = [];
 
-    console.log('📁 Uploading media files to Cloud Storage...');
+    console.log('📁 Uploading media files to Cloud Storage with optimization...');
 
     const uploadFile = async (filePath, fileName) => {
       try {
         const destination = fileName.replace(/\\/g, '/'); // Convert Windows paths
         
+        // Determine content type based on file extension
+        const ext = path.extname(fileName).toLowerCase();
+        let contentType = 'application/octet-stream';
+        let cacheControl = 'public, max-age=86400'; // 24 hours cache
+        
+        if (ext === '.mp4') {
+          contentType = 'video/mp4';
+          // Shorter cache for videos to allow updates
+          cacheControl = 'public, max-age=3600'; // 1 hour cache
+        } else if (ext === '.jpg' || ext === '.jpeg') {
+          contentType = 'image/jpeg';
+        } else if (ext === '.png') {
+          contentType = 'image/png';
+        } else if (ext === '.gif') {
+          contentType = 'image/gif';
+        } else if (ext === '.avif') {
+          contentType = 'image/avif';
+        }
+        
         await this.bucket.upload(filePath, {
           destination,
           metadata: {
-            cacheControl: 'public, max-age=86400', // 24 hours cache
+            contentType: contentType,
+            cacheControl: cacheControl,
+            metadata: {
+              'original-filename': path.basename(fileName),
+              'upload-date': new Date().toISOString(),
+              'optimized-for-web': 'true'
+            }
           },
-          public: true
+          // Force overwrite existing files
+          resumable: false,
+          predefinedAcl: 'publicRead'
         });
 
-        console.log(`✅ Uploaded: ${destination}`);
+        console.log(`✅ Uploaded: ${destination} (${contentType})`);
         return `https://storage.googleapis.com/${BUCKET_NAME}/${destination}`;
       } catch (error) {
         console.error(`❌ Error uploading ${fileName}:`, error.message);
@@ -328,6 +376,7 @@ CMD ["npm", "start"]
       console.log('🚀 Starting Google Cloud Platform migration...\n');
       
       await this.createBucket();
+      await this.makeBucketPublic();
       await this.uploadMediaFiles();
       await this.setupFirestore();
       await this.generateEnvironmentFile();

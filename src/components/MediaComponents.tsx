@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import gcpStorageService from '@/services/gcpStorageService';
 
 interface VideoPlayerProps {
-  // accept either a GCS object path (e.g. 'folder/file.mp4') or an absolute URL
+  // Accept either a Google Cloud Storage object path (e.g. 'folder/file.mp4') or an absolute URL
   objectPath: string;
   title: string;
   thumbnail?: string;
@@ -30,7 +30,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  // Generate GCS or absolute video URL
+  // Generate Google Cloud Storage or absolute video URL
   const videoUrl = gcpStorageService.generateVideoUrl(objectPath);
   const thumbnailUrl = thumbnail || gcpStorageService.generateImageUrl(objectPath.replace(/\.[^.]+$/, '') + '.jpg');
 
@@ -93,7 +93,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 };
 
 interface OptimizedImageProps {
-  // accept either a GCS object path or an absolute URL
+  // Accept either a Google Cloud Storage object path or an absolute URL
   objectPath: string;
   alt: string;
   width?: number;
