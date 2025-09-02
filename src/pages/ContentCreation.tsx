@@ -114,7 +114,6 @@ const ContentCreation = () => {
       )
     );
     console.error(`Error loading video ${idx}: ${videos[idx].title}`);
-    // Could add retry logic here
   };
 
   const handleLoadStart = (idx: number) => {
@@ -230,6 +229,7 @@ const ContentCreation = () => {
                       preload="metadata"
                       playsInline
                       muted
+                      crossOrigin="anonymous"
                       style={{ 
                         backgroundColor: "black",
                         imageRendering: "auto",

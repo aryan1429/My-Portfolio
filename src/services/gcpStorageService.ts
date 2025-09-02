@@ -5,7 +5,7 @@
 
 const BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env.VITE_GCP_STORAGE_BASE_URL)
   || (typeof process !== 'undefined' && process.env.REACT_APP_GCP_STORAGE_BASE_URL)
-  || '';
+  || 'https://storage.googleapis.com/my-portfolio-69'; // Explicit fallback
 
 function ensureTrailingSlash(s: string) {
   if (!s) return '';
@@ -17,7 +17,8 @@ export function generateVideoUrl(objectPath: string): string {
   // If objectPath already looks like an absolute URL, return as-is
   if (/^https?:\/\//i.test(objectPath)) return objectPath;
   const base = ensureTrailingSlash(BASE);
-  return base ? `${base}${objectPath}` : `/${objectPath}`; // fallback to local-relative path
+  const finalUrl = base ? `${base}${objectPath}` : `/${objectPath}`; // fallback to local-relative path
+  return finalUrl;
 }
 
 export function generateImageUrl(objectPath: string): string {
