@@ -29,19 +29,38 @@ Google App Engine / Cloud Run
 ## 📁 Project Structure
 
 ```
-├── src/
-│   ├── components/     # React components
-│   ├── pages/         # Page components
-│   ├── services/      # GCP services
-│   ├── hooks/         # Custom hooks
-│   └── lib/           # Utilities
-├── public/
-│   └── media/         # Static media files
-├── database/          # Database schemas
-├── app.yaml          # App Engine config
-├── cloudbuild.yaml   # CI/CD config
-├── Dockerfile        # Container config
-└── server.js         # Express server
+portfolio/
+├── config/              # Deployment & build configurations
+│   ├── app.yaml        # Google App Engine config
+│   ├── cloudbuild.yaml # Cloud Build config
+│   ├── Dockerfile      # Docker container config
+│   └── vercel.json     # Vercel deployment config
+├── docs/               # Documentation
+│   └── README.md       # Project documentation
+├── env/                # Environment configurations
+│   ├── .env.example    # Environment template
+│   └── .env.gcp        # GCP-specific config
+├── secrets/            # Sensitive configuration files
+│   └── *-service-account.json
+├── server/             # Backend/server-side code
+│   ├── database/       # Database schemas & services
+│   ├── services/       # Server-side business logic
+│   └── *.js            # Server entry points
+├── src/                # Frontend source code
+│   ├── components/     # Reusable UI components
+│   │   └── ui/         # Base UI components (shadcn/ui)
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Utility libraries
+│   ├── pages/          # Page components
+│   ├── services/       # Client-side services
+│   ├── utils/          # Utility functions
+│   └── *.tsx           # Main app files
+├── public/             # Static assets
+│   ├── fonts/          # Font files
+│   ├── media/          # Images, videos, etc.
+│   └── *.json          # Web app manifests
+├── scripts/            # Build & utility scripts
+└── package.json        # Dependencies & scripts
 ```
 
 ## 🚀 Quick Start
