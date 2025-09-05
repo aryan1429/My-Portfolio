@@ -33,12 +33,15 @@
     <meta property="twitter:description" content="Professional portfolio showcasing video editing, content creation, and technical projects by Aryan Aligeti." />
     <meta property="twitter:image" content="/profile-hero.jpg" />
 
-    <!-- Preload critical resources -->
+    <!-- Preload critical resources with proper priorities -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- DNS prefetch for video CDN -->
     <link rel="dns-prefetch" href="//storage.googleapis.com" />
+    
+    <!-- Security headers for development -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com; style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' data: blob: https:; connect-src 'self' https:; frame-src 'self';">
     
     <!-- Theme -->
     <meta name="theme-color" content="#6366f1" />
