@@ -1,6 +1,36 @@
 import { useState, useEffect } from 'react';
 import apiService from '../services/api';
 
+// Type definitions for portfolio data
+interface ProjectData {
+  name: string;
+  description: string;
+  category: string;
+  technologies: string[];
+  featured?: boolean;
+  [key: string]: unknown;
+}
+
+interface ContentCreationData {
+  title: string;
+  description: string;
+  category: string;
+  featured?: boolean;
+  [key: string]: unknown;
+}
+
+interface ProfileData {
+  name: string;
+  title: string;
+  description: string;
+  skills: string[];
+  [key: string]: unknown;
+}
+
+interface FileUploads {
+  [key: string]: File[];
+}
+
 export const useProjects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +53,7 @@ export const useProjects = () => {
     fetchProjects();
   }, []);
 
-  const createProject = async (projectData: any, files?: any) => {
+  const createProject = async (projectData: ProjectData, files?: FileUploads) => {
     try {
       const newProject = await apiService.createProject(projectData, files);
       setProjects(prev => [...prev, newProject]);
@@ -34,7 +64,7 @@ export const useProjects = () => {
     }
   };
 
-  const updateProject = async (id: string, projectData: any, files?: any) => {
+  const updateProject = async (id: string, projectData: ProjectData, files?: FileUploads) => {
     try {
       const updatedProject = await apiService.updateProject(id, projectData, files);
       setProjects(prev => prev.map(p => p.id === id ? updatedProject : p));
@@ -113,7 +143,7 @@ export const useContentCreation = () => {
     fetchContent();
   }, []);
 
-  const createContent = async (contentData: any, files?: any) => {
+  const createContent = async (contentData: ContentCreationData, files?: FileUploads) => {
     try {
       const newContent = await apiService.createContentCreation(contentData, files);
       setContent(prev => [...prev, newContent]);
@@ -124,7 +154,7 @@ export const useContentCreation = () => {
     }
   };
 
-  const updateContent = async (id: string, contentData: any, files?: any) => {
+  const updateContent = async (id: string, contentData: ContentCreationData, files?: FileUploads) => {
     try {
       const updatedContent = await apiService.updateContentCreation(id, contentData, files);
       setContent(prev => prev.map(c => c.id === id ? updatedContent : c));
@@ -203,7 +233,7 @@ export const useProfile = () => {
     fetchProfile();
   }, []);
 
-  const updateProfile = async (profileData: any, files?: any) => {
+  const updateProfile = async (profileData: ProfileData, files?: FileUploads) => {
     try {
       const updatedProfile = await apiService.updateProfile(profileData, files);
       setProfile(updatedProfile);

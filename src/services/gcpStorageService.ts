@@ -3,7 +3,7 @@
 // https://storage.googleapis.com/<bucket-name>/
 // Configure via Vite env: VITE_GCP_STORAGE_BASE_URL
 
-const BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env.VITE_GCP_STORAGE_BASE_URL)
+const BASE = (typeof import.meta !== 'undefined' && (import.meta as ImportMeta & { env?: Record<string, string> }).env && (import.meta as ImportMeta & { env?: Record<string, string> }).env.VITE_GCP_STORAGE_BASE_URL)
   || (typeof process !== 'undefined' && process.env.REACT_APP_GCP_STORAGE_BASE_URL)
   || 'https://storage.googleapis.com/my-portfolio-69'; // Explicit fallback
 

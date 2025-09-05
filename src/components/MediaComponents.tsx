@@ -2,6 +2,21 @@ import React, { useState } from 'react';
 import gcpStorageService from '@/services/gcpStorageService';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+// Type definitions for network connection
+interface NetworkInformation {
+  effectiveType?: '2g' | '3g' | '4g' | 'slow-2g';
+  downlink?: number;
+  saveData?: boolean;
+}
+
+interface NetworkConnection extends NetworkInformation, EventTarget {}
+
+declare global {
+  interface Navigator {
+    connection?: NetworkConnection;
+  }
+}
+
 interface VideoPlayerProps {
   // Accept either a Google Cloud Storage object path (e.g. 'folder/file.mp4') or an absolute URL
   objectPath: string;
@@ -30,7 +45,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [networkInfo, setNetworkInfo] = useState<any>(null);
+  const [networkInfo, setNetworkInfo] = useState<NetworkInformation | null>(null);
   const isMobile = useIsMobile();
 
   // Generate Google Cloud Storage or absolute video URL
@@ -39,9 +54,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Detect network conditions for mobile optimization
   React.useEffect(() => {
-    if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
-      setNetworkInfo(connection);
+    if ('connection' in navigator && navigator.connection) {
+      const connection = navigator.connection;
+      setNetworkInfo({
+        effectiveType: connection.effectiveType,
+        downlink: connection.downlink,
+        saveData: connection.saveData
+      });
     }
   }, []);
 

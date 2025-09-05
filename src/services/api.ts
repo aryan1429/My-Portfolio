@@ -1,3 +1,29 @@
+// Type definitions for API data structures
+interface ProjectData {
+  name: string;
+  description: string;
+  category: string;
+  technologies: string[];
+  featured?: boolean;
+  [key: string]: unknown;
+}
+
+interface ContentCreationData {
+  title: string;
+  description: string;
+  category: string;
+  featured?: boolean;
+  [key: string]: unknown;
+}
+
+interface ProfileData {
+  name: string;
+  title: string;
+  description: string;
+  skills: string[];
+  [key: string]: unknown;
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 class PortfolioApiService {
@@ -55,7 +81,7 @@ class PortfolioApiService {
     return this.makeRequest(`/projects/${id}`);
   }
 
-  async createProject(projectData: any, files?: { [key: string]: File[] }) {
+  async createProject(projectData: ProjectData, files?: { [key: string]: File[] }) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(projectData));
 
@@ -70,7 +96,7 @@ class PortfolioApiService {
     return this.makeFileRequest('/projects', formData);
   }
 
-  async updateProject(id: string, projectData: any, files?: { [key: string]: File[] }) {
+  async updateProject(id: string, projectData: ProjectData, files?: { [key: string]: File[] }) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(projectData));
 
@@ -112,7 +138,7 @@ class PortfolioApiService {
     return this.makeRequest(`/content/${id}`);
   }
 
-  async createContentCreation(contentData: any, files?: { [key: string]: File[] }) {
+  async createContentCreation(contentData: ContentCreationData, files?: { [key: string]: File[] }) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(contentData));
 
@@ -127,7 +153,7 @@ class PortfolioApiService {
     return this.makeFileRequest('/content', formData);
   }
 
-  async updateContentCreation(id: string, contentData: any, files?: { [key: string]: File[] }) {
+  async updateContentCreation(id: string, contentData: ContentCreationData, files?: { [key: string]: File[] }) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(contentData));
 
@@ -161,7 +187,7 @@ class PortfolioApiService {
     return this.makeRequest('/profile');
   }
 
-  async updateProfile(profileData: any, files?: { [key: string]: File[] }) {
+  async updateProfile(profileData: ProfileData, files?: { [key: string]: File[] }) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(profileData));
 

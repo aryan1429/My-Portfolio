@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Pause, Volume2, VolumeX, Loader2 } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -31,6 +31,11 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
   const [hasError, setHasError] = useState(false);
   const [showPoster, setShowPoster] = useState(true);
   const [loadAttempted, setLoadAttempted] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [wasPlayingBeforePause, setWasPlayingBeforePause] = useState(false);
+  const [showDoubleTapHint, setShowDoubleTapHint] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -73,6 +78,39 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
+    };
+  }, [loadAttempted]);
+
+  // Fullscreen detection
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isCurrentlyFullscreen = document.fullscreenElement === videoRef.current;
+      setIsFullscreen(isCurrentlyFullscreen);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  // Video time tracking for resume functionality
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(video.currentTime);
+    };
+
+    const handleLoadedMetadata = () => {
+      setDuration(video.duration);
+    };
+
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
   }, [loadAttempted]);
 
@@ -129,17 +167,25 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
     setIsPlaying(true);
     setShowPoster(false);
     setIsLoading(false);
+    setWasPlayingBeforePause(true);
     onPlay?.();
   }, [onPlay]);
 
   const handleVideoPause = useCallback(() => {
     setIsPlaying(false);
+    setWasPlayingBeforePause(false);
+    // Show poster when paused, but only if not at the beginning
+    if (currentTime > 0.5) {
+      setShowPoster(true);
+    }
     onPause?.();
-  }, [onPause]);
+  }, [onPause, currentTime]);
 
   const handleVideoEnded = useCallback(() => {
     setIsPlaying(false);
     setShowPoster(true);
+    setWasPlayingBeforePause(false);
+    setCurrentTime(0);
   }, []);
 
   const handlePlayClick = useCallback(() => {
@@ -157,6 +203,70 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
     video.muted = !isMuted;
     setIsMuted(!isMuted);
   }, [isMuted]);
+
+  const toggleFullscreen = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      if (isFullscreen || document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await video.requestFullscreen();
+      }
+    } catch (error) {
+      console.error('Fullscreen toggle failed:', error);
+    }
+  }, [isFullscreen]);
+
+  const handlePosterClick = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      setIsLoading(true);
+      setShowPoster(false);
+      
+      // If video was paused midway, resume from that position
+      if (wasPlayingBeforePause && currentTime > 0) {
+        video.currentTime = currentTime;
+      }
+      
+      await video.play();
+    } catch (error) {
+      console.error('Play from poster failed:', error);
+      setHasError(true);
+      setShowPoster(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [wasPlayingBeforePause, currentTime]);
+
+  // Touch events for mobile interaction
+  const handleVideoClick = useCallback((e: React.MouseEvent) => {
+    // Prevent click when interacting with controls
+    if ((e.target as HTMLElement).closest('.video-controls')) return;
+    
+    // Double tap for fullscreen on mobile
+    const now = Date.now();
+    const target = e.target as HTMLElement & { lastTap?: number };
+    const lastTap = target.lastTap || 0;
+    
+    if (now - lastTap < 300) {
+      // Double tap detected
+      toggleFullscreen();
+      // Show hint for first time users
+      if (isMobile) {
+        setShowDoubleTapHint(true);
+        setTimeout(() => setShowDoubleTapHint(false), 2000);
+      }
+    } else {
+      // Single tap - toggle play/pause
+      handlePlayClick();
+    }
+    
+    target.lastTap = now;
+  }, [handlePlayClick, toggleFullscreen, isMobile]);
 
   const getPreloadStrategy = () => {
     if (shouldUseDataSaver) return 'none';
@@ -197,7 +307,7 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
       {loadAttempted && (
         <video
           ref={videoRef}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover cursor-pointer"
           poster={poster}
           muted={isMuted}
           playsInline
@@ -211,6 +321,7 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
           onError={handleError}
           onWaiting={() => setIsLoading(true)}
           onPlaying={() => setIsLoading(false)}
+          onClick={handleVideoClick}
           style={{
             backgroundColor: 'black',
             willChange: 'transform'
@@ -249,12 +360,17 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
             loading="lazy"
           />
           <button
-            onClick={handlePlayClick}
+            onClick={handlePosterClick}
             className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors z-20"
-            aria-label={`Play ${title}`}
+            aria-label={`Play ${title}${currentTime > 0 ? ` from ${Math.floor(currentTime)}s` : ''}`}
           >
             <div className="bg-black/60 rounded-full p-3 hover:bg-black/80 transition-colors">
               <Play className="h-8 w-8 text-white" />
+              {currentTime > 0 && (
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-white text-xs bg-black/60 px-2 py-1 rounded">
+                  Resume from {Math.floor(currentTime)}s
+                </div>
+              )}
             </div>
           </button>
         </div>
@@ -262,7 +378,17 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
 
       {/* Custom Controls for Mobile */}
       {isLoaded && !showPoster && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity z-30">
+        <div className="video-controls absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity z-30">
+          {/* Progress Bar */}
+          {duration > 0 && (
+            <div className="w-full bg-white/20 rounded-full h-1 mb-3">
+              <div 
+                className="bg-white rounded-full h-1 transition-all duration-300"
+                style={{ width: `${(currentTime / duration) * 100}%` }}
+              />
+            </div>
+          )}
+          
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <button
@@ -288,6 +414,27 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
                   <Volume2 className="h-4 w-4 text-white" />
                 )}
               </button>
+
+              {/* Time Display */}
+              {duration > 0 && (
+                <span className="text-white text-xs font-mono">
+                  {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={toggleFullscreen}
+                className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+              >
+                {isFullscreen ? (
+                  <Minimize2 className="h-4 w-4 text-white" />
+                ) : (
+                  <Maximize2 className="h-4 w-4 text-white" />
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -304,6 +451,22 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
       {shouldUseDataSaver && (
         <div className="absolute top-2 right-2 bg-blue-600/80 text-white text-xs px-2 py-1 rounded z-20">
           Data Saver
+        </div>
+      )}
+
+      {/* Double Tap Hint for Mobile */}
+      {showDoubleTapHint && isMobile && (
+        <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
+          <div className="bg-black/80 text-white px-4 py-2 rounded-lg text-sm animate-fade-in">
+            Double tap for fullscreen
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Indicator */}
+      {isFullscreen && (
+        <div className="absolute top-2 left-2 bg-green-600/80 text-white text-xs px-2 py-1 rounded z-20">
+          Fullscreen
         </div>
       )}
     </div>

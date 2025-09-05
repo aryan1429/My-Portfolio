@@ -8,18 +8,30 @@ interface PerformanceMetrics {
   dataUsage: number;
 }
 
+interface TrackingData {
+  startTime: number;
+  networkType: string;
+  deviceType: 'mobile' | 'desktop';
+  connectionSpeed: string;
+}
+
 export const useVideoPerformance = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [isTracking, setIsTracking] = useState(false);
 
-  const startTracking = () => {
+  const startTracking = (): TrackingData => {
     setIsTracking(true);
     const startTime = performance.now();
     
     // Get connection info
-    const connection = (navigator as any).connection;
+    const connection = (navigator as Navigator & {
+      connection?: {
+        effectiveType?: string;
+        downlink?: number;
+      };
+    }).connection;
     const networkType = connection?.effectiveType || 'unknown';
-    const deviceType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+    const deviceType: 'mobile' | 'desktop' = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
     
     return {
       startTime,
@@ -29,7 +41,7 @@ export const useVideoPerformance = () => {
     };
   };
 
-  const endTracking = (trackingData: any, dataTransferred: number = 0) => {
+  const endTracking = (trackingData: TrackingData, dataTransferred: number = 0) => {
     const endTime = performance.now();
     const loadTime = endTime - trackingData.startTime;
     
@@ -71,7 +83,15 @@ export const useConnectionMonitor = () => {
 
   useEffect(() => {
     const updateConnectionInfo = () => {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as Navigator & {
+        connection?: {
+          effectiveType?: string;
+          downlink?: number;
+          saveData?: boolean;
+          addEventListener?: (event: string, handler: () => void) => void;
+          removeEventListener?: (event: string, handler: () => void) => void;
+        };
+      }).connection;
       if (connection) {
         setConnectionInfo({
           effectiveType: connection.effectiveType || 'unknown',
@@ -90,8 +110,15 @@ export const useConnectionMonitor = () => {
 
     // Listen for connection changes
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
-      connection.addEventListener('change', updateConnectionInfo);
+      const connection = (navigator as Navigator & {
+        connection?: {
+          addEventListener?: (event: string, handler: () => void) => void;
+          removeEventListener?: (event: string, handler: () => void) => void;
+        };
+      }).connection;
+      if (connection?.addEventListener) {
+        connection.addEventListener('change', updateConnectionInfo);
+      }
     }
 
     window.addEventListener('online', handleOnline);
@@ -99,8 +126,14 @@ export const useConnectionMonitor = () => {
 
     return () => {
       if ('connection' in navigator) {
-        const connection = (navigator as any).connection;
-        connection.removeEventListener('change', updateConnectionInfo);
+        const connection = (navigator as Navigator & {
+          connection?: {
+            removeEventListener?: (event: string, handler: () => void) => void;
+          };
+        }).connection;
+        if (connection?.removeEventListener) {
+          connection.removeEventListener('change', updateConnectionInfo);
+        }
       }
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);

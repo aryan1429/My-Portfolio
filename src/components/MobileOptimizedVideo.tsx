@@ -2,6 +2,21 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize2 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+// Type definitions for network connection
+interface NetworkInformation {
+  effectiveType?: '2g' | '3g' | '4g' | 'slow-2g';
+  downlink?: number;
+  saveData?: boolean;
+}
+
+interface NetworkConnection extends NetworkInformation, EventTarget {}
+
+declare global {
+  interface Navigator {
+    connection?: NetworkConnection;
+  }
+}
+
 interface MobileOptimizedVideoProps {
   src: string;
   poster?: string;
@@ -39,23 +54,20 @@ export const MobileOptimizedVideo: React.FC<MobileOptimizedVideoProps> = ({
   const [hasError, setHasError] = useState(false);
   const [showPoster, setShowPoster] = useState(true);
   const [canPlay, setCanPlay] = useState(false);
-  const [networkInfo, setNetworkInfo] = useState<any>(null);
+  const [networkInfo, setNetworkInfo] = useState<NetworkInformation | null>(null);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const isMobile = useIsMobile();
 
   // Detect network conditions for mobile optimization
   useEffect(() => {
-    if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
-      setNetworkInfo(connection);
-      
-      const updateConnection = () => {
-        setNetworkInfo({ ...connection });
-      };
-      
-      connection.addEventListener('change', updateConnection);
-      return () => connection.removeEventListener('change', updateConnection);
+    if ('connection' in navigator && navigator.connection) {
+      const connection = navigator.connection;
+      setNetworkInfo({
+        effectiveType: connection.effectiveType,
+        downlink: connection.downlink,
+        saveData: connection.saveData
+      });
     }
   }, []);
 

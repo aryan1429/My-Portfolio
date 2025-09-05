@@ -9,16 +9,51 @@ import { Badge } from '../components/ui/badge';
 import { Trash2, Edit, Plus, Upload } from 'lucide-react';
 import apiService from '../services/api';
 
+// Type definitions for form data and items
+interface FormData {
+  title: string;
+  description: string;
+  category: string;
+  technologies: string[];
+  featured: boolean;
+  [key: string]: unknown;
+}
+
+interface FileData {
+  thumbnail: File | null;
+  video: File | null;
+  images: File[];
+  [key: string]: File | File[] | null;
+}
+
+interface ItemData {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  technologies?: string[];
+  featured?: boolean;
+  thumbnail?: string;
+  video?: string;
+  images?: string[];
+  media?: {
+    thumbnail?: string;
+    video?: string;
+    images?: string[];
+  };
+  [key: string]: unknown;
+}
+
 const AdminPanel = () => {
   const { projects, loading: projectsLoading, createProject, updateProject, deleteProject } = useProjects();
   const { content, loading: contentLoading, createContent, updateContent, deleteContent } = useContentCreation();
   const { profile, loading: profileLoading, updateProfile } = useProfile();
 
   const [activeTab, setActiveTab] = useState('projects');
-  const [editingItem, setEditingItem] = useState(null);
+  const [editingItem, setEditingItem] = useState<ItemData | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
     category: '',
@@ -26,13 +61,13 @@ const AdminPanel = () => {
     featured: false,
   });
 
-  const [files, setFiles] = useState({
+  const [files, setFiles] = useState<FileData>({
     thumbnail: null,
     video: null,
     images: [],
   });
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value,
@@ -98,7 +133,7 @@ const AdminPanel = () => {
     }
   };
 
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: ItemData) => {
     setEditingItem(item);
     setFormData({
       title: item.title || '',
@@ -124,7 +159,7 @@ const AdminPanel = () => {
     }
   };
 
-  const renderItemCard = (item: any, type: 'project' | 'content') => (
+  const renderItemCard = (item: ItemData, type: 'project' | 'content') => (
     <Card key={item.id} className="mb-4">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>

@@ -137,15 +137,33 @@
     }
     
     /* Improve touch targets */
-    button, .clickable {
+    button, 
+    .clickable {
       min-height: 44px;
       min-width: 44px;
+    }
+    
+    /* Mobile video controls */
+    .video-controls {
+      opacity: 1 !important; /* Always show controls on mobile */
+    }
+    
+    .video-controls button {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 12px;
     }
     
     /* Prevent horizontal scroll on mobile */
     .container {
       padding-left: 1rem;
       padding-right: 1rem;
+    }
+    
+    /* Touch-friendly fullscreen controls */
+    video:fullscreen + .video-controls {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.8);
     }
   }
 
@@ -170,7 +188,23 @@
   /* Improve focus indicators for accessibility */
   video:focus,
   button:focus {
-    outline: 2px solid hsl(263 70% 65%);
+    outline: 2px solid hsl(var(--primary));
     outline-offset: 2px;
+  }
+
+  /* Animation for hints and feedback */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }

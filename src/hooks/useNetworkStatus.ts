@@ -15,35 +15,56 @@ export const useNetworkStatus = () => {
     // Check if the device has a slow connection
     const checkConnection = () => {
       if ('connection' in navigator) {
-        const connection = (navigator as any).connection;
+        const connection = (navigator as Navigator & {
+          connection?: {
+            effectiveType?: '2g' | '3g' | '4g' | 'slow-2g';
+            downlink?: number;
+            saveData?: boolean;
+            rtt?: number;
+            addEventListener?: (event: string, handler: () => void) => void;
+            removeEventListener?: (event: string, handler: () => void) => void;
+          };
+        }).connection;
         
-        setNetworkInfo({
-          effectiveType: connection.effectiveType,
-          downlink: connection.downlink,
-          saveData: connection.saveData,
-          rtt: connection.rtt
-        });
+        if (connection) {
+          setNetworkInfo({
+            effectiveType: connection.effectiveType,
+            downlink: connection.downlink,
+            saveData: connection.saveData,
+            rtt: connection.rtt
+          });
 
-        // Determine if connection is slow
-        const isSlow = 
-          connection.effectiveType === '2g' || 
-          connection.effectiveType === 'slow-2g' ||
-          connection.saveData === true ||
-          (connection.downlink && connection.downlink < 1);
-        
-        setIsSlowConnection(isSlow);
+          // Determine if connection is slow
+          const isSlow = 
+            connection.effectiveType === '2g' || 
+            connection.effectiveType === 'slow-2g' ||
+            connection.saveData === true ||
+            (connection.downlink && connection.downlink < 1);
+          
+          setIsSlowConnection(isSlow);
+        }
       }
     };
 
     checkConnection();
 
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
-      connection.addEventListener('change', checkConnection);
+      const connection = (navigator as Navigator & {
+        connection?: {
+          addEventListener?: (event: string, handler: () => void) => void;
+          removeEventListener?: (event: string, handler: () => void) => void;
+        };
+      }).connection;
       
-      return () => {
-        connection.removeEventListener('change', checkConnection);
-      };
+      if (connection?.addEventListener) {
+        connection.addEventListener('change', checkConnection);
+        
+        return () => {
+          if (connection?.removeEventListener) {
+            connection.removeEventListener('change', checkConnection);
+          }
+        };
+      }
     }
   }, []);
 
