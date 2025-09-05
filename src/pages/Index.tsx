@@ -6,11 +6,12 @@ import profileHero from '@/assets/Profile-pic.jpeg';
 
 const Index = () => {
   const skills = [
+    { name: "Full-Stack Development", level: "Intermediate", icon: "🧑‍💻" },
     { name: "Adobe After Effects", level: "Advanced", icon: "🎬" },
     { name: "Davinci Resolve", level: "Intermediate", icon: "✨" },
-    { name: "Content Creation Script Writing", level: "Expert", icon: "🖼️" },
-    { name: "YouTube Content Creation", level: "Expert", icon: "📺" },
-    { name: "Front-End Development", level: "Intermediate", icon: "🎨" },
+    { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
+    { name: "YouTube Content Creation", level: "Expert", icon: "▶️" },
+    
    //{ name: "", level: "Intermediate", icon: "🌟" }
   ];
 
@@ -99,7 +100,7 @@ const Index = () => {
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Skills & Expertise</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Specialized in video editing, content creation, and Script Writing across multiple platforms.
+              Specialized in Full Stack Development, Video Editing, Content Creation, and Script Writing across multiple platforms.
             </p>
           </div>
 
