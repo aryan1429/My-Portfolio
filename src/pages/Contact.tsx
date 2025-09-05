@@ -82,7 +82,7 @@ const Contact = () => {
             Let's Work Together
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Contact me if you want to any video editor or any content creation collaboration.
+            Contact me if you want to any Full Stack Developer, Video editor or any Content Creation collaboration.
           </p>
         </div>
 
