@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Play, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useIsMobile } from '@/hooks/use-mobile';
+import LazyVideo from '@/components/LazyVideo';
+import MobileDebugPanel from '@/components/MobileDebugPanel';
 
 // Video URLs using Google Cloud Storage
 import gcpStorageService from '@/services/gcpStorageService';
@@ -20,6 +23,7 @@ import salesman_thumbnail from '@/assets/salesman2.avif';
 
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
+  const isMobile = useIsMobile();
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -193,90 +197,96 @@ const ContentCreation = () => {
           ))}
         </div>
 
-        {/* Video Grid - Vertical format optimized for Reels/Shorts */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {/* Video Grid - Mobile Optimized */}
+        <div className={`grid gap-3 ${
+          isMobile 
+            ? 'grid-cols-2 sm:grid-cols-2' 
+            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
+        }`}>
           {filteredVideos.map((video, index) => {
             const originalIdx = videos.findIndex(v => v.id === video.id);
-            const state = videoStates[originalIdx];
-
-            // Show thumbnail if: video ended OR (paused AND not hovered)
-            const showThumbnail = state.ended || (!state.playing && !state.hovered);
 
             return (
               <Card 
                 key={video.id}
-                className="bg-gradient-card border-border hover:shadow-glow transition-all duration-500 hover:-translate-y-2 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
-                style={{ animationDelay: `${index * 100}ms` }}
-                onMouseEnter={() => handleMouseEnter(originalIdx)}
-                onMouseLeave={() => handleMouseLeave(originalIdx)}
+                className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 hover:-translate-y-1 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <CardContent className="p-0 relative w-full h-full">
-                  <div className="absolute inset-0 w-full h-full">
-                    <video 
-                      src={video.videoUrl} 
-                      controls 
-                      poster={video.thumbnail || undefined}
-                      className="w-full h-full object-cover rounded-md"
-                      onPlay={() => handlePlay(originalIdx)}
-                      onPause={() => handlePause(originalIdx)}
-                      onEnded={() => handleEnded(originalIdx)}
-                      onCanPlay={() => handleCanPlay(originalIdx)}
-                      onError={() => handleError(originalIdx)}
-                      onLoadStart={() => handleLoadStart(originalIdx)}
-                      onLoadedData={() => handleLoadedData(originalIdx)}
-                      onWaiting={() => handleWaiting(originalIdx)}
-                      onPlaying={() => handlePlaying(originalIdx)}
-                      preload="metadata"
-                      playsInline
-                      muted
-                      crossOrigin="anonymous"
-                      style={{ 
-                        backgroundColor: "black",
-                        imageRendering: "auto",
-                        willChange: "transform"
-                      }}
-                    >
-                      <source src={video.videoUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                    {state.loading && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                  {isMobile ? (
+                    // Use lazy loading component for mobile devices
+                    <LazyVideo
+                      src={video.videoUrl}
+                      poster={video.thumbnail}
+                      title={video.title}
+                      className="w-full h-full"
+                      aspectRatio="vertical"
+                      onError={(error) => console.error('Video error:', error)}
+                    />
+                  ) : (
+                    // Keep existing video implementation for desktop
+                    <div className="absolute inset-0 w-full h-full">
+                      <video 
+                        src={video.videoUrl} 
+                        controls 
+                        poster={video.thumbnail || undefined}
+                        className="w-full h-full object-cover rounded-md"
+                        onPlay={() => handlePlay(originalIdx)}
+                        onPause={() => handlePause(originalIdx)}
+                        onEnded={() => handleEnded(originalIdx)}
+                        onCanPlay={() => handleCanPlay(originalIdx)}
+                        onError={() => handleError(originalIdx)}
+                        onLoadStart={() => handleLoadStart(originalIdx)}
+                        onLoadedData={() => handleLoadedData(originalIdx)}
+                        onWaiting={() => handleWaiting(originalIdx)}
+                        onPlaying={() => handlePlaying(originalIdx)}
+                        preload="metadata"
+                        playsInline
+                        muted
+                        style={{ 
+                          backgroundColor: "black",
+                          imageRendering: "auto",
+                          willChange: "transform"
+                        }}
+                      >
+                        <source src={video.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      {videoStates[originalIdx]?.loading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                        </div>
+                      )}
+                      {((videoStates[originalIdx]?.ended || (!videoStates[originalIdx]?.playing && !videoStates[originalIdx]?.hovered))) && (
+                        <>
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none"
+                            style={{ zIndex: 2, backgroundColor: "black" }}
+                          />
+                          <button
+                            className="absolute inset-0 flex items-center justify-center w-full h-full"
+                            style={{ zIndex: 3 }}
+                            onClick={() => {
+                              const videoEls = document.querySelectorAll('video');
+                              const el = videoEls[originalIdx] as HTMLVideoElement;
+                              if (el) el.play();
+                            }}
+                            tabIndex={0}
+                            aria-label="Play"
+                          >
+                            <Play className="h-12 w-12 text-white drop-shadow-lg bg-black/40 rounded-full p-2" />
+                          </button>
+                        </>
+                      )}
+                      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/70 to-transparent text-white pointer-events-none rounded-t-md">
+                        <h3 className="font-semibold text-sm mb-1 line-clamp-2">
+                          {video.title}
+                        </h3>
                       </div>
-                    )}
-                    {showThumbnail && (
-                      <>
-                        <img
-                          src={video.thumbnail}
-                          alt={video.title}
-                          className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none"
-                          style={{ zIndex: 2, backgroundColor: "black" }}
-                        />
-                        {/* Play button always visible on thumbnail */}
-                        <button
-                          className="absolute inset-0 flex items-center justify-center w-full h-full"
-                          style={{ zIndex: 3 }}
-                          onClick={() => {
-                            const videoEls = document.querySelectorAll('video');
-                            const el = videoEls[originalIdx] as HTMLVideoElement;
-                            if (el) el.play();
-                          }}
-                          tabIndex={0}
-                          aria-label="Play"
-                        >
-                          <Play className="h-12 w-12 text-white drop-shadow-lg bg-black/40 rounded-full p-2" />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                  <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/70 to-transparent text-white pointer-events-none rounded-t-md">
-                    <h3 className="font-semibold text-sm mb-1">
-                      {video.title}
-                    </h3>
-                    {/*<p className="text-xs line-clamp-2">
-                      {video.caption}
-                    </p>*/}
-                  </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             );
@@ -310,6 +320,11 @@ const ContentCreation = () => {
           </Button>
         </div>
       </div>
+
+      {/* Debug Panel for Development (only on mobile) */}
+      {isMobile && import.meta.env.DEV && (
+        <MobileDebugPanel />
+      )}
     </div>
   );
 };

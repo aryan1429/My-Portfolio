@@ -1,0 +1,25 @@
+{
+  "name": "Aryan Aligeti Portfolio",
+  "short_name": "Aryan Portfolio",
+  "description": "Video Editor & Content Creator Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/placeholder.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["portfolio", "video", "entertainment"],
+  "orientation": "portrait-primary"
+}

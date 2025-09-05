@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import gcpStorageService from '@/services/gcpStorageService';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface VideoPlayerProps {
   // Accept either a Google Cloud Storage object path (e.g. 'folder/file.mp4') or an absolute URL
@@ -29,10 +30,30 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [networkInfo, setNetworkInfo] = useState<any>(null);
+  const isMobile = useIsMobile();
 
   // Generate Google Cloud Storage or absolute video URL
   const videoUrl = gcpStorageService.generateVideoUrl(objectPath);
   const thumbnailUrl = thumbnail || gcpStorageService.generateImageUrl(objectPath.replace(/\.[^.]+$/, '') + '.jpg');
+
+  // Detect network conditions for mobile optimization
+  React.useEffect(() => {
+    if ('connection' in navigator) {
+      const connection = (navigator as any).connection;
+      setNetworkInfo(connection);
+    }
+  }, []);
+
+  // Mobile-optimized preload strategy
+  const getPreloadStrategy = () => {
+    if (!isMobile) return 'metadata';
+    
+    // On mobile, be conservative with preloading based on network
+    if (networkInfo?.effectiveType === '4g') return 'metadata';
+    if (networkInfo?.effectiveType === '3g') return 'none';
+    return 'none'; // Default to none on mobile for better performance
+  };
 
   const handleLoadStart = () => {
     setIsLoading(true);
@@ -67,6 +88,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
             <p className="text-sm text-gray-600">Loading video...</p>
+            {isMobile && networkInfo && (
+              <p className="text-xs text-gray-500 mt-1">
+                Network: {networkInfo.effectiveType || 'detecting...'}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -75,7 +101,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         width={width}
         height={height}
         controls={controls}
-        autoPlay={autoPlay}
+        autoPlay={autoPlay && !isMobile} // Disable autoplay on mobile to save data
         muted={muted}
         loop={loop}
         poster={thumbnailUrl}
@@ -83,9 +109,19 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onCanPlay={handleCanPlay}
         onError={handleError}
         className="w-full h-full object-cover"
-        preload="metadata"
+        preload={getPreloadStrategy()}
+        playsInline // Critical for iOS devices
+        crossOrigin="anonymous"
+        style={{ 
+          backgroundColor: 'black',
+          maxWidth: '100%',
+          height: 'auto'
+        }}
       >
         <source src={videoUrl} type="video/mp4" />
+        {/* Add multiple source formats for better compatibility */}
+        <source src={videoUrl.replace('.mp4', '.webm')} type="video/webm" />
+        <source src={videoUrl.replace('.mp4', '.ogv')} type="video/ogg" />
         Your browser does not support the video tag.
       </video>
     </div>

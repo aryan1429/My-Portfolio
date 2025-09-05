@@ -112,13 +112,41 @@
 }
 
 @layer base {
-  /* Removed global border application to all elements to avoid unwanted borders */
-  {
+  * {
     @apply border-border;
   } 
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Mobile video optimizations */
+  @media (max-width: 768px) {
+    video {
+      /* Prevent iOS video zoom */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      /* Improve mobile video performance */
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    
+    /* Optimize mobile grid layouts */
+    .grid {
+      gap: 0.75rem !important;
+    }
+    
+    /* Improve touch targets */
+    button, .clickable {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Prevent horizontal scroll on mobile */
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   /* Show vertical video with black bars in fullscreen, no crop/zoom */
@@ -127,5 +155,22 @@
     width: 100vw !important;
     height: 100vh !important;
     background: black !important;
+  }
+
+  /* Progressive video loading for slower connections */
+  video[data-lazy] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  video[data-lazy].loaded {
+    opacity: 1;
+  }
+
+  /* Improve focus indicators for accessibility */
+  video:focus,
+  button:focus {
+    outline: 2px solid hsl(263 70% 65%);
+    outline-offset: 2px;
   }
 }
