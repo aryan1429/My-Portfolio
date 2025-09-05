@@ -11,6 +11,28 @@ interface NetworkInformation {
 
 interface NetworkConnection extends NetworkInformation, EventTarget {}
 
+// Extend HTMLVideoElement for iOS Safari fullscreen support
+interface ExtendedHTMLVideoElement extends HTMLVideoElement {
+  webkitRequestFullscreen?: () => void;
+  webkitEnterFullscreen?: () => void;
+  webkitEnterFullScreen?: () => void;
+  webkitSupportsFullscreen?: boolean;
+  webkitDisplayingFullscreen?: boolean;
+}
+
+// Extend Document for fullscreen API compatibility
+interface ExtendedDocument extends Document {
+  webkitFullscreenElement?: Element;
+  webkitExitFullscreen?: () => void;
+  mozFullScreenElement?: Element;
+  msFullscreenElement?: Element;
+}
+
+// Extend Window for IE/Edge detection
+interface ExtendedWindow extends Window {
+  MSStream?: unknown;
+}
+
 declare global {
   interface Navigator {
     connection?: NetworkConnection;
@@ -56,8 +78,11 @@ export const MobileOptimizedVideo: React.FC<MobileOptimizedVideoProps> = ({
   const [canPlay, setCanPlay] = useState(false);
   const [networkInfo, setNetworkInfo] = useState<NetworkInformation | null>(null);
   
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<ExtendedHTMLVideoElement>(null);
   const isMobile = useIsMobile();
+
+  // Detect iOS Safari
+  const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as ExtendedWindow).MSStream;
 
   // Detect network conditions for mobile optimization
   useEffect(() => {
@@ -160,10 +185,43 @@ export const MobileOptimizedVideo: React.FC<MobileOptimizedVideoProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      video.requestFullscreen().catch(console.error);
+    const extDocument = document as ExtendedDocument;
+
+    try {
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (extDocument.webkitExitFullscreen) {
+          extDocument.webkitExitFullscreen();
+        }
+      } else {
+        // Try standard fullscreen first
+        if (video.requestFullscreen) {
+          video.requestFullscreen().catch(console.error);
+        } 
+        // iOS Safari fallback - use webkit methods
+        else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        }
+        // iOS Safari video-specific fullscreen
+        else if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        }
+        // Last resort for iOS
+        else if (video.webkitSupportsFullscreen && video.webkitEnterFullScreen) {
+          video.webkitEnterFullScreen();
+        }
+      }
+    } catch (error) {
+      console.error('Fullscreen error:', error);
+      // iOS Safari fallback
+      try {
+        if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        }
+      } catch (fallbackError) {
+        console.error('iOS fullscreen fallback failed:', fallbackError);
+      }
     }
   };
 
@@ -201,6 +259,7 @@ export const MobileOptimizedVideo: React.FC<MobileOptimizedVideoProps> = ({
         muted={isMuted}
         loop={loop}
         playsInline
+        {...(isIOSSafari && { 'webkit-playsinline': 'true' })}
         preload={getOptimalPreload()}
         onPlay={handlePlay}
         onPause={handlePause}

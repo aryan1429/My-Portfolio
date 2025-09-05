@@ -3,6 +3,28 @@ import { Play, Pause, Volume2, VolumeX, Loader2, Maximize2, Minimize2 } from 'lu
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+// Extend HTMLVideoElement for iOS Safari fullscreen support
+interface ExtendedHTMLVideoElement extends HTMLVideoElement {
+  webkitRequestFullscreen?: () => void;
+  webkitEnterFullscreen?: () => void;
+  webkitEnterFullScreen?: () => void;
+  webkitSupportsFullscreen?: boolean;
+  webkitDisplayingFullscreen?: boolean;
+}
+
+// Extend Document for fullscreen API compatibility
+interface ExtendedDocument extends Document {
+  webkitFullscreenElement?: Element;
+  webkitExitFullscreen?: () => void;
+  mozFullScreenElement?: Element;
+  msFullscreenElement?: Element;
+}
+
+// Extend Window for IE/Edge detection
+interface ExtendedWindow extends Window {
+  MSStream?: unknown;
+}
+
 interface LazyVideoProps {
   src: string;
   poster?: string;
@@ -37,12 +59,15 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
   const [wasPlayingBeforePause, setWasPlayingBeforePause] = useState(false);
   const [showDoubleTapHint, setShowDoubleTapHint] = useState(false);
 
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<ExtendedHTMLVideoElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { networkInfo, isSlowConnection, shouldUseDataSaver } = useNetworkStatus();
   const isMobile = useIsMobile();
+
+  // Detect iOS Safari
+  const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as ExtendedWindow).MSStream;
 
   const aspectRatioClasses = {
     video: 'aspect-video',
@@ -83,13 +108,53 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
 
   // Fullscreen detection
   useEffect(() => {
+    const extDocument = document as ExtendedDocument;
+    
     const handleFullscreenChange = () => {
-      const isCurrentlyFullscreen = document.fullscreenElement === videoRef.current;
+      const isCurrentlyFullscreen = document.fullscreenElement === videoRef.current ||
+        extDocument.webkitFullscreenElement === videoRef.current ||
+        extDocument.mozFullScreenElement === videoRef.current ||
+        extDocument.msFullscreenElement === videoRef.current;
       setIsFullscreen(isCurrentlyFullscreen);
     };
 
+    const handleWebkitFullscreenChange = () => {
+      const isCurrentlyFullscreen = extDocument.webkitFullscreenElement === videoRef.current;
+      setIsFullscreen(isCurrentlyFullscreen);
+    };
+
+    const handleVideoFullscreenChange = () => {
+      // iOS Safari video fullscreen detection
+      const video = videoRef.current;
+      if (video && video.webkitDisplayingFullscreen !== undefined) {
+        setIsFullscreen(video.webkitDisplayingFullscreen);
+      }
+    };
+
+    // Standard fullscreen events
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleWebkitFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+    
+    // iOS Safari video fullscreen events
+    const video = videoRef.current;
+    if (video) {
+      video.addEventListener('webkitbeginfullscreen', handleVideoFullscreenChange);
+      video.addEventListener('webkitendfullscreen', handleVideoFullscreenChange);
+    }
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleWebkitFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+      
+      if (video) {
+        video.removeEventListener('webkitbeginfullscreen', handleVideoFullscreenChange);
+        video.removeEventListener('webkitendfullscreen', handleVideoFullscreenChange);
+      }
+    };
   }, []);
 
   // Video time tracking for resume functionality
@@ -208,16 +273,55 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
+    const extDocument = document as ExtendedDocument;
+
+    // Debug logging for iOS Safari
+    if (process.env.NODE_ENV === 'development' && isIOSSafari) {
+      console.log('iOS Safari detected, available fullscreen methods:', {
+        requestFullscreen: !!video.requestFullscreen,
+        webkitRequestFullscreen: !!video.webkitRequestFullscreen,
+        webkitEnterFullscreen: !!video.webkitEnterFullscreen,
+        webkitSupportsFullscreen: !!video.webkitSupportsFullscreen
+      });
+    }
+
     try {
       if (isFullscreen || document.fullscreenElement) {
-        await document.exitFullscreen();
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (extDocument.webkitExitFullscreen) {
+          extDocument.webkitExitFullscreen();
+        }
       } else {
-        await video.requestFullscreen();
+        // Try standard fullscreen first
+        if (video.requestFullscreen) {
+          await video.requestFullscreen();
+        } 
+        // iOS Safari fallback - use webkit methods
+        else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        }
+        // iOS Safari video-specific fullscreen
+        else if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        }
+        // Last resort for iOS
+        else if (video.webkitSupportsFullscreen && video.webkitEnterFullScreen) {
+          video.webkitEnterFullScreen();
+        }
       }
     } catch (error) {
       console.error('Fullscreen toggle failed:', error);
+      // iOS Safari fallback - try webkit video fullscreen
+      try {
+        if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        }
+      } catch (fallbackError) {
+        console.error('iOS fullscreen fallback failed:', fallbackError);
+      }
     }
-  }, [isFullscreen]);
+  }, [isFullscreen, isIOSSafari]);
 
   const handlePosterClick = useCallback(async () => {
     const video = videoRef.current;
@@ -311,6 +415,7 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
           poster={poster}
           muted={isMuted}
           playsInline
+          {...(isIOSSafari && { 'webkit-playsinline': 'true' })}
           preload={getPreloadStrategy()}
           onLoadStart={handleLoadStart}
           onLoadedData={handleLoadedData}
@@ -427,7 +532,8 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
               <button
                 onClick={toggleFullscreen}
                 className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-                aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                aria-label={isFullscreen ? 'Exit fullscreen' : (isIOSSafari ? 'Enter fullscreen (iOS)' : 'Enter fullscreen')}
+                title={isIOSSafari ? 'Tap for fullscreen video player' : (isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen')}
               >
                 {isFullscreen ? (
                   <Minimize2 className="h-4 w-4 text-white" />
