@@ -27,6 +27,15 @@ const Index = () => {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const downloadResume = () => {
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Aryan_Aligeti_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-hero">
       {/* Hero Section */}
@@ -65,7 +74,7 @@ const Index = () => {
                   Let's Work Together
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg">
+                <Button variant="outline" size="lg" onClick={downloadResume}>
                   <Download className="mr-2 h-5 w-5" />
                   Download Resume
                 </Button>
