@@ -12,6 +12,7 @@ A modern, responsive portfolio built with React, TypeScript, and deployed on Goo
 - **Email**: Nodemailer with Gmail integration
 - **Responsive Design**: Mobile-first approach
 - **SEO Optimized**: Meta tags and performance optimized
+- **Custom Favicon**: Generated from profile picture
 
 ## 🏗️ Architecture
 
@@ -104,6 +105,7 @@ npm run gcp:deploy
 - `npm run dev:server` - Start backend server with nodemon
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
+- `npm run favicon` - Generate favicon from profile picture
 
 ### Google Cloud Platform
 - `npm run gcp:setup` - Complete GCP setup
