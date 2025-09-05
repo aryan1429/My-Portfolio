@@ -52,8 +52,7 @@ const Index = () => {
                 </span>
               </h1>
               <p className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed">
-                A video editor and content creator passionate about Storytelling and innovation.
-                Bringing creative visions to life through cinematic editing and engaging content.
+                A Full Stack Developer, video editor, and content creator passionate about storytelling and innovation. Bringing creative visions to life through cinematic editing, engaging content, and impactful digital solutions
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">

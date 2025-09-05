@@ -293,22 +293,6 @@ const ContentCreation = () => {
           })}
         </div>
 
-        {/* Upload Placeholder */}
-        <div className="mt-16 text-center animate-fade-in">
-          <Card className="bg-gradient-card border-border border-dashed max-w-md mx-auto p-8">
-            <CardContent className="text-center">
-              <Play className="h-16 w-16 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Add Your Videos</h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                Upload your vertical videos, reels, and content here
-              </p>
-              <Button variant="outline">
-                Upload Video
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Call to Action */}
         <div className="text-center mt-16 animate-fade-in">
           <h3 className="text-2xl font-bold mb-4">Ready to create something amazing?</h3>
