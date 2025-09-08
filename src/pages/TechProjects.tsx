@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import expense from '@/assets/expense.png';
 import ironman from '@/assets/Ironman.jpg';
 import textmood from '@/assets/textmood.png';
+import sarcastic from '@/assets/mrsarcastic.png';
 
 const TechProjects = () => {
   const projects = [
@@ -27,12 +28,12 @@ const TechProjects = () => {
     },
     {
       id: 3,
-      title: "Project Name 3",
-      description: "Third placeholder project. Add your real project information here.",
-      technologies: ["Python", "Django", "PostgreSQL"],
-      githubUrl: "#",
+      title: "Mr Sarcastic",
+      description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Google OAuth authentication, real-time chat, and mood-based song suggestions.",
+      technologies: ["React", "TypeScript", "Node.js", "Express", "Google Cloud Storage", "JWT", "Tailwind CSS"],
+      githubUrl: "https://github.com/aryan1429/mr-sarcastic",
       liveUrl: "#", 
-      image: null
+      image: sarcastic
     }
   ];
 
