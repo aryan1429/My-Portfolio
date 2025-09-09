@@ -28,7 +28,21 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       rollupOptions: {
-        external: (id) => ['path', 'querystring', 'stream', 'url', 'fs', 'crypto'].includes(id) || id.includes('server/'),
+        external: (id) => {
+          // Exclude Node.js built-ins
+          if (['path', 'querystring', 'stream', 'url', 'fs', 'crypto', 'events', 'util'].includes(id)) {
+            return true;
+          }
+          // Exclude all Google Cloud packages
+          if (id.includes('@google-cloud/') || id.includes('google-cloud')) {
+            return true;
+          }
+          // Exclude server directory and GCP service files
+          if (id.includes('server/') || id.includes('gcpStorageService.js') || id.includes('gcpStorageService.server.js')) {
+            return true;
+          }
+          return false;
+        },
       },
     },
   };
