@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import gcpStorageService from '@/services/gcpStorageService';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 // Type definitions for network connection
@@ -49,8 +48,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const isMobile = useIsMobile();
 
   // Generate Google Cloud Storage or absolute video URL
-  const videoUrl = gcpStorageService.generateVideoUrl(objectPath);
-  const thumbnailUrl = thumbnail || gcpStorageService.generateImageUrl(objectPath.replace(/\.[^.]+$/, '') + '.jpg');
+  const baseUrl = 'https://storage.googleapis.com/my-portfolio-69';
+  const videoUrl = `${baseUrl}/${objectPath}`;
+  const thumbnailUrl = thumbnail || `${baseUrl}/${objectPath.replace(/\.[^.]+$/, '')}.jpg`;
 
   // Detect network conditions for mobile optimization
   React.useEffect(() => {
@@ -174,7 +174,8 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const imageUrl = gcpStorageService.generateImageUrl(objectPath);
+  const baseUrl = 'https://storage.googleapis.com/my-portfolio-69';
+  const imageUrl = `${baseUrl}/${objectPath}`;
 
   const handleLoad = () => {
     setIsLoading(false);

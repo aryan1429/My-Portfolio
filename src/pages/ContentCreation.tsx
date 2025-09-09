@@ -6,14 +6,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import LazyVideo from '@/components/LazyVideo';
 import MobileDebugPanel from '@/components/MobileDebugPanel';
 
-// Video URLs using Google Cloud Storage
-import gcpStorageService from '@/services/gcpStorageService';
-const MoonFinal = gcpStorageService.generateVideoUrl('projects/MoonFinal.mp4');
-const Wolverine = gcpStorageService.generateVideoUrl('projects/WolverineFinal.mp4');
-const ironman_edit = gcpStorageService.generateVideoUrl('projects/Ironman-edit.mp4');
-const spiderman_edit = gcpStorageService.generateVideoUrl('projects/Spiderman_edit.mp4');
-const salesman = gcpStorageService.generateVideoUrl('projects/Salesman2.mp4');
-
 // Import thumbnails
 import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png';
 import moon_thumbnail from '@/assets/moon_thumbnail.png';
@@ -24,6 +16,14 @@ import salesman_thumbnail from '@/assets/salesman2.avif';
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
+
+  // Video URLs using Google Cloud Storage
+  const baseUrl = 'https://storage.googleapis.com/my-portfolio-69';
+  const MoonFinal = `${baseUrl}/projects/MoonFinal.mp4`;
+  const Wolverine = `${baseUrl}/projects/WolverineFinal.mp4`;
+  const ironman_edit = `${baseUrl}/projects/Ironman-edit.mp4`;
+  const spiderman_edit = `${baseUrl}/projects/Spiderman_edit.mp4`;
+  const salesman = `${baseUrl}/projects/Salesman2.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
