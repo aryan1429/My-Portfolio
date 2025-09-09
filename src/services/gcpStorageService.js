@@ -5,7 +5,7 @@
 
 class GCPStorageService {
   constructor() {
-    this.bucketName = \"my-portfolio-69\"; // Hardcoded for frontend
+    this.bucketName = "my-portfolio-69"; // Hardcoded for frontend
     this.baseUrl = `https://storage.googleapis.com/${this.bucketName}`;
     this.initialized = true; // Always initialized for client
   }
@@ -25,15 +25,15 @@ class GCPStorageService {
 
   // Stub methods for compatibility (no actual operations)
   async uploadFile() {
-    throw new Error(\"Upload operations not available on client-side. Use server API.\");
+    throw new Error("Upload operations not available on client-side. Use server API.");
   }
 
   async deleteFile() {
-    throw new Error(\"Delete operations not available on client-side. Use server API.\");
+    throw new Error("Delete operations not available on client-side. Use server API.");
   }
 
   async listFiles() {
-    throw new Error(\"List operations not available on client-side. Use server API.\");
+    throw new Error("List operations not available on client-side. Use server API.");
   }
 }
 
