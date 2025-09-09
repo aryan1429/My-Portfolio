@@ -26,5 +26,10 @@ export default defineConfig(({ mode }) => {
       // Explicitly define environment variables for Vite
       'import.meta.env.VITE_GCP_STORAGE_BASE_URL': JSON.stringify(env.VITE_GCP_STORAGE_BASE_URL || 'https://storage.googleapis.com/my-portfolio-69'),
     },
+    build: {
+      rollupOptions: {
+        external: (id) => ['path', 'querystring', 'stream', 'url', 'fs', 'crypto'].includes(id) || id.includes('server/'),
+      },
+    },
   };
 });
