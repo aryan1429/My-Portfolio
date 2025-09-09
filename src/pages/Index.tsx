@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import profileHero from '@/assets/Profile-pic.jpeg';
 
 const Index = () => {
+  console.log('🏠 Index page rendering...');
   const skills = [
     { name: "Full-Stack Development", level: "Intermediate", icon: "🧑‍💻" },
     { name: "Adobe After Effects", level: "Advanced", icon: "🎬" },
