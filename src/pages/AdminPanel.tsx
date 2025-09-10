@@ -10,11 +10,19 @@ import { Trash2, Edit, Plus, Upload } from 'lucide-react';
 import apiService from '../services/api';
 
 // Type definitions for form data and items
-interface FormData {
-  title: string;
+interface ProjectFormData {
+  name: string;
   description: string;
   category: string;
   technologies: string[];
+  featured: boolean;
+  [key: string]: unknown;
+}
+
+interface ContentFormData {
+  title: string;
+  description: string;
+  category: string;
   featured: boolean;
   [key: string]: unknown;
 }
@@ -53,11 +61,18 @@ const AdminPanel = () => {
   const [editingItem, setEditingItem] = useState<ItemData | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  const [formData, setFormData] = useState<FormData>({
-    title: '',
+  const [projectFormData, setProjectFormData] = useState<ProjectFormData>({
+    name: '',
     description: '',
     category: '',
     technologies: [],
+    featured: false,
+  });
+
+  const [contentFormData, setContentFormData] = useState<ContentFormData>({
+    title: '',
+    description: '',
+    category: '',
     featured: false,
   });
 
@@ -68,10 +83,17 @@ const AdminPanel = () => {
   });
 
   const handleInputChange = (field: string, value: unknown) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
+    if (activeTab === 'projects') {
+      setProjectFormData(prev => ({
+        ...prev,
+        [field]: value,
+      }));
+    } else {
+      setContentFormData(prev => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
   };
 
   const handleFileChange = (field: string, fileList: FileList | null) => {
@@ -101,26 +123,35 @@ const AdminPanel = () => {
 
       if (editingItem) {
         if (type === 'project') {
-          await updateProject(editingItem.id, formData, fileData);
+          await updateProject(editingItem.id, projectFormData, fileData);
         } else {
-          await updateContent(editingItem.id, formData, fileData);
+          await updateContent(editingItem.id, contentFormData, fileData);
         }
       } else {
         if (type === 'project') {
-          await createProject(formData, fileData);
+          await createProject(projectFormData, fileData);
         } else {
-          await createContent(formData, fileData);
+          await createContent(contentFormData, fileData);
         }
       }
 
       // Reset form
-      setFormData({
-        title: '',
-        description: '',
-        category: '',
-        technologies: [],
-        featured: false,
-      });
+      if (type === 'project') {
+        setProjectFormData({
+          name: '',
+          description: '',
+          category: '',
+          technologies: [],
+          featured: false,
+        });
+      } else {
+        setContentFormData({
+          title: '',
+          description: '',
+          category: '',
+          featured: false,
+        });
+      }
       setFiles({
         thumbnail: null,
         video: null,
@@ -135,13 +166,22 @@ const AdminPanel = () => {
 
   const handleEdit = (item: ItemData) => {
     setEditingItem(item);
-    setFormData({
-      title: item.title || '',
-      description: item.description || '',
-      category: item.category || '',
-      technologies: item.technologies || [],
-      featured: item.featured || false,
-    });
+    if (activeTab === 'projects') {
+      setProjectFormData({
+        name: (item.name as string) || '',
+        description: item.description || '',
+        category: item.category || '',
+        technologies: item.technologies || [],
+        featured: item.featured || false,
+      });
+    } else {
+      setContentFormData({
+        title: (item.title as string) || '',
+        description: item.description || '',
+        category: item.category || '',
+        featured: item.featured || false,
+      });
+    }
     setIsCreating(true);
   };
 
@@ -210,47 +250,51 @@ const AdminPanel = () => {
     </Card>
   );
 
-  const renderForm = (type: 'project' | 'content') => (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle>
-          {editingItem ? 'Edit' : 'Create'} {type === 'project' ? 'Project' : 'Content'}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <Input
-          placeholder="Title"
-          value={formData.title}
-          onChange={(e) => handleInputChange('title', e.target.value)}
-        />
-        <Textarea
-          placeholder="Description"
-          value={formData.description}
-          onChange={(e) => handleInputChange('description', e.target.value)}
-        />
-        <Input
-          placeholder="Category"
-          value={formData.category}
-          onChange={(e) => handleInputChange('category', e.target.value)}
-        />
-        
-        {type === 'project' && (
+  const renderForm = (type: 'project' | 'content') => {
+    const currentFormData = type === 'project' ? projectFormData : contentFormData;
+    const titleField = type === 'project' ? 'name' : 'title';
+    
+    return (
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>
+            {editingItem ? 'Edit' : 'Create'} {type === 'project' ? 'Project' : 'Content'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
           <Input
-            placeholder="Technologies (comma-separated)"
-            value={formData.technologies.join(', ')}
-            onChange={(e) => handleInputChange('technologies', e.target.value.split(', ').filter(Boolean))}
+            placeholder={type === 'project' ? 'Project Name' : 'Title'}
+            value={currentFormData[titleField] as string}
+            onChange={(e) => handleInputChange(titleField, e.target.value)}
           />
-        )}
+          <Textarea
+            placeholder="Description"
+            value={currentFormData.description}
+            onChange={(e) => handleInputChange('description', e.target.value)}
+          />
+          <Input
+            placeholder="Category"
+            value={currentFormData.category}
+            onChange={(e) => handleInputChange('category', e.target.value)}
+          />
+          
+          {type === 'project' && (
+            <Input
+              placeholder="Technologies (comma-separated)"
+              value={(currentFormData as ProjectFormData).technologies.join(', ')}
+              onChange={(e) => handleInputChange('technologies', e.target.value.split(', ').filter(Boolean))}
+            />
+          )}
 
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="featured"
-            checked={formData.featured}
-            onChange={(e) => handleInputChange('featured', e.target.checked)}
-          />
-          <label htmlFor="featured">Featured</label>
-        </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="featured"
+              checked={currentFormData.featured}
+              onChange={(e) => handleInputChange('featured', e.target.checked)}
+            />
+            <label htmlFor="featured">Featured</label>
+          </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -289,13 +333,22 @@ const AdminPanel = () => {
             onClick={() => {
               setIsCreating(false);
               setEditingItem(null);
-              setFormData({
-                title: '',
-                description: '',
-                category: '',
-                technologies: [],
-                featured: false,
-              });
+              if (type === 'project') {
+                setProjectFormData({
+                  name: '',
+                  description: '',
+                  category: '',
+                  technologies: [],
+                  featured: false,
+                });
+              } else {
+                setContentFormData({
+                  title: '',
+                  description: '',
+                  category: '',
+                  featured: false,
+                });
+              }
             }}
           >
             Cancel
@@ -303,7 +356,8 @@ const AdminPanel = () => {
         </div>
       </CardContent>
     </Card>
-  );
+    );
+  };
 
   if (projectsLoading || contentLoading || profileLoading) {
     return <div className="p-6">Loading...</div>;
