@@ -68,7 +68,7 @@ const Contact = () => {
     {
       name: 'LinkedIn',
       icon: Linkedin,
-      url: '#',
+      url: 'https://www.linkedin.com/in/aryan-aligeti-099ab825b/',
       color: 'hover:text-blue-500'
     }
   ];
