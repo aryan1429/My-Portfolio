@@ -9,6 +9,8 @@ import { Badge } from '../components/ui/badge';
 import { Trash2, Edit, Plus, Upload } from 'lucide-react';
 import apiService from '../services/api';
 
+// Admin Panel Component - Fixed TypeScript issues
+
 // Type definitions for form data and items
 interface ProjectFormData {
   name: string;
