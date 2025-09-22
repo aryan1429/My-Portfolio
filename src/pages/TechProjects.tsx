@@ -29,7 +29,7 @@ const TechProjects = () => {
     {
       id: 3,
       title: "Mr Sarcastic",
-      description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Google OAuth authentication, real-time chat, and mood-based song suggestions.",
+      description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Firebase Authentication for Google sign-in, real-time chat, and mood-based song suggestions.",
       technologies: ["React", "TypeScript", "Node.js", "Express", "Google Cloud Storage", "JWT", "Tailwind CSS"],
       githubUrl: "https://github.com/aryan1429/mr-sarcastic",
       liveUrl: "#", 
