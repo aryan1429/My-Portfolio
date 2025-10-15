@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import TechProjects from "./pages/TechProjects";
 import ContentCreation from "./pages/ContentCreation";
 import Contact from "./pages/Contact";
+import AIChat from "./pages/AIChat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/tech-projects" element={<TechProjects />} />
             <Route path="/content-creation" element={<ContentCreation />} />
+            <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

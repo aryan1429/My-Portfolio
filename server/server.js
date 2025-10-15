@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import multer from 'multer';
+import OpenAI from 'openai';
 
 // Import GCP services (only if available)
 let GCPStorageService, FirestoreService;
@@ -42,6 +43,27 @@ if (GCPStorageService && FirestoreService && process.env.GCP_PROJECT_ID) {
   } catch (error) {
     console.log('⚠️  GCP services failed to initialize, falling back to traditional mode');
   }
+}
+
+// Initialize OpenAI
+let openai = null;
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  console.log('✅ OpenAI initialized');
+} else {
+  console.log('⚠️  OpenAI API key not found');
+}
+
+// Import portfolio knowledge base
+let portfolioKnowledge = null;
+try {
+  const knowledgeModule = await import('./data/portfolioKnowledge.js');
+  portfolioKnowledge = knowledgeModule.portfolioKnowledge;
+  console.log('✅ Portfolio knowledge base loaded');
+} catch (error) {
+  console.log('⚠️  Portfolio knowledge base not found');
 }
 
 // Middleware
@@ -282,6 +304,117 @@ app.get('/api/contact/messages', async (req, res) => {
   } catch (error) {
     console.error('Error getting contact messages:', error);
     res.status(500).json({ error: 'Failed to get messages' });
+  }
+});
+
+// AI Chat endpoint
+app.post('/api/ai/chat', async (req, res) => {
+  try {
+    if (!openai) {
+      return res.status(503).json({ 
+        error: 'AI service is not available. Please check the OpenAI API configuration.' 
+      });
+    }
+
+    const { message, conversationHistory = [] } = req.body;
+
+    if (!message || message.trim().length === 0) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    // Create system prompt with portfolio knowledge
+    const systemPrompt = `You are Aryan Aligeti's AI assistant. You have comprehensive knowledge about Aryan's portfolio, skills, projects, and experience. Answer questions about Aryan in a helpful, professional, and friendly manner.
+
+Here's what you know about Aryan Aligeti:
+
+PERSONAL INFORMATION:
+- Name: ${portfolioKnowledge?.personal?.name || 'Aryan Aligeti'}
+- Title: ${portfolioKnowledge?.personal?.title || 'Full Stack Developer & Content Creator'}
+- Email: ${portfolioKnowledge?.personal?.email || 'aryanaligetibusiness@gmail.com'}
+- Experience: ${portfolioKnowledge?.personal?.experience || '3+ Years'}
+- Projects Completed: ${portfolioKnowledge?.personal?.projects_completed || '50+'}
+
+TECHNICAL SKILLS:
+Frontend: React.js (Expert), TypeScript (Advanced), HTML5/CSS3 (Expert), Tailwind CSS (Advanced), Three.js (Intermediate)
+Backend: Node.js (Intermediate), Express.js (Intermediate), Python (Intermediate), Flask/FastAPI (Intermediate)
+Databases: MongoDB (Intermediate), Firebase/Firestore (Intermediate), SQLite, Redis
+Cloud & DevOps: Google Cloud Platform, Cloud Storage, App Engine, Vercel, Git/GitHub
+
+CONTENT CREATION SKILLS:
+- Adobe After Effects (Advanced)
+- DaVinci Resolve (Intermediate) 
+- Video Editing & Post-production
+- Script Writing (Expert)
+- YouTube Content Creation (Expert)
+
+KEY PROJECTS:
+1. TextMoodDJ - AI mood-based music assistant with sentiment analysis
+2. Mr Sarcastic - AI chatbot with sarcastic personality and music recommendations
+3. Expense Tracker - Full-stack MERN application with data visualization
+4. Iron Man Project - 3D web project with Three.js
+5. Moon Landing Recreation - 3D historical recreation
+
+ACHIEVEMENTS:
+- Won 5+ hackathons in Web Development
+- Managed 3+ YouTube channels
+- Completed 100+ video editing projects
+- 3+ years content creation experience
+
+UNIQUE STRENGTHS:
+- Combines technical development with creative content creation
+- Specializes in AI-powered web applications
+- Expert in both coding and video production
+- Strong background in 3D web development
+
+Always provide accurate, helpful information about Aryan. If asked about something not in your knowledge base, politely say you don't have that specific information but offer related information you do know. Be conversational and professional.`;
+
+    // Convert conversation history to OpenAI format
+    const messages = [
+      { role: 'system', content: systemPrompt }
+    ];
+
+    // Add conversation history (limit to last 10 messages for context)
+    if (conversationHistory && conversationHistory.length > 0) {
+      conversationHistory.slice(-10).forEach(msg => {
+        messages.push({
+          role: msg.isUser ? 'user' : 'assistant',
+          content: msg.text
+        });
+      });
+    }
+
+    // Add current message
+    messages.push({ role: 'user', content: message });
+
+    // Call OpenAI API
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: messages,
+      max_tokens: 500,
+      temperature: 0.7,
+      presence_penalty: 0.1,
+      frequency_penalty: 0.1
+    });
+
+    const response = completion.choices[0]?.message?.content || 
+      "I'm sorry, I couldn't generate a response right now. Please try again.";
+
+    res.json({ response });
+
+  } catch (error) {
+    console.error('AI Chat Error:', error);
+    
+    let errorMessage = 'Sorry, I encountered an error. Please try again.';
+    
+    if (error.code === 'insufficient_quota') {
+      errorMessage = 'AI service quota exceeded. Please try again later.';
+    } else if (error.code === 'invalid_api_key') {
+      errorMessage = 'AI service configuration error. Please contact support.';
+    } else if (error.code === 'rate_limit_exceeded') {
+      errorMessage = 'Too many requests. Please wait a moment and try again.';
+    }
+
+    res.status(500).json({ error: errorMessage });
   }
 });
 

@@ -11,6 +11,7 @@ const Navigation = () => {
     { path: '/', label: 'Home' },
     { path: '/tech-projects', label: 'Tech Projects' },
     { path: '/content-creation', label: 'Content Creation' },
+    { path: '/ai-chat', label: 'AI Chat' },
     { path: '/contact', label: 'Contact' }
   ];
 
