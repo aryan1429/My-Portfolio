@@ -1,0 +1,60 @@
+runtime: nodejs20
+
+env_variables:
+  NODE_ENV: production
+  GCP_PROJECT_ID: your-portfolio-project
+  GCP_BUCKET_NAME: your-portfolio-project-media
+  GCP_REGION: us-central1
+  GCP_KEY_FILE: ./gcp-service-account.json
+  OPENAI_API_KEY: your_openai_api_key_here
+  CONTACT_EMAIL: aryanaligetibusiness@gmail.com
+
+entrypoint: node server.js
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 10
+  target_cpu_utilization: 0.6
+  target_throughput_utilization: 0.6
+
+handlers:
+# Serve static assets with long cache
+- url: /assets
+  static_dir: dist/assets
+  secure: always
+  http_headers:
+    Cache-Control: "public, max-age=31536000"
+
+# Serve media files with cache
+- url: /media
+  static_dir: public/media
+  secure: always
+  http_headers:
+    Cache-Control: "public, max-age=86400"
+
+# API routes
+- url: /api/.*
+  script: auto
+  secure: always
+
+# All other routes go to the app
+- url: /.*
+  script: auto
+  secure: always
+
+# Health check
+readiness_check:
+  path: "/api/health"
+  check_interval_sec: 5
+  timeout_sec: 4
+
+liveness_check:
+  path: "/api/health"
+  check_interval_sec: 30
+  timeout_sec: 4
+
+# Resource settings optimized for premium
+resources:
+  cpu: 1
+  memory_gb: 2
+  disk_size_gb: 10
