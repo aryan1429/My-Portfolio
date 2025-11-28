@@ -75,7 +75,7 @@ const TechProjects = () => {
                     <img 
                       src={project.image} 
                       alt={project.title} 
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full ${project.id === 1 ? 'object-contain' : 'object-cover'}`}
                     />
                   ) : (
                     <Code className="h-16 w-16 text-primary" />
