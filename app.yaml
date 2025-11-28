@@ -2,10 +2,10 @@ runtime: nodejs20
 
 env_variables:
   NODE_ENV: production
-  GCP_PROJECT_ID: your-portfolio-project
-  GCP_BUCKET_NAME: your-portfolio-project-media
+  GCP_PROJECT_ID: my-portfolio-69
+  GCP_BUCKET_NAME: my-portfolio-69
   GCP_REGION: us-central1
-  GCP_KEY_FILE: ./gcp-service-account.json
+  GCP_KEY_FILE: ./secrets/node-mailer-project-467613-33455f25e5c6.json
   OPENAI_API_KEY: your_openai_api_key_here
   CONTACT_EMAIL: aryanaligetibusiness@gmail.com
 
