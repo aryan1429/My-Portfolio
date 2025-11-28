@@ -6,6 +6,8 @@ env_variables:
   GCP_BUCKET_NAME: your-portfolio-project-media
   GCP_REGION: us-central1
   GCP_KEY_FILE: ./gcp-service-account.json
+  OPENAI_API_KEY: your_openai_api_key_here
+  CONTACT_EMAIL: aryanaligetibusiness@gmail.com
 
 automatic_scaling:
   min_instances: 0

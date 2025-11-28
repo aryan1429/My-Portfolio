@@ -57,7 +57,8 @@ const AIChat = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/ai/chat', {
+      const apiUrl = import.meta.env.PROD ? '/api/ai/chat' : '/api/ai/chat';
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
