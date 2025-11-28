@@ -10,6 +10,15 @@ const TechProjects = () => {
   const projects = [
     {
       id: 1,
+      title: "Snakebite Detection System",
+      description: "A Flutter mobile application for snakebite detection using machine learning. This project helps identify venomous snake species and provides immediate first-aid guidance. I contributed by developing the complete mobile frontend with an intuitive user interface for real-time snake identification and emergency response features.",
+      technologies: ["Flutter", "Dart", "Machine Learning", "TensorFlow Lite", "Firebase", "Camera API", "Real-time Detection"],
+      githubUrl: "https://github.com/aryan1429/snakebite-detection",
+      liveUrl: "#", // Add app store link when available
+      image: null // TODO: Add thumbnail image
+    },
+    {
+      id: 2,
       title: "Expense Tracker",
       description: "This is a full-stack personal expense tracker built with the MERN (MongoDB, Express, React, Node.js) stack. It allows users to add, view, and delete their daily expenses, which are then visualized in a chart to show spending by category.",
       technologies: ["React", "MongoDb", "Express","Node.js"],
@@ -18,7 +27,7 @@ const TechProjects = () => {
       image: expense
     },
     {
-      id: 2,
+      id: 3,
       title: "TextMoodDJ", 
       description: "ABuilt an AI-powered mood-based music assistant that detects emotions from text or voice and recommends matching songs/memes using sentiment analysis, speech-to-text, and YouTube Music API, with a dynamic React UI for an engaging experience.",
       technologies: ["Python","Flask/FastAPI","React.js","Tailwind CSS","Hugging Face Transformers","YouTube Music API (ytmusicapi)","Redis / SQLite",],
@@ -27,7 +36,7 @@ const TechProjects = () => {
       image: textmood
     },
     {
-      id: 3,
+      id: 4,
       title: "Mr Sarcastic",
       description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Firebase Authentication for Google sign-in, real-time chat, and mood-based song suggestions.",
       technologies: ["React", "TypeScript", "Node.js", "Express", "Google Cloud Storage", "JWT", "Tailwind CSS"],
