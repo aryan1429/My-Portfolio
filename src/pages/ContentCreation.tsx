@@ -17,13 +17,17 @@ const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
 
-  // Video URLs using Google Cloud Storage
-  const baseUrl = 'https://storage.googleapis.com/my-portfolio-69';
-  const MoonFinal = `${baseUrl}/projects/MoonFinal.mp4`;
-  const Wolverine = `${baseUrl}/projects/WolverineFinal.mp4`;
-  const ironman_edit = `${baseUrl}/projects/Ironman-edit.mp4`;
-  const spiderman_edit = `${baseUrl}/projects/Spiderman_edit.mp4`;
-  const salesman = `${baseUrl}/projects/Salesman2.mp4`;
+  // Video URLs - GitHub LFS for production, local for development
+  const isDevelopment = import.meta.env.DEV;
+  const baseUrl = isDevelopment 
+    ? '/media/projects' 
+    : 'https://github.com/aryan1429/My-Portfolio/raw/master/public/media/projects';
+  
+  const MoonFinal = `${baseUrl}/MoonFinal.mp4`;
+  const Wolverine = `${baseUrl}/WolverineFinal.mp4`;
+  const ironman_edit = `${baseUrl}/Ironman-edit.mp4`;
+  const spiderman_edit = `${baseUrl}/Spiderman_edit.mp4`;
+  const salesman = `${baseUrl}/Salesman2.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
