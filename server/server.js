@@ -260,35 +260,49 @@ app.post('/api/contact', async (req, res) => {
     }
 
     // Send email notification
-    const transporter = nodemailer.createTransporter({
-      service: 'gmail',
-      auth: {
-        user: process.env.SMTP_USER || process.env.EMAIL_USER,
-        pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
-      },
-    });
+    try {
+      const transporter = nodemailer.createTransporter({
+        service: 'gmail',
+        auth: {
+          user: process.env.SMTP_USER || process.env.EMAIL_USER,
+          pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
+        },
+      });
 
-    const mailOptions = {
-      from: email,
-      to: process.env.CONTACT_EMAIL || 'your-email@gmail.com',
-      subject: `Portfolio Contact: ${subject || 'New Message'}`,
-      html: `
-        <h3>New Contact Form Submission</h3>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject || 'N/A'}</p>
-        <p><strong>Message:</strong></p>
-        <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
-          ${message.replace(/\n/g, '<br>')}
-        </div>
-      `,
-    };
+      const mailOptions = {
+        from: process.env.SMTP_FROM || email,
+        to: process.env.CONTACT_EMAIL || 'your-email@gmail.com',
+        subject: `Portfolio Contact: ${subject || 'New Message from ' + name}`,
+        html: `
+          <h3>New Contact Form Submission</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Subject:</strong> ${subject || 'Portfolio Contact'}</p>
+          <p><strong>Message:</strong></p>
+          <div style="background: #f5f5f5; padding: 15px; border-radius: 5px;">
+            ${message.replace(/\n/g, '<br>')}
+          </div>
+        `,
+      };
 
-    await transporter.sendMail(mailOptions);
+      // Only try to send email if SMTP credentials are configured
+      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully');
+      } else {
+        console.log('Email not configured, but message saved:', { name, email, message });
+      }
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError.message);
+      // Don't fail the entire request if only email fails
+    }
     res.status(200).json({ message: 'Message sent successfully.' });
   } catch (error) {
     console.error('Error processing contact form:', error);
-    res.status(500).json({ error: 'Failed to send message.' });
+    res.status(500).json({ 
+      error: 'Failed to send message.', 
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined 
+    });
   }
 });
 
