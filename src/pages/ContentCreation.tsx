@@ -118,6 +118,7 @@ const ContentCreation = () => {
       )
     );
     console.error(`Error loading video ${idx}: ${videos[idx].title}`);
+    console.error(`Video URL: ${videos[idx].videoUrl}`);
   };
 
   const handleLoadStart = (idx: number) => {
