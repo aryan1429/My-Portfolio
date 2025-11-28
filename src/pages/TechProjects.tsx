@@ -5,6 +5,7 @@ import expense from '@/assets/expense.png';
 import ironman from '@/assets/Ironman.jpg';
 import textmood from '@/assets/textmood.png';
 import sarcastic from '@/assets/mrsarcastic.png';
+import snakebite from '@/assets/snakebitethumbnail.png';
 
 const TechProjects = () => {
   const projects = [
@@ -15,7 +16,7 @@ const TechProjects = () => {
       technologies: ["Flutter", "Dart", "Machine Learning", "TensorFlow Lite", "Firebase", "Camera API", "Real-time Detection"],
       githubUrl: "https://github.com/manohari3299/AI_Based_SnakeBite_Detection_TreatmentAid.git",
       liveUrl: "https://github.com/manohari3299/AI_Based_SnakeBite_Detection_TreatmentAid/releases/latest",
-      image: null // TODO: Add thumbnail image
+      image: snakebite
     },
     {
       id: 2,
