@@ -13,6 +13,13 @@ export default defineConfig(({ mode }) => {
       hmr: {
         port: 8081, // Use the same port for HMR
       },
+      proxy: {
+        '/api': {
+          target: 'http://localhost:5001',
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
     plugins: [
       react(),
