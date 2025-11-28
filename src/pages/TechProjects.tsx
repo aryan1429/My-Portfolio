@@ -6,6 +6,8 @@ import ironman from '@/assets/Ironman.jpg';
 import textmood from '@/assets/textmood.png';
 import sarcastic from '@/assets/mrsarcastic.png';
 import snakebite from '@/assets/snakebitethumbnail.png';
+import snakebite2 from '@/assets/snakebitethumbnail2.png';
+import snakebite3 from '@/assets/snakebitethumbnail3.png';
 
 const TechProjects = () => {
   const projects = [
@@ -72,11 +74,33 @@ const TechProjects = () => {
               <CardHeader>
                 <div className="w-full h-48 bg-muted rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                   {project.image ? (
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
-                      className={`w-full h-full ${project.id === 1 ? 'object-contain' : 'object-cover'}`}
-                    />
+                    project.id === 1 ? (
+                      // Snakebite project - show all three thumbnails side by side
+                      <div className="flex w-full h-full">
+                        <img 
+                          src={snakebite} 
+                          alt={`${project.title} - Screen 1`} 
+                          className="flex-1 h-full object-contain"
+                        />
+                        <img 
+                          src={snakebite2} 
+                          alt={`${project.title} - Screen 2`} 
+                          className="flex-1 h-full object-contain"
+                        />
+                        <img 
+                          src={snakebite3} 
+                          alt={`${project.title} - Screen 3`} 
+                          className="flex-1 h-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      // Other projects - single image
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    )
                   ) : (
                     <Code className="h-16 w-16 text-primary" />
                   )}
