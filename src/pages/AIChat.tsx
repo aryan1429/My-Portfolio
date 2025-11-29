@@ -59,7 +59,7 @@ const AIChat = () => {
     try {
       // Use environment variable for API URL, fallback to relative path for development
       const apiUrl = import.meta.env.VITE_API_URL 
-        ? `${import.meta.env.VITE_API_URL}/ai/chat` 
+        ? `${import.meta.env.VITE_API_URL}/api/ai/chat` 
         : '/api/ai/chat';
       
       console.log('Making API request to:', apiUrl);
