@@ -2,112 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Cinematic Portfolio Design System - Dark theme optimized for video/content creation */
+/* Cinematic Glassmorphism Design System */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    /* Cinematic Dark Theme */
-    --background: 222 24% 5%;
+    /* Deep Space Theme */
+    --background: 222 47% 11%; /* Deep Blue */
     --foreground: 210 40% 98%;
 
-    --card: 222 20% 8%;
+    --card: 222 47% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 20% 8%;
+    --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    /* Cinematic Purple Primary */
-    --primary: 263 70% 65%;
-    --primary-foreground: 222 24% 5%;
-    --primary-glow: 263 70% 75%;
+    /* Vibrant Violet Primary */
+    --primary: 270 90% 60%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 270 90% 70%;
 
-    /* Elegant Secondary */
-    --secondary: 222 20% 12%;
-    --secondary-foreground: 210 40% 98%;
+    /* Neon Cyan Secondary */
+    --secondary: 180 100% 50%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 222 20% 10%;
+    --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
 
-    /* Cinematic Accent */
-    --accent: 200 100% 70%;
-    --accent-foreground: 222 24% 5%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 222 47% 11%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 222 20% 15%;
-    --input: 222 20% 12%;
-    --ring: 263 70% 65%;
+    --border: 217 33% 20%;
+    --input: 217 33% 17%;
+    --ring: 270 90% 60%;
 
     /* Cinematic Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(263 70% 65%), hsl(200 100% 70%));
-    --gradient-hero: linear-gradient(135deg, hsl(222 24% 5%) 0%, hsl(222 20% 8%) 50%, hsl(263 70% 15%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(222 20% 8%), hsl(222 20% 12%));
+    --gradient-primary: linear-gradient(135deg, hsl(270 90% 60%), hsl(180 100% 50%));
+    --gradient-hero: radial-gradient(circle at top center, hsl(222 47% 15%), hsl(222 47% 11%));
+    --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
     
     /* Cinematic Shadows */
-    --shadow-glow: 0 0 40px hsl(263 70% 65% / 0.3);
-    --shadow-card: 0 10px 30px -10px hsl(222 24% 5% / 0.5);
-    --shadow-hero: 0 25px 50px -12px hsl(263 70% 65% / 0.25);
+    --shadow-glow: 0 0 40px hsl(270 90% 60% / 0.4);
+    --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --shadow-hero: 0 25px 50px -12px hsl(270 90% 60% / 0.25);
 
     /* Smooth Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* ... keep other dark mode variables consistent if needed, or rely on root for single theme */
   }
 }
 
@@ -117,94 +70,48 @@
   } 
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans selection:bg-primary/30;
   }
 
-  /* Mobile video optimizations */
-  @media (max-width: 768px) {
-    video {
-      /* Prevent iOS video zoom */
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      /* Improve mobile video performance */
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-    
-    /* Optimize mobile grid layouts */
-    .grid {
-      gap: 0.75rem !important;
-    }
-    
-    /* Improve touch targets */
-    button, 
-    .clickable {
-      min-height: 44px;
-      min-width: 44px;
-    }
-    
-    /* Mobile video controls */
-    .video-controls {
-      opacity: 1 !important; /* Always show controls on mobile */
-    }
-    
-    .video-controls button {
-      min-height: 44px;
-      min-width: 44px;
-      padding: 12px;
-    }
-    
-    /* Prevent horizontal scroll on mobile */
-    .container {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-    
-    /* Touch-friendly fullscreen controls */
-    video:fullscreen + .video-controls {
-      opacity: 1;
-      background: rgba(0, 0, 0, 0.8);
-    }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
   }
+}
 
-  /* Show vertical video with black bars in fullscreen, no crop/zoom */
-  video:fullscreen {
-    object-fit: contain !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background: black !important;
-  }
-
-  /* Progressive video loading for slower connections */
-  video[data-lazy] {
-    opacity: 0;
-    transition: opacity 0.3s ease;
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-card;
   }
   
-  video[data-lazy].loaded {
-    opacity: 1;
+  .glass-hover {
+    @apply hover:bg-white/10 transition-all duration-300;
   }
 
-  /* Improve focus indicators for accessibility */
-  video:focus,
-  button:focus {
-    outline: 2px solid hsl(var(--primary));
-    outline-offset: 2px;
+  .text-gradient {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
   }
+}
 
-  /* Animation for hints and feedback */
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-in-out;
-  }
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Mobile optimizations remain... */
+@media (max-width: 768px) {
+  video {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
+  .grid { gap: 1rem !important; }
+  button, .clickable { min-height: 44px; min-width: 44px; }
+  .container { padding-left: 1rem; padding-right: 1rem; }
 }

@@ -58,18 +58,18 @@ const AIChat = () => {
 
     try {
       // Use environment variable for API URL, fallback to relative path for development
-      const apiUrl = import.meta.env.VITE_API_URL 
-        ? `${import.meta.env.VITE_API_URL}/api/ai/chat` 
+      const apiUrl = import.meta.env.VITE_API_URL
+        ? `${import.meta.env.VITE_API_URL}/api/ai/chat`
         : '/api/ai/chat';
-      
+
       console.log('Making API request to:', apiUrl);
-      
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           message: input.trim(),
           conversationHistory: messages.slice(-10) // Send last 10 messages for context
         }),
@@ -86,7 +86,7 @@ const AIChat = () => {
 
       const data = await response.json();
       console.log('API Response:', data);
-      
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: data.response || "I received your message but couldn't generate a proper response.",
@@ -95,14 +95,14 @@ const AIChat = () => {
       };
 
       setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message:', error);
       toast({
         title: "Error",
         description: `Failed to get AI response: ${error.message}`,
         variant: "destructive",
       });
-      
+
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: `I'm sorry, I'm experiencing some technical difficulties right now. Error: ${error.message}. Please try again in a moment!`,
@@ -116,10 +116,10 @@ const AIChat = () => {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
   };
 
@@ -137,13 +137,21 @@ const AIChat = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero pt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-4xl">
+    <div className="min-h-screen bg-background relative overflow-hidden pt-20">
+      {/* Animated Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[10%] right-[30%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
+        <div className="absolute bottom-[10%] left-[20%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: '3s' }} />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-4xl relative z-10">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <MessageCircle className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <div className="p-3 bg-primary/10 rounded-full border border-primary/20 shadow-glow">
+              <MessageCircle className="h-8 w-8 text-primary" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-primary tracking-tight">
               AI Assistant
             </h1>
           </div>
@@ -153,14 +161,14 @@ const AIChat = () => {
         </div>
 
         {/* Chat Container */}
-        <Card className="bg-gradient-card border-border shadow-glow">
-          <CardHeader className="border-b border-border">
-            <CardTitle className="flex items-center gap-2">
+        <Card className="glass border-white/10 shadow-glow animate-fade-in-up">
+          <CardHeader className="border-b border-white/10 bg-white/5">
+            <CardTitle className="flex items-center gap-2 font-heading">
               <Bot className="h-5 w-5 text-primary" />
               Aryan's AI Assistant
             </CardTitle>
           </CardHeader>
-          
+
           <CardContent className="p-0">
             {/* Messages */}
             <ScrollArea ref={scrollAreaRef} className="h-[500px] p-4">
@@ -170,19 +178,18 @@ const AIChat = () => {
                     key={message.id}
                     className={`flex gap-3 ${message.isUser ? 'flex-row-reverse' : 'flex-row'}`}
                   >
-                    <Avatar className={`h-8 w-8 ${message.isUser ? 'bg-primary' : 'bg-secondary'}`}>
-                      <AvatarFallback>
+                    <Avatar className={`h-8 w-8 border border-white/10 ${message.isUser ? 'bg-primary shadow-glow' : 'bg-secondary/80'}`}>
+                      <AvatarFallback className="bg-transparent text-white">
                         {message.isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                       </AvatarFallback>
                     </Avatar>
-                    
-                    <div className={`max-w-[70%] ${message.isUser ? 'text-right' : 'text-left'}`}>
+
+                    <div className={`max-w-[80%] ${message.isUser ? 'text-right' : 'text-left'}`}>
                       <div
-                        className={`rounded-lg px-4 py-2 ${
-                          message.isUser
-                            ? 'bg-primary text-primary-foreground ml-auto'
-                            : 'bg-muted text-muted-foreground'
-                        }`}
+                        className={`rounded-2xl px-4 py-3 shadow-md ${message.isUser
+                            ? 'bg-primary text-primary-foreground ml-auto rounded-tr-none'
+                            : 'bg-white/10 text-foreground border border-white/10 rounded-tl-none backdrop-blur-sm'
+                          }`}
                       >
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
                       </div>
@@ -192,16 +199,16 @@ const AIChat = () => {
                     </div>
                   </div>
                 ))}
-                
+
                 {isLoading && (
                   <div className="flex gap-3">
-                    <Avatar className="h-8 w-8 bg-secondary">
-                      <AvatarFallback>
+                    <Avatar className="h-8 w-8 bg-secondary/80 border border-white/10">
+                      <AvatarFallback className="bg-transparent text-white">
                         <Bot className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-muted rounded-lg px-4 py-2 flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div className="bg-white/10 rounded-2xl rounded-tl-none px-4 py-3 flex items-center gap-2 border border-white/10">
+                      <Loader2 className="h-4 w-4 animate-spin text-primary" />
                       <span className="text-sm text-muted-foreground">Thinking...</span>
                     </div>
                   </div>
@@ -211,15 +218,15 @@ const AIChat = () => {
 
             {/* Suggestions (only show when no messages or just the initial message) */}
             {messages.length <= 1 && (
-              <div className="px-4 pb-4">
-                <p className="text-sm text-muted-foreground mb-3">Try asking about:</p>
+              <div className="px-4 pb-4 animate-fade-in">
+                <p className="text-sm text-muted-foreground mb-3 font-medium">Try asking about:</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {suggestionPrompts.map((prompt, index) => (
                     <Button
                       key={index}
                       variant="outline"
                       size="sm"
-                      className="text-left justify-start h-auto py-2 px-3 text-xs"
+                      className="text-left justify-start h-auto py-2 px-3 text-xs glass hover:bg-white/10 border-white/10 text-muted-foreground hover:text-primary transition-colors"
                       onClick={() => handleSuggestionClick(prompt)}
                     >
                       {prompt}
@@ -230,16 +237,21 @@ const AIChat = () => {
             )}
 
             {/* Input */}
-            <div className="border-t border-border p-4">
+            <div className="border-t border-white/10 p-4 bg-white/5">
               <form onSubmit={sendMessage} className="flex gap-2">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask me anything about Aryan..."
                   disabled={isLoading}
-                  className="flex-1"
+                  className="flex-1 bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all"
                 />
-                <Button type="submit" disabled={!input.trim() || isLoading} size="icon">
+                <Button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  size="icon"
+                  className="shadow-glow hover:scale-105 transition-transform"
+                >
                   {isLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (

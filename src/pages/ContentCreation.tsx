@@ -19,10 +19,10 @@ const ContentCreation = () => {
 
   // Video URLs - GitHub LFS for production, local for development
   const isDevelopment = import.meta.env.DEV;
-  const baseUrl = isDevelopment 
-    ? '/media/projects' 
+  const baseUrl = isDevelopment
+    ? '/media/projects'
     : 'https://github.com/aryan1429/My-Portfolio/raw/master/public/media/projects';
-  
+
   const MoonFinal = `${baseUrl}/MoonFinal.mp4`;
   const Wolverine = `${baseUrl}/WolverineFinal.mp4`;
   const ironman_edit = `${baseUrl}/Ironman-edit.mp4`;
@@ -31,7 +31,7 @@ const ContentCreation = () => {
 
   const filters = [
     { id: 'all', label: 'All Content' },
-   // { id: 'reels', label: 'Reels' },
+    // { id: 'reels', label: 'Reels' },
     { id: 'shorts', label: 'Shorts' },
     { id: 'edits', label: 'Edits' }
   ];
@@ -74,8 +74,8 @@ const ContentCreation = () => {
     },
   ];
 
-  const filteredVideos = activeFilter === 'all' 
-    ? videos 
+  const filteredVideos = activeFilter === 'all'
+    ? videos
     : videos.filter(video => video.category === activeFilter);
 
   // --- NEW STATE FOR VIDEO THUMBNAIL LOGIC ---
@@ -174,15 +174,21 @@ const ContentCreation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero pt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="min-h-screen bg-background relative overflow-hidden pt-20">
+      {/* Animated Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[30%] left-[20%] w-[30%] h-[30%] bg-primary/20 rounded-full blur-[100px] animate-float" />
+        <div className="absolute bottom-[30%] right-[20%] w-[30%] h-[30%] bg-secondary/20 rounded-full blur-[100px] animate-float" style={{ animationDelay: '5s' }} />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight">
             Video Editing & Content Creation
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Showcasing my creative work in video editing, content creation, and visual storytelling 
+            Showcasing my creative work in video editing, content creation, and visual storytelling
             across various platforms and formats.
           </p>
         </div>
@@ -194,7 +200,10 @@ const ContentCreation = () => {
               key={filter.id}
               variant={activeFilter === filter.id ? "default" : "outline"}
               onClick={() => setActiveFilter(filter.id)}
-              className="transition-all duration-300"
+              className={`transition-all duration-300 rounded-full px-6 ${activeFilter === filter.id
+                ? 'shadow-glow'
+                : 'glass border-white/10 hover:bg-white/10'
+                }`}
             >
               <Filter className="h-4 w-4 mr-2" />
               {filter.label}
@@ -203,18 +212,17 @@ const ContentCreation = () => {
         </div>
 
         {/* Video Grid - Mobile Optimized */}
-        <div className={`grid gap-3 ${
-          isMobile 
-            ? 'grid-cols-2 sm:grid-cols-2' 
-            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
-        }`}>
+        <div className={`grid gap-4 ${isMobile
+          ? 'grid-cols-2 sm:grid-cols-2'
+          : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
+          }`}>
           {filteredVideos.map((video, index) => {
             const originalIdx = videos.findIndex(v => v.id === video.id);
 
             return (
-              <Card 
+              <Card
                 key={video.id}
-                className="bg-gradient-card border-border hover:shadow-glow transition-all duration-300 hover:-translate-y-1 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
+                className="glass border-white/10 hover:bg-white/5 hover:shadow-glow transition-all duration-300 hover:-translate-y-1 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <CardContent className="p-0 relative w-full h-full">
@@ -231,9 +239,9 @@ const ContentCreation = () => {
                   ) : (
                     // Keep existing video implementation for desktop
                     <div className="absolute inset-0 w-full h-full">
-                      <video 
-                        src={video.videoUrl} 
-                        controls 
+                      <video
+                        src={video.videoUrl}
+                        controls
                         poster={video.thumbnail || undefined}
                         className="w-full h-full object-cover rounded-md"
                         onPlay={() => handlePlay(originalIdx)}
@@ -248,7 +256,7 @@ const ContentCreation = () => {
                         preload="metadata"
                         playsInline
                         muted
-                        style={{ 
+                        style={{
                           backgroundColor: "black",
                           imageRendering: "auto",
                           willChange: "transform"
@@ -267,11 +275,11 @@ const ContentCreation = () => {
                           <img
                             src={video.thumbnail}
                             alt={video.title}
-                            className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity"
                             style={{ zIndex: 2, backgroundColor: "black" }}
                           />
                           <button
-                            className="absolute inset-0 flex items-center justify-center w-full h-full"
+                            className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                             style={{ zIndex: 3 }}
                             onClick={() => {
                               const videoEls = document.querySelectorAll('video');
@@ -281,12 +289,12 @@ const ContentCreation = () => {
                             tabIndex={0}
                             aria-label="Play"
                           >
-                            <Play className="h-12 w-12 text-white drop-shadow-lg bg-black/40 rounded-full p-2" />
+                            <Play className="h-14 w-14 text-white drop-shadow-lg bg-primary/80 backdrop-blur-sm rounded-full p-3 hover:scale-110 transition-transform" />
                           </button>
                         </>
                       )}
-                      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/70 to-transparent text-white pointer-events-none rounded-t-md">
-                        <h3 className="font-semibold text-sm mb-1 line-clamp-2">
+                      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/80 to-transparent text-white pointer-events-none rounded-t-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 className="font-semibold text-sm mb-1 line-clamp-2 font-heading">
                           {video.title}
                         </h3>
                       </div>
@@ -299,12 +307,12 @@ const ContentCreation = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16 animate-fade-in">
-          <h3 className="text-2xl font-bold mb-4">Ready to create something amazing?</h3>
-          <p className="text-muted-foreground mb-6">
+        <div className="text-center mt-20 animate-fade-in">
+          <h3 className="text-2xl font-bold mb-4 font-heading">Ready to create something amazing?</h3>
+          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
             Let's collaborate on your next video project or content creation campaign.
           </p>
-          <Button variant="default" size="lg" className="shadow-glow">
+          <Button variant="default" size="lg" className="shadow-glow hover:scale-105 transition-transform rounded-full px-8">
             Let's Work Together
           </Button>
         </div>

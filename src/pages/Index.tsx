@@ -11,8 +11,8 @@ const Index = () => {
     { name: "Davinci Resolve", level: "Intermediate", icon: "✨" },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
     { name: "YouTube Content Creation", level: "Expert", icon: "▶️" },
-    
-   //{ name: "", level: "Intermediate", icon: "🌟" }
+
+    //{ name: "", level: "Intermediate", icon: "🌟" }
   ];
 
   const achievements = [
@@ -64,10 +64,10 @@ const Index = () => {
               <p className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed">
                 A Full Stack Developer, video editor, and content creator passionate about storytelling and innovation. Bringing creative visions to life through cinematic editing, engaging content, and impactful digital solutions
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="shadow-glow animate-glow"
                   onClick={() => scrollToSection('contact')}
                 >
@@ -95,7 +95,7 @@ const Index = () => {
 
           {/* Scroll Indicator */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <ChevronDown 
+            <ChevronDown
               className="h-8 w-8 text-primary cursor-pointer"
               onClick={() => scrollToSection('skills')}
             />
@@ -115,7 +115,7 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((skill, index) => (
-              <Card 
+              <Card
                 key={skill.name}
                 className="bg-gradient-card border-border hover:shadow-glow transition-all duration-500 hover:-translate-y-2 animate-fade-in-up"
                 style={{ animationDelay: `${index * 100}ms` }}
@@ -145,7 +145,7 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {achievements.map((achievement, index) => (
-              <Card 
+              <Card
                 key={achievement.title}
                 className="bg-gradient-card border-border hover:shadow-glow transition-all duration-500 hover:-translate-y-2 animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
@@ -170,7 +170,7 @@ const Index = () => {
                 Ready to create something amazing?
               </h2>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Whether you need video editing, content creation, or technical development, 
+                Whether you need video editing, content creation, or technical development,
                 let's collaborate to bring your vision to life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

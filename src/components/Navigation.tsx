@@ -30,11 +30,10 @@ const Navigation = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`transition-all duration-300 hover:text-primary relative ${
-                  location.pathname === item.path 
-                    ? 'text-primary' 
+                className={`transition-all duration-300 hover:text-primary relative ${location.pathname === item.path
+                    ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
-                }`}
+                  }`}
               >
                 {item.label}
                 {location.pathname === item.path && (
@@ -63,11 +62,10 @@ const Navigation = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`block transition-all duration-300 hover:text-primary ${
-                    location.pathname === item.path 
-                      ? 'text-primary font-medium' 
+                  className={`block transition-all duration-300 hover:text-primary ${location.pathname === item.path
+                      ? 'text-primary font-medium'
                       : 'text-muted-foreground'
-                  }`}
+                    }`}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}
