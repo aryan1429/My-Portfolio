@@ -3,20 +3,15 @@
 # Start Command: npm start
 
 # This file tells Render how to deploy the backend
-{
-  "name": "portfolio-backend",
-  "type": "web",
-  "env": "node",
-  "buildCommand": "npm install",
-  "startCommand": "npm start",
-  "envVars": [
-    {
-      "key": "NODE_ENV",
-      "value": "production"
-    },
-    {
-      "key": "PORT",
-      "value": "10000"
-    }
-  ]
-}
+services:
+  - type: web
+    name: portfolio-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
