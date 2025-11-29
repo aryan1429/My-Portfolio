@@ -66,6 +66,130 @@ try {
   console.log('⚠️  Portfolio knowledge base not found');
 }
 
+// Fallback response generator for when OpenAI is unavailable
+function generateFallbackResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  // Skills and expertise questions
+  if (lowerMessage.includes('skill') || lowerMessage.includes('technology') || lowerMessage.includes('tech stack')) {
+    return `Here are Aryan's key technical skills:
+
+🎯 **Frontend Expertise:**
+• React.js (Expert) - Building dynamic, responsive web applications
+• TypeScript (Advanced) - Type-safe development
+• HTML5/CSS3 (Expert) - Modern web standards
+• Tailwind CSS (Advanced) - Utility-first styling
+• Three.js (Intermediate) - 3D web graphics
+
+💻 **Backend & Databases:**
+• Node.js & Express.js (Intermediate)
+• Python with Flask/FastAPI (Intermediate)
+• MongoDB, Firebase/Firestore, SQLite, Redis
+
+☁️ **Cloud & DevOps:**
+• Google Cloud Platform (GCP)
+• Cloud Storage & App Engine
+• Vercel deployment
+• Git/GitHub version control
+
+🎬 **Content Creation:**
+• Adobe After Effects (Advanced)
+• DaVinci Resolve (Intermediate)
+• Video editing & post-production
+• Script writing (Expert)
+• YouTube content creation (Expert)`;
+  }
+  
+  // Project questions
+  if (lowerMessage.includes('project') || lowerMessage.includes('portfolio') || lowerMessage.includes('work')) {
+    return `Here are some of Aryan's notable projects:
+
+🎵 **TextMoodDJ** - AI-powered mood-based music assistant
+• Uses sentiment analysis to understand user emotions
+• Recommends music based on detected mood
+• Built with Python and machine learning
+
+🤖 **Mr Sarcastic** - AI Chatbot with personality
+• Sarcastic AI assistant with music recommendation features
+• Natural language processing and conversation flows
+• Integrated with music APIs
+
+💰 **Expense Tracker** - Full-stack financial management
+• MERN stack application (MongoDB, Express, React, Node.js)
+• Data visualization with charts and graphs
+• User authentication and data persistence
+
+🎥 **Content Creation Portfolio** - 50+ projects completed
+• YouTube content creation and editing
+• Adobe After Effects animations
+• Script writing and video production
+
+Aryan has completed 50+ projects across web development, AI/ML, and content creation with 3+ years of experience.`;
+  }
+  
+  // Contact and collaboration questions
+  if (lowerMessage.includes('contact') || lowerMessage.includes('hire') || lowerMessage.includes('email') || lowerMessage.includes('reach')) {
+    return `📧 **Contact Aryan Aligeti:**
+
+**Email:** aryanaligetibusiness@gmail.com
+**Portfolio:** https://aryanaligeti.dev
+
+💼 **Professional Focus:**
+• Full-stack web development
+• AI/ML projects and implementations
+• Content creation and video production
+• Technical consultation and project collaboration
+
+🚀 **Experience:** 3+ years in development
+📊 **Projects Completed:** 50+
+
+Aryan is open to freelance projects, full-time opportunities, and collaboration on innovative tech projects. Feel free to reach out for any development needs or creative partnerships!`;
+  }
+  
+  // Experience and background questions
+  if (lowerMessage.includes('experience') || lowerMessage.includes('background') || lowerMessage.includes('about')) {
+    return `👨‍💻 **About Aryan Aligeti:**
+
+**Title:** Full Stack Developer & Content Creator
+**Experience:** 3+ Years in Development
+**Specialization:** React.js, AI/ML, Content Creation
+
+🎯 **Professional Journey:**
+• Started as a content creator with YouTube expertise
+• Evolved into full-stack development with React.js focus
+• Specialized in AI/ML integration and modern web technologies
+• Combines technical skills with creative content production
+
+🏆 **Key Achievements:**
+• 50+ completed projects across various technologies
+• Expert-level React.js and content creation skills
+• Advanced knowledge in TypeScript and modern web development
+• Successfully integrated AI/ML into web applications
+
+🌟 **Unique Combination:**
+Aryan brings a unique blend of technical development expertise and creative content creation skills, making him ideal for projects that require both robust development and engaging user experiences.`;
+  }
+  
+  // Default response for general questions
+  return `Hello! I'm Aryan Aligeti's AI assistant. Aryan is a **Full Stack Developer & Content Creator** with 3+ years of experience and 50+ completed projects.
+
+🎯 **Key Expertise:**
+• React.js & TypeScript development (Expert)
+• AI/ML integration and chatbot development  
+• Content creation with Adobe After Effects
+• Full-stack web development (MERN stack)
+• Google Cloud Platform deployment
+
+💡 **Notable Projects:**
+• TextMoodDJ - AI mood-based music assistant
+• Mr Sarcastic - AI chatbot with personality
+• Expense Tracker - Full-stack financial app
+
+📧 **Contact:** aryanaligetibusiness@gmail.com
+
+Feel free to ask me about Aryan's skills, projects, experience, or how to get in touch for collaboration opportunities!`;
+}
+
 // Middleware
 app.use(cors({
   origin: [
@@ -435,14 +559,21 @@ Always provide accurate, helpful information about Aryan. If asked about somethi
   } catch (error) {
     console.error('❌ AI Chat Error:', error);
     
+    // Check if it's a quota/rate limit error and provide fallback
+    if (error.code === 'insufficient_quota' || error.code === 'rate_limit_exceeded') {
+      console.log('🔄 OpenAI quota exceeded, providing fallback response');
+      
+      const fallbackResponse = generateFallbackResponse(req.body.message);
+      
+      return res.json({ 
+        response: fallbackResponse + "\n\n*Note: AI assistant is currently at capacity. This is a pre-configured response based on Aryan's portfolio.*"
+      });
+    }
+    
     let errorMessage = 'Sorry, I encountered an error. Please try again.';
     
-    if (error.code === 'insufficient_quota') {
-      errorMessage = 'AI service quota exceeded. Please try again later.';
-    } else if (error.code === 'invalid_api_key') {
+    if (error.code === 'invalid_api_key') {
       errorMessage = 'AI service configuration error. Please contact support.';
-    } else if (error.code === 'rate_limit_exceeded') {
-      errorMessage = 'Too many requests. Please wait a moment and try again.';
     }
 
     res.status(500).json({ error: errorMessage });

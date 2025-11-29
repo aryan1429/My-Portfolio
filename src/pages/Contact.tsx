@@ -48,19 +48,13 @@ const Contact = () => {
 
   const socialLinks = [
     {
-      name: 'YouTube 1',
+      name: 'YouTube',
       icon: Youtube,
       url: '#',
       color: 'hover:text-red-500'
     },
     {
-      name: 'YouTube 2',
-      icon: Youtube,
-      url: '#',
-      color: 'hover:text-red-500'
-    },
-    {
-      name: 'Instagram', 
+      name: 'Instagram',
       icon: Instagram,
       url: '#',
       color: 'hover:text-pink-500'
@@ -148,9 +142,9 @@ const Contact = () => {
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
-                  className="w-full shadow-glow" 
+                <Button
+                  type="submit"
+                  className="w-full shadow-glow"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -181,8 +175,8 @@ const Contact = () => {
                   <Mail className="h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">Email</p>
-                    <a 
-                      href="mailto:your.email@gmail.com" 
+                    <a
+                      href="mailto:aryanaligetibusiness@gmail.com"
                       className="text-primary hover:text-primary-glow transition-colors"
                     >
                       aryanaligetibusiness@gmail.com
