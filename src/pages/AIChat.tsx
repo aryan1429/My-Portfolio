@@ -61,6 +61,9 @@ const AIChat = () => {
       const apiUrl = import.meta.env.VITE_API_URL 
         ? `${import.meta.env.VITE_API_URL}/ai/chat` 
         : '/api/ai/chat';
+      
+      console.log('Making API request to:', apiUrl);
+      
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -72,15 +75,21 @@ const AIChat = () => {
         }),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       if (!response.ok) {
-        throw new Error('Failed to get AI response');
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(`API Error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('API Response:', data);
       
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: data.response,
+        text: data.response || "I received your message but couldn't generate a proper response.",
         isUser: false,
         timestamp: new Date()
       };
@@ -90,13 +99,13 @@ const AIChat = () => {
       console.error('Error sending message:', error);
       toast({
         title: "Error",
-        description: "Failed to get AI response. Please try again.",
+        description: `Failed to get AI response: ${error.message}`,
         variant: "destructive",
       });
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I'm sorry, I'm experiencing some technical difficulties right now. Please try again in a moment!",
+        text: `I'm sorry, I'm experiencing some technical difficulties right now. Error: ${error.message}. Please try again in a moment!`,
         isUser: false,
         timestamp: new Date()
       };

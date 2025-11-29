@@ -68,7 +68,13 @@ try {
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || ['http://localhost:3000', 'http://localhost:5173'],
+  origin: [
+    process.env.FRONTEND_URL || 'https://aryanaligeti.dev',
+    'http://localhost:3000', 
+    'http://localhost:5173',
+    'http://localhost:8081',
+    'https://aryanaligeti.dev'
+  ],
   credentials: true
 }));
 
@@ -323,8 +329,14 @@ app.get('/api/contact/messages', async (req, res) => {
 
 // AI Chat endpoint
 app.post('/api/ai/chat', async (req, res) => {
+  console.log('🤖 AI Chat request received');
+  console.log('Request body:', req.body);
+  console.log('OpenAI available:', !!openai);
+  console.log('Portfolio knowledge available:', !!portfolioKnowledge);
+  
   try {
     if (!openai) {
+      console.log('❌ OpenAI not initialized');
       return res.status(503).json({ 
         error: 'AI service is not available. Please check the OpenAI API configuration.' 
       });
@@ -333,8 +345,11 @@ app.post('/api/ai/chat', async (req, res) => {
     const { message, conversationHistory = [] } = req.body;
 
     if (!message || message.trim().length === 0) {
+      console.log('❌ Empty message received');
       return res.status(400).json({ error: 'Message is required' });
     }
+
+    console.log('✅ Processing message:', message.substring(0, 50) + '...');
 
     // Create system prompt with portfolio knowledge
     const systemPrompt = `You are Aryan Aligeti's AI assistant. You have comprehensive knowledge about Aryan's portfolio, skills, projects, and experience. Answer questions about Aryan in a helpful, professional, and friendly manner.
@@ -400,6 +415,8 @@ Always provide accurate, helpful information about Aryan. If asked about somethi
     // Add current message
     messages.push({ role: 'user', content: message });
 
+    console.log('🚀 Calling OpenAI API...');
+    
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
@@ -413,10 +430,12 @@ Always provide accurate, helpful information about Aryan. If asked about somethi
     const response = completion.choices[0]?.message?.content || 
       "I'm sorry, I couldn't generate a response right now. Please try again.";
 
+    console.log('✅ OpenAI response received:', response.substring(0, 50) + '...');
+    
     res.json({ response });
 
   } catch (error) {
-    console.error('AI Chat Error:', error);
+    console.error('❌ AI Chat Error:', error);
     
     let errorMessage = 'Sorry, I encountered an error. Please try again.';
     
