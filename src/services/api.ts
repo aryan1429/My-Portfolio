@@ -24,7 +24,8 @@ interface ProfileData {
   [key: string]: unknown;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = `${BASE_URL}/api`;
 
 class PortfolioApiService {
   private async makeRequest(url: string, options: RequestInit = {}) {
@@ -234,7 +235,7 @@ class PortfolioApiService {
   getMediaUrl(filename: string, category: string = 'images') {
     if (!filename) return '';
     if (filename.startsWith('http')) return filename; // External URL
-    return `http://localhost:5000/uploads/${category}/${filename}`;
+    return `${BASE_URL}/uploads/${category}/${filename}`;
   }
 }
 

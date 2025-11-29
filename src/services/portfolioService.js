@@ -1,6 +1,7 @@
 // Portfolio data service for React frontend
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = `${BASE_URL}/api`;
 
 class PortfolioService {
   async fetchData(endpoint) {
@@ -61,21 +62,21 @@ class PortfolioService {
   // Helper methods for media URLs
   getMediaUrl(mediaPath) {
     if (!mediaPath) return '';
-    
+
     // If it's already a full URL, return as is
     if (mediaPath.startsWith('http')) return mediaPath;
-    
+
     // If it starts with /, it's an absolute path from root
-    if (mediaPath.startsWith('/')) return mediaPath;
-    
+    if (mediaPath.startsWith('/')) return `${BASE_URL}${mediaPath}`;
+
     // Otherwise, prepend /media/
-    return `/media/${mediaPath}`;
+    return `${BASE_URL}/media/${mediaPath}`;
   }
 
   // Get optimized image URL (you can implement CDN logic here)
   getOptimizedImageUrl(mediaPath, width = null, height = null) {
     const baseUrl = this.getMediaUrl(mediaPath);
-    
+
     // For now, just return the base URL
     // In the future, you can add query parameters for image optimization
     return baseUrl;
