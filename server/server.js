@@ -398,8 +398,11 @@ app.post('/api/contact', async (req, res) => {
 
       const transporter = createTransport({
         host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, // Use SSL
+        port: 587,
+        secure: false, // Use STARTTLS
+        requireTLS: true,
+        logger: true, // Log to console
+        debug: true, // Include SMTP traffic in logs
         auth: {
           user: process.env.SMTP_USER || process.env.EMAIL_USER,
           pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
