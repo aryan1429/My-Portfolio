@@ -9,14 +9,14 @@ export const chatResponses: ChatResponse[] = [
     // --- Personal / Introduction ---
     {
         id: 'intro',
-        keywords: ['hello', 'hi', 'hey', 'greetings', 'who are you', 'name'],
+        keywords: ['hello', 'hi', 'hey', 'greetings', 'who are you', 'who is he', 'who is aryan', 'name'],
         response: "Hello! I'm Aryan's AI assistant. I can answer questions about his skills, projects, and experience. Ask me anything!",
         category: 'Personal'
     },
     {
         id: 'about',
-        keywords: ['about', 'tell me about yourself', 'background', 'bio'],
-        response: "I'm a passionate Full Stack Developer with experience in React, Node.js, and Cloud technologies. I love building scalable web applications and solving complex problems.",
+        keywords: ['about', 'tell me about yourself', 'background', 'bio', 'who is he'],
+        response: "Aryan is a passionate Full Stack Developer and Content Creator with experience in React, Node.js, and Video Editing. He loves building scalable web applications and creating engaging content.",
         category: 'Personal'
     },
     {
@@ -26,10 +26,18 @@ export const chatResponses: ChatResponse[] = [
         category: 'Personal'
     },
 
+    // --- Content Creation ---
+    {
+        id: 'content-creation',
+        keywords: ['content creation', 'video editing', 'youtube', 'editing', 'editor', 'davinci', 'after effects', 'premiere'],
+        response: "Aryan has over 3 years of experience in content creation and video editing. He is proficient in Adobe After Effects, DaVinci Resolve, and Premiere Pro. He has managed multiple YouTube channels and completed 100+ editing projects.",
+        category: 'Personal'
+    },
+
     // --- Technical Skills ---
     {
         id: 'skills',
-        keywords: ['skills', 'stack', 'technologies', 'tech', 'languages'],
+        keywords: ['skills', 'stack', 'technologies', 'tech', 'languages', 'what do you know'],
         response: "My core stack includes React, TypeScript, Node.js, and Python. I also have experience with AWS, Google Cloud, Docker, and various databases like MongoDB and PostgreSQL.",
         category: 'Technical'
     },
@@ -76,7 +84,7 @@ export const chatResponses: ChatResponse[] = [
     {
         id: 'contact',
         keywords: ['contact', 'email', 'reach', 'touch', 'hire'],
-        response: "You can reach me via the Contact page form, or email me directly at aryan@example.com (placeholder). I'm always open to discussing new opportunities.",
+        response: "You can reach me via the Contact page form, or email me directly at aryanaligetibusiness@gmail.com. I'm always open to discussing new opportunities.",
         category: 'Contact'
     },
     {
