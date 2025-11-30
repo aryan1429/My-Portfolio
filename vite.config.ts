@@ -36,6 +36,9 @@ export default defineConfig(({ mode }) => {
     define: {
       // Explicitly define environment variables for Vite
       'import.meta.env.VITE_GCP_STORAGE_BASE_URL': JSON.stringify(env.VITE_GCP_STORAGE_BASE_URL || 'https://storage.googleapis.com/my-portfolio-69'),
+      'import.meta.env.VITE_EMAILJS_SERVICE_ID': JSON.stringify(env.VITE_EMAILJS_SERVICE_ID),
+      'import.meta.env.VITE_EMAILJS_TEMPLATE_ID': JSON.stringify(env.VITE_EMAILJS_TEMPLATE_ID),
+      'import.meta.env.VITE_EMAILJS_PUBLIC_KEY': JSON.stringify(env.VITE_EMAILJS_PUBLIC_KEY),
     },
     build: {
       rollupOptions: {
