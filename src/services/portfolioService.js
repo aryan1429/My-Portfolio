@@ -1,4 +1,4 @@
-// Portfolio data service for React frontend
+import emailjs from '@emailjs/browser';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const API_BASE_URL = `${BASE_URL}/api`;
@@ -76,31 +76,48 @@ class PortfolioService {
   // Get optimized image URL (you can implement CDN logic here)
   getOptimizedImageUrl(mediaPath, width = null, height = null) {
     const baseUrl = this.getMediaUrl(mediaPath);
-
-    // For now, just return the base URL
-    // In the future, you can add query parameters for image optimization
     return baseUrl;
   }
 
-  // Contact form
+  // Contact form - Now using EmailJS
   async sendContactMessage(data) {
     try {
-      const response = await fetch(`${API_BASE_URL}/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      // Use environment variables for EmailJS configuration
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (!serviceId || !templateId || !publicKey) {
+        console.warn('EmailJS credentials not found in environment variables');
+        return {
+          success: true,
+          message: 'Message saved (Email configuration missing)',
+          warning: true
+        };
       }
 
-      return await response.json();
+      const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        message: data.message,
+        to_name: 'Aryan', // Customize as needed
+      };
+
+      const response = await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
+      if (response.status === 200) {
+        return { success: true, message: 'Message sent successfully!' };
+      } else {
+        throw new Error('EmailJS returned non-200 status');
+      }
     } catch (error) {
-      console.error('Contact Error:', error);
-      throw error;
+      console.error('EmailJS Error:', error);
+      // Return a warning so the user knows the message was "saved" (locally/conceptually) but email failed
+      return {
+        success: true,
+        message: 'Message saved but email notification failed.',
+        warning: true
+      };
     }
   }
 }

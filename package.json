@@ -22,6 +22,7 @@
     "gcp:setup": "npm install @google-cloud/storage @google-cloud/firestore @google-cloud/logging && npm run gcp:migrate"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@google-cloud/firestore": "^7.11.3",
     "@google-cloud/logging": "^11.2.0",
     "@google-cloud/storage": "^7.17.0",
