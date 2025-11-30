@@ -397,16 +397,17 @@ app.post('/api/contact', async (req, res) => {
       }
 
       const transporter = createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // Use STARTTLS
-        requireTLS: true,
-        logger: true, // Log to console
-        debug: true, // Include SMTP traffic in logs
+        service: 'gmail', // Revert to service: 'gmail' but with specific options
         auth: {
           user: process.env.SMTP_USER || process.env.EMAIL_USER,
           pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
         },
+        // Force IPv4 to avoid IPv6 timeouts in some environments
+        family: 4,
+        // Increase connection timeout
+        connectionTimeout: 10000,
+        logger: true,
+        debug: true,
       });
 
       console.log(`📧 Preparing to send email to: ${process.env.CONTACT_EMAIL || 'DEFAULT (your-email@gmail.com)'}`);
