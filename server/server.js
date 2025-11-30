@@ -428,11 +428,33 @@ app.post('/api/contact', async (req, res) => {
       } else {
         console.log('Email not configured, but message saved:', { name, email, message });
         res.status(200).json({
-          error: 'Failed to send message.',
-          details: process.env.NODE_ENV === 'development' ? error.message : undefined
+          message: 'Message received (Email not configured on server).',
+          warning: true
         });
       }
+    } catch (emailError) {
+      console.error('❌ Email sending failed DETAILED ERROR:', {
+        message: emailError.message,
+        code: emailError.code,
+        command: emailError.command,
+        response: emailError.response,
+        stack: emailError.stack
+      });
+
+      res.status(200).json({
+        message: 'Message received but failed to send email notification.',
+        warning: true,
+        debugError: emailError.message
+      });
+    }
+  } catch (error) {
+    console.error('Error processing contact form:', error);
+    res.status(500).json({
+      error: 'Failed to send message.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
+  }
+});
 
 // Get contact messages (admin only)
 app.get('/api/contact/messages', async (req, res) => {
