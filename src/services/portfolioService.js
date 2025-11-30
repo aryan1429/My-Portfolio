@@ -87,6 +87,13 @@ class PortfolioService {
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
       const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
+      console.log('EmailJS Config Status:', {
+        hasServiceId: !!serviceId,
+        hasTemplateId: !!templateId,
+        hasPublicKey: !!publicKey,
+        serviceIdPrefix: serviceId ? serviceId.substring(0, 4) + '...' : 'MISSING'
+      });
+
       if (!serviceId || !templateId || !publicKey) {
         console.warn('EmailJS credentials not found in environment variables');
         return {
@@ -97,10 +104,10 @@ class PortfolioService {
       }
 
       const templateParams = {
-        from_name: data.name,
-        from_email: data.email,
+        name: data.name,
+        email: data.email,
         message: data.message,
-        to_name: 'Aryan', // Customize as needed
+        time: new Date().toLocaleString(), // Add timestamp for the template
       };
 
       const response = await emailjs.send(serviceId, templateId, templateParams, publicKey);
