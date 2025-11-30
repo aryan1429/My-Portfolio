@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { findResponse } from '@/data/chatResponses';
 
 interface Message {
   id: string;
@@ -56,63 +57,30 @@ const AIChat = () => {
     setInput('');
     setIsLoading(true);
 
-    try {
-      // Use environment variable for API URL, fallback to relative path for development
-      const apiUrl = import.meta.env.VITE_API_URL
-        ? `${import.meta.env.VITE_API_URL}/api/ai/chat`
-        : '/api/ai/chat';
+    // Simulate network delay and use local response logic
+    setTimeout(() => {
+      try {
+        const responseText = findResponse(userMessage.text);
 
-      console.log('Making API request to:', apiUrl);
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: responseText,
+          isUser: false,
+          timestamp: new Date()
+        };
 
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: input.trim(),
-          conversationHistory: messages.slice(-10) // Send last 10 messages for context
-        }),
-      });
-
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error Response:', errorText);
-        throw new Error(`API Error: ${response.status} - ${errorText}`);
+        setMessages(prev => [...prev, aiMessage]);
+      } catch (error: any) {
+        console.error('Error getting response:', error);
+        toast({
+          title: "Error",
+          description: "Failed to generate response.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
       }
-
-      const data = await response.json();
-      console.log('API Response:', data);
-
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: data.response || "I received your message but couldn't generate a proper response.",
-        isUser: false,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, aiMessage]);
-    } catch (error: any) {
-      console.error('Error sending message:', error);
-      toast({
-        title: "Error",
-        description: `Failed to get AI response: ${error.message}`,
-        variant: "destructive",
-      });
-
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: `I'm sorry, I'm experiencing some technical difficulties right now. Error: ${error.message}. Please try again in a moment!`,
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+    }, 800);
   };
 
   const formatTime = (date: Date) => {
@@ -187,8 +155,8 @@ const AIChat = () => {
                     <div className={`max-w-[80%] ${message.isUser ? 'text-right' : 'text-left'}`}>
                       <div
                         className={`rounded-2xl px-4 py-3 shadow-md ${message.isUser
-                            ? 'bg-primary text-primary-foreground ml-auto rounded-tr-none'
-                            : 'bg-white/10 text-foreground border border-white/10 rounded-tl-none backdrop-blur-sm'
+                          ? 'bg-primary text-primary-foreground ml-auto rounded-tr-none'
+                          : 'bg-white/10 text-foreground border border-white/10 rounded-tl-none backdrop-blur-sm'
                           }`}
                       >
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
