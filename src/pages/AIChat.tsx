@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Loader2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,28 @@ interface Message {
   timestamp: Date;
 }
 
+const Typewriter = ({ text, onUpdate, speed = 15 }: { text: string; onUpdate?: () => void; speed?: number }) => {
+  const [displayedText, setDisplayedText] = useState('');
+
+  useEffect(() => {
+    let i = 0;
+    setDisplayedText('');
+    const timer = setInterval(() => {
+      if (i < text.length) {
+        setDisplayedText((prev) => prev + text.charAt(i));
+        i++;
+        onUpdate?.();
+      } else {
+        clearInterval(timer);
+      }
+    }, speed);
+
+    return () => clearInterval(timer);
+  }, [text, speed, onUpdate]);
+
+  return <>{displayedText}</>;
+};
+
 const AIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -29,18 +51,18 @@ const AIChat = () => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
       if (scrollContainer) {
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,7 +181,13 @@ const AIChat = () => {
                           : 'bg-white/10 text-foreground border border-white/10 rounded-tl-none backdrop-blur-sm'
                           }`}
                       >
-                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                          {message.isUser ? (
+                            message.text
+                          ) : (
+                            <Typewriter text={message.text} onUpdate={scrollToBottom} />
+                          )}
+                        </p>
                       </div>
                       <p className="text-xs text-muted-foreground mt-1 px-1">
                         {formatTime(message.timestamp)}
