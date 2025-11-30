@@ -29,12 +29,21 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await portfolioService.sendContactMessage(formData);
-      toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
-      });
-      setFormData({ name: '', email: '', message: '' });
+      const response = await portfolioService.sendContactMessage(formData);
+
+      if (response.warning) {
+        toast({
+          title: "Message Saved (Email Warning)",
+          description: response.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you soon.",
+        });
+        setFormData({ name: '', email: '', message: '' });
+      }
     } catch (error) {
       toast({
         title: "Error",
