@@ -1,48 +1,69 @@
-import dotenv from 'dotenv';
-import nodemailer from 'nodemailer';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import nodemailer from 'nodemailer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const envPath = path.join(__dirname, '../.env');
 
-// Load env from root
-dotenv.config({ path: path.join(__dirname, '../.env') });
+console.log('Reading .env from:', envPath);
 
-console.log('--- Email Config Test ---');
-console.log('Checking environment variables...');
+try {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    const envVars = {};
 
-const user = process.env.SMTP_USER || process.env.EMAIL_USER;
-const pass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
+    envContent.split('\n').forEach(line => {
+        const match = line.match(/^([^=]+)=(.*)$/);
+        if (match) {
+            const key = match[1].trim();
+            let value = match[2].trim();
+            // Remove quotes if present
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.slice(1, -1);
+            }
+            envVars[key] = value;
+        }
+    });
 
-if (!user) {
-    console.error('❌ ERROR: SMTP_USER or EMAIL_USER is missing in .env');
-} else {
-    console.log('✅ SMTP_USER/EMAIL_USER is set:', user);
-}
+    const user = envVars.SMTP_USER || envVars.EMAIL_USER;
+    let pass = envVars.SMTP_PASS || envVars.EMAIL_PASS;
 
-if (!pass) {
-    console.error('❌ ERROR: SMTP_PASS or EMAIL_PASS is missing in .env');
-} else {
-    console.log('✅ SMTP_PASS/EMAIL_PASS is set (hidden)');
-}
+    if (!user) {
+        console.log('❌ SMTP_USER not found in .env');
+        process.exit(1);
+    }
+    if (!pass) {
+        console.log('❌ SMTP_PASS not found in .env');
+        process.exit(1);
+    }
 
-if (user && pass) {
-    console.log('\nAttempting to create transporter...');
+    console.log('✅ Found credentials for:', user);
+
+    // Handle spaces in App Password
+    if (pass.includes(' ')) {
+        console.log('ℹ️  Password contains spaces. Removing them for connection...');
+        pass = pass.replace(/\s/g, '');
+    }
+
     const transporter = nodemailer.createTransporter({
         service: 'gmail',
         auth: { user, pass },
     });
 
-    console.log('Verifying connection...');
-    try {
-        await transporter.verify();
-        console.log('✅ Connection successful! Your email config is correct.');
-    } catch (error) {
-        console.error('❌ Connection failed:', error.message);
-        console.log('\nPossible fixes:');
-        console.log('1. Check if your password is correct.');
-        console.log('2. If using Gmail, you MUST use an App Password, not your login password.');
-        console.log('   Go to Google Account > Security > 2-Step Verification > App Passwords.');
-    }
+    console.log('Testing connection...');
+    transporter.verify()
+        .then(() => {
+            console.log('✅ SUCCESS: Credentials are valid!');
+            console.log('👉 Suggestion: If your server is running, RESTART it now.');
+        })
+        .catch((err) => {
+            console.error('❌ CONNECTION FAILED:', err.message);
+            if (err.message.includes('Username and Password not accepted')) {
+                console.log('👉 Tip: Ensure you are using an App Password, not your login password.');
+            }
+        });
+
+} catch (err) {
+    console.error('❌ Error reading .env:', err.message);
 }

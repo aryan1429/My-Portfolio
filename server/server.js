@@ -69,7 +69,7 @@ try {
 // Fallback response generator for when OpenAI is unavailable
 function generateFallbackResponse(message) {
   const lowerMessage = message.toLowerCase();
-  
+
   // Skills and expertise questions
   if (lowerMessage.includes('skill') || lowerMessage.includes('technology') || lowerMessage.includes('tech stack')) {
     return `Here are Aryan's key technical skills:
@@ -99,7 +99,7 @@ function generateFallbackResponse(message) {
 • Script writing (Expert)
 • YouTube content creation (Expert)`;
   }
-  
+
   // Project questions
   if (lowerMessage.includes('project') || lowerMessage.includes('portfolio') || lowerMessage.includes('work')) {
     return `Here are some of Aryan's notable projects:
@@ -126,7 +126,7 @@ function generateFallbackResponse(message) {
 
 Aryan has completed 50+ projects across web development, AI/ML, and content creation with 3+ years of experience.`;
   }
-  
+
   // Contact and collaboration questions
   if (lowerMessage.includes('contact') || lowerMessage.includes('hire') || lowerMessage.includes('email') || lowerMessage.includes('reach')) {
     return `📧 **Contact Aryan Aligeti:**
@@ -145,7 +145,7 @@ Aryan has completed 50+ projects across web development, AI/ML, and content crea
 
 Aryan is open to freelance projects, full-time opportunities, and collaboration on innovative tech projects. Feel free to reach out for any development needs or creative partnerships!`;
   }
-  
+
   // Experience and background questions
   if (lowerMessage.includes('experience') || lowerMessage.includes('background') || lowerMessage.includes('about')) {
     return `👨‍💻 **About Aryan Aligeti:**
@@ -169,7 +169,7 @@ Aryan is open to freelance projects, full-time opportunities, and collaboration 
 🌟 **Unique Combination:**
 Aryan brings a unique blend of technical development expertise and creative content creation skills, making him ideal for projects that require both robust development and engaging user experiences.`;
   }
-  
+
   // Default response for general questions
   return `Hello! I'm Aryan Aligeti's AI assistant. Aryan is a **Full Stack Developer & Content Creator** with 3+ years of experience and 50+ completed projects.
 
@@ -194,7 +194,7 @@ Feel free to ask me about Aryan's skills, projects, experience, or how to get in
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'https://aryanaligeti.dev',
-    'http://localhost:3000', 
+    'http://localhost:3000',
     'http://localhost:5173',
     'http://localhost:8081',
     'https://aryanaligeti.dev'
@@ -273,7 +273,7 @@ app.get('/api/portfolio/profile', async (req, res) => {
 app.get('/api/portfolio/projects', async (req, res) => {
   try {
     const { featured } = req.query;
-    
+
     if (firestoreDb) {
       const projects = await firestoreDb.getProjects(featured === 'true');
       res.json(projects);
@@ -302,7 +302,7 @@ app.get('/api/portfolio/projects', async (req, res) => {
 app.post('/api/portfolio/projects', upload.single('image'), async (req, res) => {
   try {
     const projectData = JSON.parse(req.body.data || '{}');
-    
+
     // Upload image if provided
     if (req.file && gcpStorage) {
       const imageUrl = await gcpStorage.uploadFile(
@@ -338,7 +338,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       const { folder = 'uploads' } = req.body;
       const fileName = `${Date.now()}-${req.file.originalname}`;
       const fileUrl = await gcpStorage.uploadFile(req.file.buffer, fileName, folder);
-      
+
       res.json({
         url: fileUrl,
         fileName,
@@ -350,11 +350,11 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       const fs = await import('fs-extra');
       const uploadDir = path.join(__dirname, 'public', 'media', 'uploads');
       await fs.ensureDir(uploadDir);
-      
+
       const fileName = `${Date.now()}-${req.file.originalname}`;
       const filePath = path.join(uploadDir, fileName);
       await fs.writeFile(filePath, req.file.buffer);
-      
+
       res.json({
         url: `/uploads/${fileName}`,
         fileName,
@@ -389,7 +389,14 @@ app.post('/api/contact', async (req, res) => {
 
     // Send email notification
     try {
-      const transporter = nodemailer.createTransporter({
+      // Handle Nodemailer import compatibility (v6 vs v7)
+      const createTransport = nodemailer.createTransport || nodemailer.default?.createTransport;
+
+      if (!createTransport) {
+        throw new Error('Nodemailer createTransport function not found');
+      }
+
+      const transporter = createTransport({
         service: 'gmail',
         auth: {
           user: process.env.SMTP_USER || process.env.EMAIL_USER,
@@ -417,19 +424,26 @@ app.post('/api/contact', async (req, res) => {
       if (process.env.SMTP_USER && process.env.SMTP_PASS) {
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully');
+        res.status(200).json({ message: 'Message sent successfully.' });
       } else {
         console.log('Email not configured, but message saved:', { name, email, message });
+        res.status(200).json({
+          message: 'Message received (Email not configured on server).',
+          warning: true
+        });
       }
     } catch (emailError) {
       console.error('Email sending failed:', emailError.message);
-      // Don't fail the entire request if only email fails
+      res.status(200).json({
+        message: 'Message received but failed to send email notification.',
+        warning: true
+      });
     }
-    res.status(200).json({ message: 'Message sent successfully.' });
   } catch (error) {
     console.error('Error processing contact form:', error);
-    res.status(500).json({ 
-      error: 'Failed to send message.', 
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined 
+    res.status(500).json({
+      error: 'Failed to send message.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -455,12 +469,12 @@ app.post('/api/ai/chat', async (req, res) => {
   console.log('Request body:', req.body);
   console.log('OpenAI available:', !!openai);
   console.log('Portfolio knowledge available:', !!portfolioKnowledge);
-  
+
   try {
     if (!openai) {
       console.log('❌ OpenAI not initialized');
-      return res.status(503).json({ 
-        error: 'AI service is not available. Please check the OpenAI API configuration.' 
+      return res.status(503).json({
+        error: 'AI service is not available. Please check the OpenAI API configuration.'
       });
     }
 
@@ -538,7 +552,7 @@ Always provide accurate, helpful information about Aryan. If asked about somethi
     messages.push({ role: 'user', content: message });
 
     console.log('🚀 Calling OpenAI API...');
-    
+
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
@@ -549,29 +563,29 @@ Always provide accurate, helpful information about Aryan. If asked about somethi
       frequency_penalty: 0.1
     });
 
-    const response = completion.choices[0]?.message?.content || 
+    const response = completion.choices[0]?.message?.content ||
       "I'm sorry, I couldn't generate a response right now. Please try again.";
 
     console.log('✅ OpenAI response received:', response.substring(0, 50) + '...');
-    
+
     res.json({ response });
 
   } catch (error) {
     console.error('❌ AI Chat Error:', error);
-    
+
     // Check if it's a quota/rate limit error and provide fallback
     if (error.code === 'insufficient_quota' || error.code === 'rate_limit_exceeded') {
       console.log('🔄 OpenAI quota exceeded, providing fallback response');
-      
+
       const fallbackResponse = generateFallbackResponse(req.body.message);
-      
-      return res.json({ 
+
+      return res.json({
         response: fallbackResponse + "\n\n*Note: AI assistant is currently at capacity. This is a pre-configured response based on Aryan's portfolio.*"
       });
     }
-    
+
     let errorMessage = 'Sorry, I encountered an error. Please try again.';
-    
+
     if (error.code === 'invalid_api_key') {
       errorMessage = 'AI service configuration error. Please contact support.';
     }
@@ -607,10 +621,10 @@ app.get('*', (req, res) => {
 // Error handling middleware
 app.use((error, req, res, next) => {
   console.error('Server error:', error);
-  res.status(500).json({ 
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Internal server error' 
-      : error.message 
+  res.status(500).json({
+    error: process.env.NODE_ENV === 'production'
+      ? 'Internal server error'
+      : error.message
   });
 });
 
