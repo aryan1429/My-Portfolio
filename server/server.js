@@ -404,6 +404,8 @@ app.post('/api/contact', async (req, res) => {
         },
       });
 
+      console.log(`📧 Preparing to send email to: ${process.env.CONTACT_EMAIL || 'DEFAULT (your-email@gmail.com)'}`);
+
       const mailOptions = {
         from: process.env.SMTP_FROM || email,
         to: process.env.CONTACT_EMAIL || 'your-email@gmail.com',
