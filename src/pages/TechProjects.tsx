@@ -119,7 +119,7 @@ const TechProjects = () => {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent>
+              <CardContent className={project.id === 2 ? "pb-0" : ""}>
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.technologies.map((tech) => (
