@@ -12,6 +12,7 @@ import moon_thumbnail from '@/assets/moon_thumbnail.png';
 import ironman_thumbnail from '@/assets/Ironman.jpg';
 import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg';
 import salesman_thumbnail from '@/assets/salesman2.avif';
+import steve_thumbnail from '/media/projects/steve.jpg';
 
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -28,6 +29,7 @@ const ContentCreation = () => {
   const ironman_edit = `${baseUrl}/Ironman-edit.mp4`;
   const spiderman_edit = `${baseUrl}/Spiderman_edit.mp4`;
   const salesman = `${baseUrl}/Salesman2.mp4`;
+  const steve = `${baseUrl}/steve.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -39,34 +41,41 @@ const ContentCreation = () => {
   const videos = [
     {
       id: 1,
+      title: "Steve Edit",
+      category: "edits",
+      thumbnail: steve_thumbnail,
+      videoUrl: steve
+    },
+    {
+      id: 2,
       title: "How did our Moon Formed",
       category: "shorts",
       thumbnail: moon_thumbnail,
       videoUrl: MoonFinal
     },
     {
-      id: 2,
+      id: 3,
       title: "Can Wolverine Survive a Black Hole",
       category: "shorts",
       thumbnail: wolverine_thumbnail,
       videoUrl: Wolverine
     },
     {
-      id: 3,
+      id: 4,
       title: "IronMan Edit ",
       category: "edits",
       thumbnail: ironman_thumbnail,
       videoUrl: ironman_edit
     },
     {
-      id: 4,
+      id: 5,
       title: "Spiderman Edit",
       category: "edits",
       thumbnail: spiderman_thumbnail,
       videoUrl: spiderman_edit
     },
     {
-      id: 5,
+      id: 6,
       title: "Salesman Edit",
       category: "edits",
       thumbnail: salesman_thumbnail,
