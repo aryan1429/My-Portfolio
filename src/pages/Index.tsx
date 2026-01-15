@@ -6,10 +6,11 @@ import profileHero from '@/assets/Profile-pic.jpeg';
 import aeLogo from '/media/projects/aelogo.png';
 import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
 import ytLogo from '/media/projects/yt-logo.png';
+import fullstackLogo from '/media/projects/fullstack.png';
 
 const Index = () => {
   const skills = [
-    { name: "Full-Stack Development", level: "Intermediate", icon: "🧑‍💻" },
+    { name: "Full-Stack Development", level: "Intermediate", icon: fullstackLogo, isImage: true },
     { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
     { name: "Davinci Resolve", level: "Intermediate", icon: davinciLogo, isImage: true },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
