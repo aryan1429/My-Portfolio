@@ -68,7 +68,7 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
                 <Button
                   size="lg"
-                  className="shadow-glow animate-glow hover:scale-105 transition-transform duration-300"
+                  className="shadow-glow transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_60px_hsl(270_90%_60%/_0.6)]"
                   onClick={() => scrollToSection('contact')}
                 >
                   Let's Work Together
