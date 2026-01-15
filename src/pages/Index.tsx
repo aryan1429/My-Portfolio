@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import profileHero from '@/assets/Profile-pic.jpeg';
 import aeLogo from '/media/projects/aelogo.png';
 import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
+import ytLogo from '/media/projects/yt-logo.png';
 
 const Index = () => {
   const skills = [
@@ -12,7 +13,7 @@ const Index = () => {
     { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
     { name: "Davinci Resolve", level: "Intermediate", icon: davinciLogo, isImage: true },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
-    { name: "YouTube Content Creation", level: "Expert", icon: "▶️" },
+    { name: "YouTube Content Creation", level: "Expert", icon: ytLogo, isImage: true, imageSize: "w-14 h-14" },
 
     //{ name: "", level: "Intermediate", icon: "🌟" }
   ];
@@ -128,7 +129,7 @@ const Index = () => {
                 <CardContent className="p-6 text-center">
                   <div className="text-4xl mb-4 flex justify-center items-center">
                     {skill.isImage ? (
-                      <img src={skill.icon} alt={skill.name} className="w-12 h-12 object-contain" />
+                      <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-12 h-12'} object-contain`} />
                     ) : (
                       skill.icon
                     )}
