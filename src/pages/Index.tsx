@@ -135,10 +135,7 @@ const Index = () => {
                       skill.icon
                     )}
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{skill.name}</h3>
-                  <span className="inline-block px-3 py-1 bg-primary/20 text-primary rounded-full text-sm border border-primary/30">
-                    {skill.level}
-                  </span>
+                  <h3 className="text-lg font-semibold">{skill.name}</h3>
                 </CardContent>
               </Card>
             ))}
