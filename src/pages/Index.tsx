@@ -57,24 +57,24 @@ const Index = () => {
             <div className="order-1 lg:order-2 text-center lg:text-left animate-fade-in-up">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
                 Hi, I'm{' '}
-                <span className="bg-gradient-primary bg-clip-text text-transparent">
+                <span className="bg-gradient-primary bg-clip-text text-transparent text-glow">
                   Aryan Aligeti
                 </span>
               </h1>
-              <p className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed">
+              <p className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed text-glow-white">
                 A Full Stack Developer, video editor, and content creator passionate about storytelling and innovation. Bringing creative visions to life through cinematic editing, engaging content, and impactful digital solutions
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
                 <Button
                   size="lg"
-                  className="shadow-glow animate-glow"
+                  className="shadow-glow animate-glow hover:scale-105 transition-transform duration-300"
                   onClick={() => scrollToSection('contact')}
                 >
                   Let's Work Together
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg" onClick={downloadResume}>
+                <Button variant="outline" size="lg" onClick={downloadResume} className="glass glass-hover border-primary/20 hover:bg-white/10">
                   <Download className="mr-2 h-5 w-5" />
                   Download Resume
                 </Button>
@@ -82,11 +82,11 @@ const Index = () => {
 
               <div className="flex items-center justify-center lg:justify-start gap-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-accent" />
+                  <Star className="h-4 w-4 text-accent animate-pulse" />
                   <span>3+ Years Experience</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="h-4 w-4 text-accent" />
+                  <Award className="h-4 w-4 text-accent animate-pulse" />
                   <span>50+ Projects</span>
                 </div>
               </div>
@@ -96,7 +96,7 @@ const Index = () => {
           {/* Scroll Indicator */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
             <ChevronDown
-              className="h-8 w-8 text-primary cursor-pointer"
+              className="h-8 w-8 text-primary cursor-pointer hover:text-accent transition-colors"
               onClick={() => scrollToSection('skills')}
             />
           </div>
@@ -104,10 +104,13 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20">
+      <section id="skills" className="py-20 relative overflow-hidden">
+        {/* Decorative background element */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 opacity-30"></div>
+
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Skills & Expertise</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-glow-white">Skills & Expertise</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Specialized in Full Stack Development, Video Editing, Content Creation, and Script Writing across multiple platforms.
             </p>
@@ -117,7 +120,7 @@ const Index = () => {
             {skills.map((skill, index) => (
               <Card
                 key={skill.name}
-                className="bg-gradient-card border-border hover:shadow-glow transition-all duration-500 hover:-translate-y-2 animate-fade-in-up"
+                className="glass glass-hover border-white/10 animate-fade-in-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <CardContent className="p-6 text-center">
@@ -134,10 +137,10 @@ const Index = () => {
       </section>
 
       {/* Achievements Section */}
-      <section id="achievements" className="py-20">
+      <section id="achievements" className="py-20 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Achievements & Impact</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-glow-white">Achievements & Impact</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Proven track record of delivering exceptional results and creating meaningful impact.
             </p>
@@ -147,12 +150,12 @@ const Index = () => {
             {achievements.map((achievement, index) => (
               <Card
                 key={achievement.title}
-                className="bg-gradient-card border-border hover:shadow-glow transition-all duration-500 hover:-translate-y-2 animate-fade-in-up"
+                className="glass glass-hover border-white/10 animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4">{achievement.icon}</div>
-                  <div className="text-3xl font-bold text-primary mb-2">{achievement.count}</div>
+                  <div className="text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-300">{achievement.icon}</div>
+                  <div className="text-3xl font-bold text-primary mb-2 text-glow">{achievement.count}</div>
                   <p className="text-sm text-muted-foreground">{achievement.title}</p>
                 </CardContent>
               </Card>
@@ -164,9 +167,10 @@ const Index = () => {
       {/* CTA Section */}
       <section id="contact" className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="bg-gradient-card border-border shadow-hero max-w-4xl mx-auto animate-fade-in">
-            <CardContent className="p-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <Card className="glass border-white/10 shadow-hero max-w-4xl mx-auto animate-fade-in relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-primary opacity-10 blur-3xl -z-10"></div>
+            <CardContent className="p-12 text-center relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-glow-white">
                 Ready to create something amazing?
               </h2>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -174,14 +178,14 @@ const Index = () => {
                 let's collaborate to bring your vision to life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="shadow-glow">
+                <Button asChild size="lg" className="shadow-glow hover:scale-105 transition-transform duration-300">
                   <Link to="/contact">
                     Get In Touch
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <Link to="/content-creation">View My Work</Link>
+                <Button variant="outline" size="lg" asChild className="glass glass-hover border-primary/20 hover:bg-white/10">
+                  <Link to="/ContentCreation">View My Work</Link>
                 </Button>
               </div>
             </CardContent>
