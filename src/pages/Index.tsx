@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import profileHero from '@/assets/Profile-pic.jpeg';
 import aeLogo from '/media/projects/aelogo.png';
+import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
 
 const Index = () => {
   const skills = [
     { name: "Full-Stack Development", level: "Intermediate", icon: "🧑‍💻" },
     { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
-    { name: "Davinci Resolve", level: "Intermediate", icon: "✨" },
+    { name: "Davinci Resolve", level: "Intermediate", icon: davinciLogo, isImage: true },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
     { name: "YouTube Content Creation", level: "Expert", icon: "▶️" },
 
