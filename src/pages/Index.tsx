@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import profileHero from '@/assets/Profile-pic.jpeg';
+import aeLogo from '/media/projects/aelogo.png';
 
 const Index = () => {
   const skills = [
     { name: "Full-Stack Development", level: "Intermediate", icon: "🧑‍💻" },
-    { name: "Adobe After Effects", level: "Advanced", icon: "🎬" },
+    { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
     { name: "Davinci Resolve", level: "Intermediate", icon: "✨" },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
     { name: "YouTube Content Creation", level: "Expert", icon: "▶️" },
@@ -124,7 +125,13 @@ const Index = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4">{skill.icon}</div>
+                  <div className="text-4xl mb-4 flex justify-center items-center">
+                    {skill.isImage ? (
+                      <img src={skill.icon} alt={skill.name} className="w-12 h-12 object-contain" />
+                    ) : (
+                      skill.icon
+                    )}
+                  </div>
                   <h3 className="text-lg font-semibold mb-2">{skill.name}</h3>
                   <span className="inline-block px-3 py-1 bg-primary/20 text-primary rounded-full text-sm border border-primary/30">
                     {skill.level}
