@@ -11,7 +11,6 @@ import ContentCreation from "./pages/ContentCreation";
 import Contact from "./pages/Contact";
 import AIChat from "./pages/AIChat";
 import NotFound from "./pages/NotFound";
-import { ChatWidget } from "./components/ChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +33,6 @@ const App = () => {
             </Routes>
           </div>
           <BottomNavigation />
-          <ChatWidget />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
