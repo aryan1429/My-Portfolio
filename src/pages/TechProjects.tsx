@@ -63,7 +63,7 @@ const TechProjects = () => {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20">
+    <div className="min-h-screen relative overflow-hidden pt-20 tech-projects-bg">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
@@ -87,10 +87,20 @@ const TechProjects = () => {
           {projects.map((project, index) => (
             <Card
               key={project.id}
-              className="glass border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 group animate-fade-in-up overflow-hidden"
+              className="border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 group animate-fade-in-up overflow-hidden rounded-xl relative"
               style={{ animationDelay: `${index * 200}ms` }}
             >
-              <CardHeader>
+              {/* Background Image */}
+              <div
+                className="absolute inset-0 z-0"
+                style={{
+                  backgroundImage: 'linear-gradient(to bottom, rgba(30, 41, 59, 0.85), rgba(30, 41, 59, 0.9)), url(/background.jpeg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center top',
+                  backgroundRepeat: 'no-repeat'
+                }}
+              />
+              <CardHeader className="relative z-10">
                 <div className="w-full h-48 bg-black/40 rounded-lg mb-4 flex items-center justify-center overflow-hidden border border-white/5 group-hover:border-primary/30 transition-colors">
                   {project.image ? (
                     project.id === 1 ? (
@@ -156,7 +166,7 @@ const TechProjects = () => {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className={project.id === 2 ? "pb-0" : ""}>
+              <CardContent className={`relative z-10 ${project.id === 2 ? "pb-0" : ""}`}>
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.technologies.map((tech) => (

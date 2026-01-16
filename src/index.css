@@ -113,6 +113,35 @@
   }
 }
 
+/* Tech Projects page specific background */
+.tech-projects-bg {
+  position: relative;
+}
+
+.tech-projects-bg::after {
+  content: '';
+  position: fixed;
+  top: -100px;
+  left: 0;
+  width: 100%;
+  height: 200vh;
+  background:
+    linear-gradient(to bottom, hsl(222 47% 11% / 0.7), hsl(222 47% 11% / 0.75)),
+    url('/cool.jpeg');
+  background-size: 100% auto;
+  background-position: center 50%;
+  background-repeat: no-repeat;
+  z-index: -2;
+  transform: translateY(calc(var(--scroll) * -0.35));
+  will-change: transform;
+}
+
+/* Hide default background on tech page */
+.tech-projects-bg~body::before,
+body:has(.tech-projects-bg)::before {
+  display: none !important;
+}
+
 @layer utilities {
   .glass {
     @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-card hover:bg-white/10 transition-all duration-300;

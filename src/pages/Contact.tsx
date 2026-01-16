@@ -97,8 +97,18 @@ const Contact = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <Card className="glass border-white/10 animate-fade-in-up">
-            <CardHeader>
+          <Card className="border-white/10 animate-fade-in-up overflow-hidden rounded-xl relative">
+            {/* Background Image */}
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                backgroundImage: 'linear-gradient(to bottom, rgba(30, 41, 59, 0.85), rgba(30, 41, 59, 0.9)), url(/cool.jpeg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            />
+            <CardHeader className="relative z-10">
               <CardTitle className="text-2xl flex items-center gap-2 font-heading">
                 <Mail className="h-6 w-6 text-primary" />
                 Send me a message
@@ -107,7 +117,7 @@ const Contact = () => {
                 Fill out the form below and I'll get back to you as soon as possible.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
