@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
+import profilePic from '@/assets/Profile-pic.jpeg';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,12 @@ const Navigation = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <img
+              src={profilePic}
+              alt="Aryan Aligeti"
+              className="w-8 h-8 rounded-full object-cover border border-primary/30"
+            />
             Aryan Aligeti
           </Link>
 
@@ -31,8 +37,8 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 className={`transition-all duration-300 hover:text-primary relative ${location.pathname === item.path
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
                 {item.label}
@@ -63,8 +69,8 @@ const Navigation = () => {
                   key={item.path}
                   to={item.path}
                   className={`block transition-all duration-300 hover:text-primary ${location.pathname === item.path
-                      ? 'text-primary font-medium'
-                      : 'text-muted-foreground'
+                    ? 'text-primary font-medium'
+                    : 'text-muted-foreground'
                     }`}
                   onClick={() => setIsOpen(false)}
                 >
