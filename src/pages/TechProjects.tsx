@@ -8,6 +8,11 @@ import sarcastic from '@/assets/mrsarcastic.png';
 import snakebite from '@/assets/snakebitethumbnail.png';
 import snakebite2 from '@/assets/snakebitethumbnail2.png';
 import snakebite3 from '@/assets/snakebitethumbnail3.png';
+import gym1 from '@/assets/gym1.png';
+import gym2 from '@/assets/gym2.png';
+import gym3 from '@/assets/gym3.png';
+import gym4 from '@/assets/gym4.png';
+import gym5 from '@/assets/gym5.png';
 
 const TechProjects = () => {
   const projects = [
@@ -46,6 +51,15 @@ const TechProjects = () => {
       githubUrl: "https://github.com/aryan1429/mr-sarcastic",
       liveUrl: "#",
       image: sarcastic
+    },
+    {
+      id: 5,
+      title: "Gym Tracker",
+      description: "A beautiful Flutter mobile application for tracking gym workouts, featuring a premium Glass & Neon UI design with smooth animations. The app includes workout planning, calendar integration, progress photos, weather-based smart timers, and an intuitive dark theme interface for an engaging fitness tracking experience.",
+      technologies: ["Flutter", "Dart", "Firebase", "Weather API", "Material Design", "Glassmorphism"],
+      githubUrl: "https://github.com/aryan1429/gym-tracker",
+      liveUrl: "https://github.com/aryan1429/gym-tracker/releases/latest",
+      image: gym1
     }
   ];
 
@@ -97,6 +111,35 @@ const TechProjects = () => {
                           src={snakebite3}
                           alt={`${project.title} - Screen 3`}
                           className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-150"
+                        />
+                      </div>
+                    ) : project.id === 5 ? (
+                      // Gym Tracker project - show all five thumbnails side by side
+                      <div className="flex w-full h-full">
+                        <img
+                          src={gym1}
+                          alt={`${project.title} - Screen 1`}
+                          className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500"
+                        />
+                        <img
+                          src={gym2}
+                          alt={`${project.title} - Screen 2`}
+                          className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-75"
+                        />
+                        <img
+                          src={gym3}
+                          alt={`${project.title} - Screen 3`}
+                          className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-150"
+                        />
+                        <img
+                          src={gym4}
+                          alt={`${project.title} - Screen 4`}
+                          className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-200"
+                        />
+                        <img
+                          src={gym5}
+                          alt={`${project.title} - Screen 5`}
+                          className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-300"
                         />
                       </div>
                     ) : (
@@ -153,7 +196,7 @@ const TechProjects = () => {
                   >
                     <Button variant="default" size="sm" className="w-full shadow-glow hover:scale-105 transition-transform">
                       <ExternalLink className="h-4 w-4 mr-2" />
-                      {project.id === 1 ? '📱 APK' : 'Live Demo'}
+                      {(project.id === 1 || project.id === 5) ? '📱 APK' : 'Live Demo'}
                     </Button>
                   </a>
                 </div>
