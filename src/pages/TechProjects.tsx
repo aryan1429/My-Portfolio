@@ -12,7 +12,6 @@ import gym1 from '@/assets/gym1.png';
 import gym2 from '@/assets/gym2.png';
 import gym3 from '@/assets/gym3.png';
 import gym4 from '@/assets/gym4.png';
-import gym5 from '@/assets/gym5.png';
 
 const TechProjects = () => {
   const projects = [
@@ -27,6 +26,15 @@ const TechProjects = () => {
     },
     {
       id: 2,
+      title: "Gym Tracker",
+      description: "A beautiful Flutter mobile application for tracking gym workouts, featuring a premium Glass & Neon UI design with smooth animations. The app includes workout planning, calendar integration, progress photos, weather-based smart timers, and an intuitive dark theme interface for an engaging fitness tracking experience.",
+      technologies: ["Flutter", "Dart", "Firebase", "Weather API", "Material Design", "Glassmorphism"],
+      githubUrl: "https://github.com/aryan1429/gym-tracker",
+      liveUrl: "https://github.com/aryan1429/gym-tracker/releases/latest",
+      image: gym1
+    },
+    {
+      id: 3,
       title: "Expense Tracker",
       description: "This is a full-stack personal expense tracker built with the MERN (MongoDB, Express, React, Node.js) stack. It allows users to add, view, and delete their daily expenses, which are then visualized in a chart to show spending by category.",
       technologies: ["React", "MongoDb", "Express", "Node.js"],
@@ -35,7 +43,7 @@ const TechProjects = () => {
       image: expense
     },
     {
-      id: 3,
+      id: 4,
       title: "TextMoodDJ",
       description: "ABuilt an AI-powered mood-based music assistant that detects emotions from text or voice and recommends matching songs/memes using sentiment analysis, speech-to-text, and YouTube Music API, with a dynamic React UI for an engaging experience.",
       technologies: ["Python", "Flask/FastAPI", "React.js", "Tailwind CSS", "Hugging Face Transformers", "YouTube Music API (ytmusicapi)", "Redis / SQLite",],
@@ -44,22 +52,13 @@ const TechProjects = () => {
       image: textmood
     },
     {
-      id: 4,
+      id: 5,
       title: "Mr Sarcastic",
       description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Firebase Authentication for Google sign-in, real-time chat, and mood-based song suggestions.",
       technologies: ["React", "TypeScript", "Node.js", "Express", "Google Cloud Storage", "JWT", "Tailwind CSS"],
       githubUrl: "https://github.com/aryan1429/mr-sarcastic",
       liveUrl: "#",
       image: sarcastic
-    },
-    {
-      id: 5,
-      title: "Gym Tracker",
-      description: "A beautiful Flutter mobile application for tracking gym workouts, featuring a premium Glass & Neon UI design with smooth animations. The app includes workout planning, calendar integration, progress photos, weather-based smart timers, and an intuitive dark theme interface for an engaging fitness tracking experience.",
-      technologies: ["Flutter", "Dart", "Firebase", "Weather API", "Material Design", "Glassmorphism"],
-      githubUrl: "https://github.com/aryan1429/gym-tracker",
-      liveUrl: "https://github.com/aryan1429/gym-tracker/releases/latest",
-      image: gym1
     }
   ];
 
@@ -113,8 +112,8 @@ const TechProjects = () => {
                           className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-150"
                         />
                       </div>
-                    ) : project.id === 5 ? (
-                      // Gym Tracker project - show all five thumbnails side by side
+                    ) : project.id === 2 ? (
+                      // Gym Tracker project - show all four thumbnails side by side
                       <div className="flex w-full h-full">
                         <img
                           src={gym1}
@@ -135,11 +134,6 @@ const TechProjects = () => {
                           src={gym4}
                           alt={`${project.title} - Screen 4`}
                           className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-200"
-                        />
-                        <img
-                          src={gym5}
-                          alt={`${project.title} - Screen 5`}
-                          className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-300"
                         />
                       </div>
                     ) : (
@@ -196,7 +190,7 @@ const TechProjects = () => {
                   >
                     <Button variant="default" size="sm" className="w-full shadow-glow hover:scale-105 transition-transform">
                       <ExternalLink className="h-4 w-4 mr-2" />
-                      {(project.id === 1 || project.id === 5) ? '📱 APK' : 'Live Demo'}
+                      {(project.id === 1 || project.id === 2) ? '📱 APK' : 'Live Demo'}
                     </Button>
                   </a>
                 </div>
