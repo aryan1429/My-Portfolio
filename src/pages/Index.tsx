@@ -131,7 +131,7 @@ const Index = () => {
                   <div className="text-4xl mb-4 flex justify-center items-center">
                     {skill.isImage ? (
                       skill.cropBottom ? (
-                        <div className="w-14 h-12 overflow-hidden">
+                        <div className="w-14 h-14 overflow-hidden">
                           <img src={skill.icon} alt={skill.name} className="w-14 object-cover object-top" />
                         </div>
                       ) : (
