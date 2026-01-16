@@ -2,7 +2,7 @@ import { ArrowRight, Download, Award, Star, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import profileHero from '@/assets/Profile-pic.jpeg';
+import profileHero from '@/assets/new-profile.jpeg';
 import aeLogo from '/media/projects/aelogo.png';
 import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
 import ytLogo from '/media/projects/yt-logo.png';
@@ -48,13 +48,14 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Profile Image */}
             <div className="order-2 lg:order-1 animate-fade-in">
-              <div className="relative w-64 h-64 mx-auto rounded-2xl overflow-hidden shadow-hero border border-border/20">
+              <div className="relative w-72 h-72 sm:w-80 sm:h-80 mx-auto rounded-2xl overflow-hidden shadow-hero border border-border/20">
                 <img
                   src={profileHero}
                   alt="Aryan Aligeti - Video Editor & Content Creator"
                   className="w-full h-full object-cover object-center rounded-2xl"
+                  style={{ imageRendering: 'auto' }}
+                  loading="eager"
                 />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-primary opacity-20 animate-glow"></div>
               </div>
             </div>
             {/* Right: Hero Content */}
