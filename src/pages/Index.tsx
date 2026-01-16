@@ -11,12 +11,11 @@ import fullstackLogo from '/media/projects/fullstack.png';
 const Index = () => {
   const skills = [
     { name: "Full-Stack Development", level: "Intermediate", icon: fullstackLogo, isImage: true },
+    { name: "App Development", level: "Intermediate", icon: "📱" },
     { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
     { name: "Davinci Resolve", level: "Intermediate", icon: davinciLogo, isImage: true },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
     { name: "YouTube Content Creation", level: "Expert", icon: ytLogo, isImage: true, imageSize: "w-14 h-14" },
-
-    //{ name: "", level: "Intermediate", icon: "🌟" }
   ];
 
   const achievements = [
