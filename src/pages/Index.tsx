@@ -7,11 +7,12 @@ import aeLogo from '/media/projects/aelogo.png';
 import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
 import ytLogo from '/media/projects/yt-logo.png';
 import fullstackLogo from '/media/projects/fullstack.png';
+import mobileLogo from '/media/projects/mobile.png';
 
 const Index = () => {
   const skills = [
     { name: "Full-Stack Development", level: "Intermediate", icon: fullstackLogo, isImage: true },
-    { name: "App Development", level: "Intermediate", icon: "📱" },
+    { name: "App Development", level: "Intermediate", icon: mobileLogo, isImage: true, cropBottom: true },
     { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
     { name: "Davinci Resolve", level: "Intermediate", icon: davinciLogo, isImage: true },
     { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
@@ -129,7 +130,13 @@ const Index = () => {
                 <CardContent className="p-6 text-center">
                   <div className="text-4xl mb-4 flex justify-center items-center">
                     {skill.isImage ? (
-                      <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-12 h-12'} object-contain`} />
+                      skill.cropBottom ? (
+                        <div className="w-14 h-12 overflow-hidden">
+                          <img src={skill.icon} alt={skill.name} className="w-14 object-cover object-top" />
+                        </div>
+                      ) : (
+                        <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-12 h-12'} object-contain`} />
+                      )
                     ) : (
                       skill.icon
                     )}
