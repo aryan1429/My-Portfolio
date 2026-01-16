@@ -183,7 +183,7 @@ const ContentCreation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden pt-20">
+    <div className="min-h-screen relative overflow-hidden pt-20">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[30%] left-[20%] w-[30%] h-[30%] bg-primary/20 rounded-full blur-[100px] animate-float" />

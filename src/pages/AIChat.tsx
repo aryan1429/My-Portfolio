@@ -17,14 +17,16 @@ interface Message {
 
 const Typewriter = ({ text, onUpdate, speed = 15 }: { text: string; onUpdate?: () => void; speed?: number }) => {
   const [displayedText, setDisplayedText] = useState('');
+  const indexRef = React.useRef(0);
 
   useEffect(() => {
-    let i = 0;
+    indexRef.current = 0;
     setDisplayedText('');
     const timer = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText((prev) => prev + text.charAt(i));
-        i++;
+      if (indexRef.current < text.length) {
+        const currentIndex = indexRef.current;
+        setDisplayedText((prev) => prev + text.charAt(currentIndex));
+        indexRef.current++;
         onUpdate?.();
       } else {
         clearInterval(timer);
@@ -127,7 +129,7 @@ const AIChat = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden pt-20">
+    <div className="min-h-screen relative overflow-hidden pt-20">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[10%] right-[30%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
@@ -151,7 +153,14 @@ const AIChat = () => {
         </div>
 
         {/* Chat Container */}
-        <Card className="glass border-white/10 shadow-glow animate-fade-in-up">
+        <Card
+          className="glass border-white/10 shadow-glow animate-fade-in-up relative overflow-hidden"
+          style={{
+            backgroundImage: 'linear-gradient(to bottom, rgba(30, 41, 59, 0.85), rgba(30, 41, 59, 0.9)), url(/cool.jpeg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
           <CardHeader className="border-b border-white/10 bg-white/5">
             <CardTitle className="flex items-center gap-2 font-heading">
               <Bot className="h-5 w-5 text-primary" />

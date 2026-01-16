@@ -41,7 +41,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center pt-24 sm:pt-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

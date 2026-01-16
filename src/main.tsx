@@ -2,6 +2,13 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
+// Parallax scroll effect
+const updateParallax = () => {
+  document.body.style.setProperty('--scroll', `${window.scrollY}px`);
+};
+window.addEventListener('scroll', updateParallax, { passive: true });
+updateParallax();
+
 // Simple error boundary for debugging
 try {
   const rootElement = document.getElementById("root");

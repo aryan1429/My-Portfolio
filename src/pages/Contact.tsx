@@ -77,7 +77,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden pt-20">
+    <div className="min-h-screen relative overflow-hidden pt-20">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[10%] right-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
