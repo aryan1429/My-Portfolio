@@ -214,22 +214,24 @@ body:has(.tech-projects-bg)::before {
   }
 
   100% {
-    top: 0;
+    top: 50%;
     left: 50%;
-    width: min(95vw, 1000px);
-    height: 100vh;
-    transform: translateX(-50%);
+    width: min(90vw, 600px);
+    height: auto;
+    max-height: 90vh;
+    transform: translate(-50%, -50%);
     opacity: 1;
   }
 }
 
 @keyframes project-zoom-out {
   0% {
-    top: 0;
+    top: 50%;
     left: 50%;
-    width: min(95vw, 1000px);
-    height: 100vh;
-    transform: translateX(-50%);
+    width: min(90vw, 600px);
+    height: auto;
+    max-height: 90vh;
+    transform: translate(-50%, -50%);
     opacity: 1;
   }
 

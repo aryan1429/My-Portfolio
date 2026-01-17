@@ -297,7 +297,7 @@ const TechProjects = () => {
 
           {/* Modal Content with Shared Element Transition */}
           <div
-            className={`fixed z-[55] overflow-y-auto rounded-2xl border border-white/20 ${isClosing ? 'project-zoom-out' : 'project-zoom-in'}`}
+            className={`fixed z-[55] overflow-visible rounded-2xl border border-white/20 ${isClosing ? 'project-zoom-out' : 'project-zoom-in'}`}
             onClick={(e) => e.stopPropagation()}
             style={{
               '--start-top': `${cardRect.top}px`,
@@ -318,7 +318,7 @@ const TechProjects = () => {
             </button>
 
             {/* Project Images */}
-            <div className="w-full h-64 md:h-80 bg-black/40 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-48 md:h-56 bg-black/40 flex items-center justify-center overflow-hidden rounded-t-2xl">
               {selectedProject.id === 1 ? (
                 // Snakebite project - show all three thumbnails
                 <div className="flex w-full h-full gap-2 p-4">
@@ -373,56 +373,53 @@ const TechProjects = () => {
             </div>
 
             {/* Project Details */}
-            <div className="p-8">
-              {/* Title */}
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-primary">
-                {selectedProject.title}
-              </h2>
+            <div className="p-5">
+              {/* Title and Actions Row */}
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <h2 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-primary">
+                  {selectedProject.title}
+                </h2>
+                <div className="flex gap-2 flex-shrink-0">
+                  <a
+                    href={selectedProject.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Button variant="outline" size="sm" className="glass hover:bg-white/20 border-white/10">
+                      <Github className="h-4 w-4 mr-1" />
+                      Code
+                    </Button>
+                  </a>
+                  <a
+                    href={selectedProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Button variant="default" size="sm" className="shadow-glow hover:scale-105 transition-transform">
+                      <ExternalLink className="h-4 w-4 mr-1" />
+                      {(selectedProject.id === 1 || selectedProject.id === 2) ? 'APK' : 'Demo'}
+                    </Button>
+                  </a>
+                </div>
+              </div>
 
               {/* Full Description */}
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
                 {selectedProject.description}
               </p>
 
               {/* Technologies */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-white/80">Technologies Used</h3>
-                <div className="flex flex-wrap gap-3">
-                  {selectedProject.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-4 py-2 bg-primary/15 text-primary rounded-full text-sm font-medium border border-primary/30 hover:bg-primary/25 transition-colors"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href={selectedProject.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Button variant="outline" size="lg" className="glass hover:bg-white/20 border-white/10">
-                    <Github className="h-5 w-5 mr-2" />
-                    View Source Code
-                  </Button>
-                </a>
-                <a
-                  href={selectedProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Button variant="default" size="lg" className="shadow-glow hover:scale-105 transition-transform">
-                    <ExternalLink className="h-5 w-5 mr-2" />
-                    {(selectedProject.id === 1 || selectedProject.id === 2) ? '📱 Download APK' : 'View Live Demo'}
-                  </Button>
-                </a>
+              <div className="flex flex-wrap gap-2">
+                {selectedProject.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2 py-1 bg-primary/15 text-primary rounded-full text-xs font-medium border border-primary/30"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
