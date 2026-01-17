@@ -187,6 +187,100 @@ body:has(.tech-projects-bg)::before {
   animation: float 6s ease-in-out infinite;
 }
 
+@keyframes zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-zoom-in {
+  animation: zoom-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Shared Element Transition - Zoom from card to center */
+@keyframes project-zoom-in {
+  0% {
+    top: var(--start-top);
+    left: var(--start-left);
+    width: var(--start-width);
+    height: var(--start-height);
+    opacity: 0.8;
+  }
+
+  100% {
+    top: 0;
+    left: 50%;
+    width: min(95vw, 1000px);
+    height: 100vh;
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+}
+
+@keyframes project-zoom-out {
+  0% {
+    top: 0;
+    left: 50%;
+    width: min(95vw, 1000px);
+    height: 100vh;
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+
+  100% {
+    top: var(--start-top);
+    left: var(--start-left);
+    width: var(--start-width);
+    height: var(--start-height);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+}
+
+.project-zoom-in {
+  animation: project-zoom-in 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+.project-zoom-out {
+  animation: project-zoom-out 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+/* Hide scrollbar but keep scrolling */
+.project-zoom-in,
+.project-zoom-out {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+.project-zoom-in::-webkit-scrollbar,
+.project-zoom-out::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+/* Fade animations */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 0.4s ease-out forwards;
+}
+
 /* Mobile optimizations remain... */
 @media (max-width: 768px) {
   video {
