@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
-import { findResponse } from '@/data/chatResponses';
+import { chatWithGemini, ConversationMessage } from '@/services/geminiService';
 
 interface Message {
   id: string;
@@ -43,13 +43,14 @@ const AIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Hello! I'm Aryan's AI assistant. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!",
+      text: "Hello! I'm Aryan's AI assistant powered by Google Gemini. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!",
       isUser: false,
       timestamp: new Date()
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -81,30 +82,35 @@ const AIChat = () => {
     setInput('');
     setIsLoading(true);
 
-    // Simulate network delay and use local response logic
-    setTimeout(() => {
-      try {
-        const responseText = findResponse(userMessage.text);
+    try {
+      // Call Gemini API with conversation history
+      const responseText = await chatWithGemini(userMessage.text, conversationHistory);
 
-        const aiMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: responseText,
-          isUser: false,
-          timestamp: new Date()
-        };
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: responseText,
+        isUser: false,
+        timestamp: new Date()
+      };
 
-        setMessages(prev => [...prev, aiMessage]);
-      } catch (error: any) {
-        console.error('Error getting response:', error);
-        toast({
-          title: "Error",
-          description: "Failed to generate response.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    }, 800);
+      setMessages(prev => [...prev, aiMessage]);
+
+      // Update conversation history for context
+      setConversationHistory(prev => [
+        ...prev,
+        { role: 'user', parts: [{ text: userMessage.text }] },
+        { role: 'model', parts: [{ text: responseText }] }
+      ]);
+    } catch (error: any) {
+      console.error('Error getting response:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate response. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formatTime = (date: Date) => {
