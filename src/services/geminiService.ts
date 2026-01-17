@@ -137,7 +137,7 @@ export const chatWithGemini = async (
     try {
         console.log('Calling Gemini API...');
         const model = ai.getGenerativeModel({
-            model: 'gemini-1.5-flash',
+            model: 'gemini-2.0-flash-lite',
             systemInstruction: PORTFOLIO_CONTEXT,
         });
 
