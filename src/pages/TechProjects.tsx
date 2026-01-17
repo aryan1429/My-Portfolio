@@ -133,9 +133,10 @@ const TechProjects = () => {
             <div
               key={project.id}
               ref={(el) => { cardRefs.current[project.id] = el; }}
+              className="h-full"
             >
               <Card
-                className="border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 group animate-fade-in-up overflow-hidden rounded-xl relative cursor-pointer"
+                className="h-full flex flex-col border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 group animate-fade-in-up overflow-hidden rounded-xl relative cursor-pointer"
                 style={{ animationDelay: `${index * 200}ms` }}
                 onClick={() => handleCardClick(project, cardRefs.current[project.id])}
               >
@@ -215,7 +216,7 @@ const TechProjects = () => {
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent className={`relative z-10 ${project.id === 2 ? "pb-0" : ""}`}>
+                <CardContent className="relative z-10 flex-grow flex flex-col">
                   {/* Technologies */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.technologies.map((tech) => (
@@ -229,7 +230,7 @@ const TechProjects = () => {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-3 mt-auto">
+                  <div className="flex gap-3 mt-auto pt-2">
                     <a
                       href={project.githubUrl}
                       target="_blank"
@@ -411,7 +412,7 @@ const TechProjects = () => {
               </p>
 
               {/* Technologies */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 pb-4">
                 {selectedProject.technologies.map((tech) => (
                   <span
                     key={tech}
