@@ -41,7 +41,7 @@ const PORTFOLIO_CONTEXT = `You are Aryan Aligeti's AI assistant embedded in his 
 ## Content Creation & Video Editing
 - 3+ years of content creation experience
 - Edited over 100 projects (short-form reels to long-form documentaries)
-- **Tools**: Adobe Premiere Pro, After Effects, DaVinci Resolve
+- **Tools**: After Effects, DaVinci Resolve
 - **Skills**: Color grading, motion graphics, VFX, sound design
 - **Graphics**: Photoshop, Canva for high-CTR thumbnails
 
@@ -82,7 +82,9 @@ const PORTFOLIO_CONTEXT = `You are Aryan Aligeti's AI assistant embedded in his 
 ## Contact Information
 - Email: aryanaligetibusiness@gmail.com
 - GitHub: https://github.com/aryan1429
-- LinkedIn and other socials available in the portfolio footer
+- LinkedIn: https://www.linkedin.com/in/aryan-aligeti-099ab825b/
+- Instagram: https://www.instagram.com/aryan_alejandro_aligeti/
+- YouTube: https://www.youtube.com/channel/UCqJLSH1DtEDUdJmJz1mk8gQ
 - Currently open to new opportunities, internships, and collaborations
 
 ## Behavioral Traits
