@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
-import { chatWithOllama, ConversationMessage } from '@/services/ollamaService';
+import { chatWithGroq, ConversationMessage } from '@/services/groqService';
 
 interface Message {
   id: string;
@@ -43,7 +43,7 @@ const AIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Hello! I'm Aryan's AI assistant powered by Ollama running locally. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!",
+      text: "Hello! I'm Aryan's AI assistant powered by Groq. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!",
       isUser: false,
       timestamp: new Date()
     }
@@ -83,8 +83,8 @@ const AIChat = () => {
     setIsLoading(true);
 
     try {
-      // Call Ollama API with conversation history
-      const responseText = await chatWithOllama(userMessage.text, conversationHistory);
+      // Call Groq API with conversation history
+      const responseText = await chatWithGroq(userMessage.text, conversationHistory);
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
