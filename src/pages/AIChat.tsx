@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Loader2, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,74 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { chatWithGroq, ConversationMessage } from '@/services/groqService';
+
+interface Message {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
+}
+
+// Component to render AI messages with clickable page links
+const MessageRenderer = ({ text }: { text: string }) => {
+  const navigate = useNavigate();
+
+  // Map page names to routes
+  const pageRoutes: Record<string, string> = {
+    'tech projects': '/tech-projects',
+    'content creation': '/content-creation',
+    'contact': '/contact',
+    'home': '/',
+    'ai chat': '/ai-chat',
+    'ai assistant': '/ai-chat',
+  };
+
+  // Parse the message and convert **bold page names** to clickable links
+  const renderMessage = () => {
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    const regex = /\*\*([^*]+)\*\*/g;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before the match
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+
+      const boldText = match[1];
+      const lowerBoldText = boldText.toLowerCase();
+      const route = pageRoutes[lowerBoldText];
+
+      if (route) {
+        // It's a page reference - make it a clickable link
+        parts.push(
+          <button
+            key={match.index}
+            onClick={() => navigate(route)}
+            className="font-bold text-primary hover:text-primary-glow underline cursor-pointer transition-colors mx-1"
+          >
+            {boldText}
+          </button>
+        );
+      } else {
+        // Just bold text, not a page reference
+        parts.push(<strong key={match.index}>{boldText}</strong>);
+      }
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
+  return <div className="whitespace-pre-wrap">{renderMessage()}</div>;
+};
 
 interface Message {
   id: string;
@@ -196,11 +265,11 @@ const AIChat = () => {
                           : 'bg-white/10 text-foreground border border-white/10 rounded-tl-none backdrop-blur-sm'
                           }`}
                       >
-                        <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                        <p className="text-sm leading-relaxed">
                           {message.isUser ? (
-                            message.text
+                            <span className="whitespace-pre-wrap">{message.text}</span>
                           ) : (
-                            <Typewriter text={message.text} onUpdate={scrollToBottom} />
+                            <MessageRenderer text={message.text} />
                           )}
                         </p>
                       </div>
