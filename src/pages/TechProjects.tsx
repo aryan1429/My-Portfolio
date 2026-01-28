@@ -13,6 +13,10 @@ import gym1 from '@/assets/gym1.png';
 import gym2 from '@/assets/gym2.png';
 import gym3 from '@/assets/gym3.png';
 import gym4 from '@/assets/gym4.png';
+import bro1 from '@/assets/bro1.png';
+import bro2 from '@/assets/bro2.png';
+import bro3 from '@/assets/bro3.png';
+import bro4 from '@/assets/bro4.png';
 
 interface Project {
   id: number;
@@ -85,7 +89,7 @@ const TechProjects = () => {
       technologies: ["Next.js", "TypeScript", "Python", "FastAPI", "Docker", "AWS EC2", "Qdrant", "PostgreSQL", "Groq LLM"],
       githubUrl: "https://github.com/aryan1429/study-buddy",
       liveUrl: "#",
-      image: ""
+      image: bro1
     },
     {
       id: 4,
@@ -203,6 +207,30 @@ const TechProjects = () => {
                             src={gym4}
                             alt={`${project.title} - Screen 4`}
                             className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-200"
+                          />
+                        </div>
+                      ) : project.id === 3 ? (
+                        // Bro project - show all four thumbnails in 2x2 grid
+                        <div className="grid grid-cols-2 grid-rows-2 w-full h-full gap-2 p-2">
+                          <img
+                            src={bro1}
+                            alt={`${project.title} - Screen 1`}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 rounded"
+                          />
+                          <img
+                            src={bro2}
+                            alt={`${project.title} - Screen 2`}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 delay-75 rounded"
+                          />
+                          <img
+                            src={bro3}
+                            alt={`${project.title} - Screen 3`}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 delay-150 rounded"
+                          />
+                          <img
+                            src={bro4}
+                            alt={`${project.title} - Screen 4`}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 delay-200 rounded"
                           />
                         </div>
                       ) : (
@@ -370,6 +398,30 @@ const TechProjects = () => {
                     src={gym4}
                     alt={`${selectedProject.title} - Screen 4`}
                     className="flex-1 h-full object-contain rounded-lg"
+                  />
+                </div>
+              ) : selectedProject.id === 3 ? (
+                // Bro project - show all four thumbnails in 2x2 grid
+                <div className="grid grid-cols-2 grid-rows-2 w-full h-full gap-2 p-4">
+                  <img
+                    src={bro1}
+                    alt={`${selectedProject.title} - Screen 1`}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                  <img
+                    src={bro2}
+                    alt={`${selectedProject.title} - Screen 2`}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                  <img
+                    src={bro3}
+                    alt={`${selectedProject.title} - Screen 3`}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                  <img
+                    src={bro4}
+                    alt={`${selectedProject.title} - Screen 4`}
+                    className="w-full h-full object-contain rounded-lg"
                   />
                 </div>
               ) : (
