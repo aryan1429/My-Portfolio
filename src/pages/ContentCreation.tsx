@@ -18,11 +18,9 @@ const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
 
-  // Video URLs - GitHub LFS for production, local for development
-  const isDevelopment = import.meta.env.DEV;
-  const baseUrl = isDevelopment
-    ? '/media/projects'
-    : 'https://github.com/aryan1429/My-Portfolio/raw/master/public/media/projects';
+  // Video URLs - always use local paths since hosting platform will serve them
+  // GitHub raw URLs don't support proper video streaming
+  const baseUrl = '/media/projects';
 
   const MoonFinal = `${baseUrl}/MoonFinal.mp4`;
   const Wolverine = `${baseUrl}/WolverineFinal.mp4`;
