@@ -285,6 +285,22 @@ body:has(.tech-projects-bg)::before {
 
 /* Mobile optimizations remain... */
 @media (max-width: 768px) {
+
+  /* Fix background image for mobile devices */
+  body::before {
+    background-size: cover !important;
+    background-position: center top !important;
+    height: 300vh;
+    top: 0;
+  }
+
+  .tech-projects-bg::after {
+    background-size: cover !important;
+    background-position: center center !important;
+    height: 300vh;
+    top: 0;
+  }
+
   video {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
@@ -305,6 +321,36 @@ body:has(.tech-projects-bg)::before {
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+  body::before {
+    background-size: cover !important;
+    background-position: center top !important;
+    height: 400vh;
+  }
+
+  .tech-projects-bg::after {
+    background-size: cover !important;
+    background-position: center center !important;
+    height: 400vh;
+  }
+}
+
+/* Landscape mobile devices */
+@media (max-width: 896px) and (orientation: landscape) {
+  body::before {
+    background-size: cover !important;
+    background-position: center center !important;
+    height: 300vh;
+  }
+
+  .tech-projects-bg::after {
+    background-size: cover !important;
+    background-position: center center !important;
+    height: 300vh;
   }
 }
 
