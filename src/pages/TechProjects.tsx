@@ -80,6 +80,15 @@ const TechProjects = () => {
     },
     {
       id: 3,
+      title: "Bro - AI Study Buddy",
+      description: "Bro is a web-based AI study buddy that lets users upload notes and interact with them through a clean, modern chat interface with source-style references and a dedicated Study Mode for quizzes and flashcards. The application is built using a scalable, backend-ready architecture and containerized with Docker for consistent development and deployment. It is deployed on AWS EC2, demonstrating real-world hosting, environment management, and production-style setup suitable for full-stack AI applications.",
+      technologies: ["Next.js", "TypeScript", "Python", "FastAPI", "Docker", "AWS EC2", "Qdrant", "PostgreSQL", "Groq LLM"],
+      githubUrl: "https://github.com/aryan1429/study-buddy",
+      liveUrl: "#",
+      image: ""
+    },
+    {
+      id: 4,
       title: "Expense Tracker",
       description: "This is a full-stack personal expense tracker built with the MERN (MongoDB, Express, React, Node.js) stack. It allows users to add, view, and delete their daily expenses, which are then visualized in a chart to show spending by category.",
       technologies: ["React", "MongoDb", "Express", "Node.js"],
@@ -88,7 +97,7 @@ const TechProjects = () => {
       image: expense
     },
     {
-      id: 4,
+      id: 5,
       title: "TextMoodDJ",
       description: "ABuilt an AI-powered mood-based music assistant that detects emotions from text or voice and recommends matching songs/memes using sentiment analysis, speech-to-text, and YouTube Music API, with a dynamic React UI for an engaging experience.",
       technologies: ["Python", "Flask/FastAPI", "React.js", "Tailwind CSS", "Hugging Face Transformers", "YouTube Music API (ytmusicapi)", "Redis / SQLite",],
@@ -97,22 +106,13 @@ const TechProjects = () => {
       image: textmood
     },
     {
-      id: 5,
+      id: 6,
       title: "Mr Sarcastic",
       description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Firebase Authentication for Google sign-in, real-time chat, and mood-based song suggestions.",
       technologies: ["React", "TypeScript", "Node.js", "Express", "Google Cloud Storage", "JWT", "Tailwind CSS"],
       githubUrl: "https://github.com/aryan1429/mr-sarcastic",
       liveUrl: "#",
       image: sarcastic
-    },
-    {
-      id: 6,
-      title: "Bro - AI Study Buddy",
-      description: "Bro is a web-based AI study buddy that lets users upload notes and interact with them through a clean, modern chat interface with source-style references and a dedicated Study Mode for quizzes and flashcards. The application is built using a scalable, backend-ready architecture and containerized with Docker for consistent development and deployment. It is deployed on AWS EC2, demonstrating real-world hosting, environment management, and production-style setup suitable for full-stack AI applications.",
-      technologies: ["Next.js", "TypeScript", "Python", "FastAPI", "Docker", "AWS EC2", "Qdrant", "PostgreSQL", "Groq LLM"],
-      githubUrl: "https://github.com/aryan1429/study-buddy",
-      liveUrl: "#",
-      image: ""
     }
   ];
 
