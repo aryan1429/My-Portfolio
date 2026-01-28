@@ -88,7 +88,7 @@ const TechProjects = () => {
       description: "Bro is a web-based AI study buddy that lets users upload notes and interact with them through a clean, modern chat interface with source-style references and a dedicated Study Mode for quizzes and flashcards. The application is built using a scalable, backend-ready architecture and containerized with Docker for consistent development and deployment. It is deployed on AWS EC2, demonstrating real-world hosting, environment management, and production-style setup suitable for full-stack AI applications.",
       technologies: ["Next.js", "TypeScript", "Python", "FastAPI", "Docker", "AWS EC2", "Qdrant", "PostgreSQL", "Groq LLM"],
       githubUrl: "https://github.com/aryan1429/Bro-StudyBuddy.git",
-      liveUrl: "#",
+      liveUrl: "https://brostudybuddy.live/",
       image: bro3
     },
     {
