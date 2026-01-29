@@ -250,7 +250,7 @@ const ContentCreation = () => {
                         src={video.videoUrl}
                         controls
                         poster={video.thumbnail || undefined}
-                        className="w-full h-full object-cover rounded-md"
+                        className="w-full h-full object-contain rounded-md"
                         onPlay={() => handlePlay(originalIdx)}
                         onPause={() => handlePause(originalIdx)}
                         onEnded={() => handleEnded(originalIdx)}
