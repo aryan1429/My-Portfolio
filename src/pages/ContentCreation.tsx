@@ -18,9 +18,9 @@ const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
 
-  // Video URLs - always use local paths since hosting platform will serve them
-  // GitHub raw URLs don't support proper video streaming
-  const baseUrl = '/media/projects';
+  // Video URLs - hosted on AWS S3 for reliable delivery
+  // S3 bucket: aryan-portfolio-videos in ap-south-1
+  const baseUrl = 'https://aryan-portfolio-videos.s3.ap-south-1.amazonaws.com';
 
   const MoonFinal = `${baseUrl}/MoonFinal.mp4`;
   const Wolverine = `${baseUrl}/WolverineFinal.mp4`;
