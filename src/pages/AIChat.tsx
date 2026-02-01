@@ -109,10 +109,12 @@ const Typewriter = ({ text, onUpdate, speed = 15 }: { text: string; onUpdate?: (
 };
 
 const AIChat = () => {
+  const greetingText = "Hello! I'm Aryan's AI assistant powered by Groq. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!";
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Hello! I'm Aryan's AI assistant powered by Groq. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!",
+      text: greetingText,
       isUser: false,
       timestamp: new Date()
     }
@@ -120,6 +122,7 @@ const AIChat = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
+  const [isGreetingTyping, setIsGreetingTyping] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -268,6 +271,14 @@ const AIChat = () => {
                         <p className="text-sm leading-relaxed">
                           {message.isUser ? (
                             <span className="whitespace-pre-wrap">{message.text}</span>
+                          ) : message.id === '1' && isGreetingTyping ? (
+                            <Typewriter
+                              text={greetingText}
+                              speed={20}
+                              onUpdate={() => {
+                                setTimeout(() => scrollToBottom(), 10);
+                              }}
+                            />
                           ) : (
                             <MessageRenderer text={message.text} />
                           )}
