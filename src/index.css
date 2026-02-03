@@ -8,6 +8,12 @@
 
 @layer base {
   :root {
+    /* Safe Area Insets for notch/home indicator */
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom);
+    --sal: env(safe-area-inset-left);
+    
     /* Deep Space Theme */
     --background: 222 47% 11%;
     /* Deep Blue */
@@ -73,6 +79,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Prevent text size adjustment on mobile */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Better tap highlight */
+    -webkit-tap-highlight-color: rgba(124, 58, 237, 0.2);
   }
 
   * {
@@ -83,6 +95,12 @@
     @apply text-foreground font-sans selection:bg-primary/30;
     background-color: hsl(222 47% 11%);
     overflow-x: hidden;
+    /* Smooth font rendering on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Safe area padding */
+    padding-left: max(env(safe-area-inset-left), 0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
   }
 
   body::before {
@@ -165,6 +183,28 @@ body:has(.tech-projects-bg)::before {
 
   .text-glow-white {
     text-shadow: var(--text-glow-white);
+  }
+  
+  /* Mobile-friendly utilities */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  }
+  
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top), 0px);
+  }
+  
+  /* Better text sizing for mobile */
+  .text-responsive {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+  
+  .heading-responsive {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
   }
 }
 
@@ -283,9 +323,27 @@ body:has(.tech-projects-bg)::before {
   animation: fade-out 0.4s ease-out forwards;
 }
 
-/* Mobile optimizations remain... */
-@media (max-width: 768px) {
+/* Mobile optimizations */
+/* Small phones (320px - 374px) */
+@media (max-width: 374px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  h1 {
+    font-size: 1.875rem !important; /* 30px */
+    line-height: 2.25rem;
+  }
+  
+  .text-xl {
+    font-size: 1rem !important;
+    line-height: 1.5rem;
+  }
+}
 
+/* Standard mobile (375px - 767px) */
+@media (max-width: 767px) {
   /* Fix background image for mobile devices */
   body::before {
     background-size: cover !important;
@@ -312,20 +370,41 @@ body:has(.tech-projects-bg)::before {
     gap: 1rem !important;
   }
 
+  /* Ensure all buttons and interactive elements are touch-friendly */
   button,
-  .clickable {
+  a[role="button"],
+  .clickable,
+  input[type="button"],
+  input[type="submit"] {
     min-height: 44px;
     min-width: 44px;
+    padding: 0.625rem 1rem;
   }
 
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+  
+  /* Better text sizing */
+  h1 {
+    font-size: 2.25rem; /* 36px */
+    line-height: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 1.875rem; /* 30px */
+    line-height: 2.25rem;
+  }
+  
+  /* Improve touch spacing */
+  .space-y-4 > * + * {
+    margin-top: 1.25rem;
+  }
 }
 
-/* Extra small devices (phones in portrait) */
-@media (max-width: 480px) {
+/* Extra small devices (phones in portrait, < 375px) */
+@media (max-width: 374px) {
   body::before {
     background-size: cover !important;
     background-position: center top !important;
@@ -336,6 +415,11 @@ body:has(.tech-projects-bg)::before {
     background-size: cover !important;
     background-position: center center !important;
     height: 400vh;
+  }
+  
+  /* Stack buttons vertically on very small screens */
+  .flex-col.sm\:flex-row {
+    flex-direction: column !important;
   }
 }
 
