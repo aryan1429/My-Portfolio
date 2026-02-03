@@ -41,14 +41,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center pt-24 sm:pt-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="min-h-screen flex items-center justify-center pt-24 sm:pt-20 px-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left: Profile Image */}
             <div className="order-2 lg:order-1 animate-fade-in">
-              <div className="relative w-72 h-72 sm:w-80 sm:h-80 mx-auto rounded-2xl overflow-hidden shadow-hero border border-border/20">
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mx-auto rounded-2xl overflow-hidden shadow-hero border border-border/20">
                 <img
                   src={profileHero}
                   alt="Aryan Aligeti - Video Editor & Content Creator"
@@ -60,32 +60,32 @@ const Index = () => {
             </div>
             {/* Right: Hero Content */}
             <div className="order-1 lg:order-2 text-center lg:text-left animate-fade-in-up">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
                 Hi, I'm{' '}
                 <span className="bg-gradient-primary bg-clip-text text-transparent text-glow">
                   Aryan Aligeti
                 </span>
               </h1>
-              <p className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed text-glow-white">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed text-glow-white">
                 A Full Stack Developer, video editor, and content creator passionate about storytelling and innovation. Bringing creative visions to life through cinematic editing, engaging content, and impactful digital solutions
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 sm:mb-12">
                 <Button
                   size="lg"
-                  className="shadow-glow transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_60px_hsl(270_90%_60%/_0.6)]"
+                  className="shadow-glow transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_60px_hsl(270_90%_60%/_0.6)] w-full sm:w-auto touch-target"
                   onClick={() => scrollToSection('contact')}
                 >
                   Let's Work Together
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg" onClick={downloadResume} className="glass glass-hover border-primary/20 hover:bg-white/10">
+                <Button variant="outline" size="lg" onClick={downloadResume} className="glass glass-hover border-primary/20 hover:bg-white/10 w-full sm:w-auto touch-target">
                   <Download className="mr-2 h-5 w-5" />
                   Download Resume
                 </Button>
               </div>
 
-              <div className="flex items-center justify-center lg:justify-start gap-6 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-accent animate-pulse" />
                   <span>3+ Years Experience</span>
@@ -109,40 +109,40 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 relative overflow-hidden">
+      <section id="skills" className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
         {/* Decorative background element */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 opacity-30"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 opacity-30"></div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-glow-white">Skills & Expertise</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-glow-white">Skills & Expertise</h2>
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Specialized in Full Stack Development, Video Editing, Content Creation, and Script Writing across multiple platforms.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {skills.map((skill, index) => (
               <Card
                 key={skill.name}
                 className="glass glass-hover border-white/10 animate-fade-in-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4 flex justify-center items-center">
+                <CardContent className="p-5 sm:p-6 text-center">
+                  <div className="text-4xl mb-3 sm:mb-4 flex justify-center items-center">
                     {skill.isImage ? (
                       skill.cropBottom ? (
-                        <div className="w-14 h-14 overflow-hidden">
-                          <img src={skill.icon} alt={skill.name} className="w-14 object-cover object-top" />
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 overflow-hidden">
+                          <img src={skill.icon} alt={skill.name} className="w-12 sm:w-14 object-cover object-top" />
                         </div>
                       ) : (
-                        <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-12 h-12'} object-contain`} />
+                        <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-10 h-10 sm:w-12 sm:h-12'} object-contain`} />
                       )
                     ) : (
                       skill.icon
                     )}
                   </div>
-                  <h3 className="text-lg font-semibold">{skill.name}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold">{skill.name}</h3>
                 </CardContent>
               </Card>
             ))}
@@ -151,26 +151,26 @@ const Index = () => {
       </section>
 
       {/* Achievements Section */}
-      <section id="achievements" className="py-20 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-glow-white">Achievements & Impact</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+      <section id="achievements" className="py-12 sm:py-16 md:py-20 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-glow-white">Achievements & Impact</h2>
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Proven track record of delivering exceptional results and creating meaningful impact.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {achievements.map((achievement, index) => (
               <Card
                 key={achievement.title}
                 className="glass glass-hover border-white/10 animate-fade-in-up"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-300">{achievement.icon}</div>
-                  <div className="text-3xl font-bold text-primary mb-2 text-glow">{achievement.count}</div>
-                  <p className="text-sm text-muted-foreground">{achievement.title}</p>
+                <CardContent className="p-5 sm:p-6 text-center">
+                  <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 transform group-hover:scale-110 transition-transform duration-300">{achievement.icon}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-2 text-glow">{achievement.count}</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-snug">{achievement.title}</p>
                 </CardContent>
               </Card>
             ))}
@@ -179,26 +179,26 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section id="contact" className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="contact" className="py-12 sm:py-16 md:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <Card className="glass border-white/10 shadow-hero max-w-4xl mx-auto animate-fade-in relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-primary opacity-10 blur-3xl -z-10"></div>
-            <CardContent className="p-12 text-center relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-glow-white">
+            <CardContent className="p-6 sm:p-8 md:p-12 text-center relative z-10">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-glow-white">
                 Ready to create something amazing?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
                 Whether you need video editing, content creation, or technical development,
                 let's collaborate to bring your vision to life.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="shadow-glow hover:scale-105 transition-transform duration-300">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <Button asChild size="lg" className="shadow-glow hover:scale-105 transition-transform duration-300 w-full sm:w-auto touch-target">
                   <Link to="/contact">
                     Get In Touch
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="lg" asChild className="glass glass-hover border-primary/20 hover:bg-white/10">
+                <Button variant="outline" size="lg" asChild className="glass glass-hover border-primary/20 hover:bg-white/10 w-full sm:w-auto touch-target">
                   <Link to="/ContentCreation">View My Work</Link>
                 </Button>
               </div>
