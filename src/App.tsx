@@ -22,14 +22,14 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Navigation />
-          <div className="pb-16 md:pb-0">
+          <div className=\"pb-20 md:pb-0\" style={{ paddingBottom: 'max(calc(4rem + env(safe-area-inset-bottom)), 4rem)' }}>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/tech-projects" element={<TechProjects />} />
-              <Route path="/content-creation" element={<ContentCreation />} />
-              <Route path="/ai-chat" element={<AIChat />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path=\"/\" element={<Index />} />
+              <Route path=\"/tech-projects\" element={<TechProjects />} />
+              <Route path=\"/content-creation\" element={<ContentCreation />} />
+              <Route path=\"/ai-chat\" element={<AIChat />} />
+              <Route path=\"/contact\" element={<Contact />} />
+              <Route path=\"*\" element={<NotFound />} />
             </Routes>
           </div>
           <BottomNavigation />

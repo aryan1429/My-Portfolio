@@ -77,25 +77,25 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-20">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[10%] right-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
         <div className="absolute bottom-[10%] left-[10%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: '3s' }} />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight">
+        <div className="text-center mb-12 sm:mb-16 animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight">
             Let's Work Together
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
             Contact me if you want to any Full Stack Developer, Video editor or any Content Creation collaboration.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
           <Card className="border-white/10 animate-fade-in-up overflow-hidden rounded-xl relative">
             {/* Background Image */}
@@ -109,16 +109,16 @@ const Contact = () => {
               }}
             />
             <CardHeader className="relative z-10">
-              <CardTitle className="text-2xl flex items-center gap-2 font-heading">
-                <Mail className="h-6 w-6 text-primary" />
+              <CardTitle className="text-xl sm:text-2xl flex items-center gap-2 font-heading">
+                <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                 Send me a message
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm sm:text-base">
                 Fill out the form below and I'll get back to you as soon as possible.
               </CardDescription>
             </CardHeader>
             <CardContent className="relative z-10">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
                     Name
@@ -128,9 +128,10 @@ const Contact = () => {
                     name="name"
                     type="text"
                     required
+                    autoComplete="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all"
+                    className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all min-h-[44px] text-base"
                     placeholder="Your full name"
                   />
                 </div>
@@ -144,9 +145,11 @@ const Contact = () => {
                     name="email"
                     type="email"
                     required
+                    autoComplete="email"
+                    inputMode="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all"
+                    className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all min-h-[44px] text-base"
                     placeholder="your.email@gmail.com"
                   />
                 </div>
@@ -162,14 +165,14 @@ const Contact = () => {
                     rows={6}
                     value={formData.message}
                     onChange={handleInputChange}
-                    className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all resize-none"
+                    className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all resize-none min-h-[120px] text-base"
                     placeholder="Express your feelings for me"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full shadow-glow hover:scale-[1.02] transition-transform"
+                  className="w-full shadow-glow hover:scale-[1.02] transition-transform touch-target min-h-[48px]"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -186,41 +189,41 @@ const Contact = () => {
           </Card>
 
           {/* Contact Info & Social */}
-          <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             {/* Direct Contact */}
             <Card className="glass border-white/10">
               <CardHeader>
-                <CardTitle className="text-xl font-heading">Get in Touch</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg sm:text-xl font-heading">Get in Touch</CardTitle>
+                <CardDescription className="text-sm">
                   Prefer direct contact? Reach out to me directly.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <a
-                      href="mailto:aryanaligetibusiness@gmail.com"
-                      className="text-primary hover:text-primary-glow transition-colors"
-                    >
+                <a
+                  href="mailto:aryanaligetibusiness@gmail.com"
+                  className="flex items-center gap-3 p-3 sm:p-4 bg-white/5 rounded-lg border border-white/5 hover:bg-white/10 transition-colors touch-target"
+                >
+                  <Mail className="h-5 w-5 text-primary flex-shrink-0" />
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm sm:text-base">Email</p>
+                    <span className="text-primary hover:text-primary-glow transition-colors text-xs sm:text-sm break-all">
                       aryanaligetibusiness@gmail.com
-                    </a>
+                    </span>
                   </div>
-                </div>
+                </a>
               </CardContent>
             </Card>
 
             {/* Social Links */}
             <Card className="glass border-white/10">
               <CardHeader>
-                <CardTitle className="text-xl font-heading">Follow My Work</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg sm:text-xl font-heading">Follow My Work</CardTitle>
+                <CardDescription className="text-sm">
                   Connect with me on social media for updates and behind-the-scenes content.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {socialLinks.map((social) => {
                     const Icon = social.icon;
                     return (
@@ -229,10 +232,10 @@ const Contact = () => {
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex items-center gap-3 p-4 bg-white/5 rounded-lg border border-white/5 transition-all duration-300 hover:bg-white/10 hover:scale-[1.02] ${social.color} group`}
+                        className={`flex items-center gap-3 p-3 sm:p-4 bg-white/5 rounded-lg border border-white/5 transition-all duration-300 hover:bg-white/10 hover:scale-[1.02] ${social.color} group touch-target`}
                       >
-                        <Icon className="h-5 w-5 transition-transform group-hover:scale-110" />
-                        <span className="font-medium">{social.name}</span>
+                        <Icon className="h-5 w-5 transition-transform group-hover:scale-110 flex-shrink-0" />
+                        <span className="font-medium text-sm sm:text-base">{social.name}</span>
                       </a>
                     );
                   })}
@@ -242,10 +245,10 @@ const Contact = () => {
 
             {/* Response Time */}
             <Card className="glass border-white/10">
-              <CardContent className="pt-6">
+              <CardContent className="pt-5 sm:pt-6">
                 <div className="text-center">
-                  <h3 className="font-semibold mb-2 font-heading">Quick Response</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <h3 className="font-semibold mb-2 font-heading text-sm sm:text-base">Quick Response</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     I typically respond to messages within 24 hours during business days.
                   </p>
                 </div>
