@@ -27,18 +27,17 @@ const Navigation = () => {
               alt="Aryan Aligeti"
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-primary/30"
             />
-            <span className="hidden xs:inline">Aryan Aligeti</span>
-            <span className="xs:hidden">AA</span>
+            <span>Aryan Aligeti</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-6 lg:space-x-8">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`transition-all duration-300 hover:text-primary relative text-sm lg:text-base touch-target ${location.pathname === item.path
-                  ? 'text-primary'
+                  ? 'text-primary font-medium'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
               >
