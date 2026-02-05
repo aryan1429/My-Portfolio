@@ -36,7 +36,7 @@ const Navigation = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`transition-all duration-300 hover:text-primary relative text-sm lg:text-base touch-target ${location.pathname === item.path
+                className={`transition-all duration-300 hover:text-primary relative text-sm lg:text-base touch-target pt-2 ${location.pathname === item.path
                   ? 'text-primary font-medium'
                   : 'text-muted-foreground hover:text-foreground'
                   }`}
