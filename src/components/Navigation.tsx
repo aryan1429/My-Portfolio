@@ -21,13 +21,13 @@ const Navigation = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 text-lg sm:text-xl font-bold bg-gradient-primary bg-clip-text text-transparent touch-target">
+          <Link to="/" className="flex items-center gap-2 text-lg sm:text-xl font-bold touch-target">
             <img
               src={profilePic}
               alt="Aryan Aligeti"
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-primary/30"
             />
-            <span>Aryan Aligeti</span>
+            <span className="bg-gradient-primary bg-clip-text text-transparent">Aryan Aligeti</span>
           </Link>
 
           {/* Desktop Navigation */}
