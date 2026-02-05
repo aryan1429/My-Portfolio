@@ -181,7 +181,50 @@ const ContentCreation = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-20\">\n      {/* Animated Background Elements */}\n      <div className=\"absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none\">\n        <div className=\"absolute top-[30%] left-[20%] w-[30%] h-[30%] bg-primary/20 rounded-full blur-[100px] animate-float\" />\n        <div className=\"absolute bottom-[30%] right-[20%] w-[30%] h-[30%] bg-secondary/20 rounded-full blur-[100px] animate-float\" style={{ animationDelay: '5s' }} />\n      </div>\n\n      <div className=\"container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10 max-w-7xl\">\n        {/* Header */}\n        <div className=\"text-center mb-12 sm:mb-16 animate-fade-in\">\n          <h1 className=\"text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight\">\n            Video Editing & Content Creation\n          </h1>\n          <p className=\"text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4\">\n            Showcasing my creative work in video editing, content creation, and visual storytelling\n            across various platforms and formats.\n          </p>\n        </div>\n\n        {/* Filter Buttons */}\n        <div className=\"flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 animate-fade-in px-4\">\n          {filters.map((filter) => (\n            <Button\n              key={filter.id}\n              variant={activeFilter === filter.id ? \"default\" : \"outline\"}\n              onClick={() => setActiveFilter(filter.id)}\n              className={`transition-all duration-300 rounded-full px-4 sm:px-6 touch-target text-sm sm:text-base ${\n                activeFilter === filter.id\n                  ? 'shadow-glow'\n                  : 'glass border-white/10 hover:bg-white/10'\n                }`}\n            >\n              <Filter className=\"h-4 w-4 mr-2\" />\n              {filter.label}\n            </Button>\n          ))}\n        </div>\n\n        {/* Video Grid - Mobile Optimized */}\n        <div className={`grid gap-3 sm:gap-4 ${\n          isMobile\n            ? 'grid-cols-2 xs:grid-cols-2'\n            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'\n          }`}>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-20">
+      {/* Animated Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[30%] left-[20%] w-[30%] h-[30%] bg-primary/20 rounded-full blur-[100px] animate-float" />
+        <div className="absolute bottom-[30%] right-[20%] w-[30%] h-[30%] bg-secondary/20 rounded-full blur-[100px] animate-float" style={{ animationDelay: '5s' }} />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10 max-w-7xl">
+        {/* Header */}
+        <div className="text-center mb-12 sm:mb-16 animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight">
+            Video Editing & Content Creation
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
+            Showcasing my creative work in video editing, content creation, and visual storytelling
+            across various platforms and formats.
+          </p>
+        </div>
+
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 animate-fade-in px-4">
+          {filters.map((filter) => (
+            <Button
+              key={filter.id}
+              variant={activeFilter === filter.id ? "default" : "outline"}
+              onClick={() => setActiveFilter(filter.id)}
+              className={`transition-all duration-300 rounded-full px-4 sm:px-6 touch-target text-sm sm:text-base ${
+                activeFilter === filter.id
+                  ? 'shadow-glow'
+                  : 'glass border-white/10 hover:bg-white/10'
+                }`}
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              {filter.label}
+            </Button>
+          ))}
+        </div>
+
+        {/* Video Grid - Mobile Optimized */}
+        <div className={`grid gap-3 sm:gap-4 ${
+          isMobile
+            ? 'grid-cols-2 xs:grid-cols-2'
+            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
+          }`}>
           {filteredVideos.map((video, index) => {
             const originalIdx = videos.findIndex(v => v.id === video.id);
 
