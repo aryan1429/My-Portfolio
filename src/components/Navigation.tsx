@@ -43,7 +43,7 @@ const Navigation = () => {
               >
                 {item.label}
                 {location.pathname === item.path && (
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-primary" />
+                  <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-primary" />
                 )}
               </Link>
             ))}
