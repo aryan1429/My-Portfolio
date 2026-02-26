@@ -84,13 +84,27 @@ interface Message {
   timestamp: Date;
 }
 
-const Typewriter = ({ text, onUpdate, speed = 15 }: { text: string; onUpdate?: () => void; speed?: number }) => {
+const Typewriter = ({
+  text,
+  onUpdate,
+  onDone,
+  speed = 15,
+}: {
+  text: string;
+  onUpdate?: () => void;
+  onDone?: () => void;
+  speed?: number;
+}) => {
   const [displayedText, setDisplayedText] = useState('');
+  const [done, setDone] = useState(false);
   const indexRef = React.useRef(0);
+  const onDoneRef = React.useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     indexRef.current = 0;
     setDisplayedText('');
+    setDone(false);
     const timer = setInterval(() => {
       if (indexRef.current < text.length) {
         const currentIndex = indexRef.current;
@@ -99,13 +113,22 @@ const Typewriter = ({ text, onUpdate, speed = 15 }: { text: string; onUpdate?: (
         onUpdate?.();
       } else {
         clearInterval(timer);
+        setDone(true);
+        onDoneRef.current?.();
       }
     }, speed);
 
     return () => clearInterval(timer);
   }, [text, speed, onUpdate]);
 
-  return <>{displayedText}</>;
+  return (
+    <>
+      {displayedText}
+      {!done && (
+        <span className="inline-block w-[2px] h-[1em] ml-[1px] align-middle bg-primary animate-pulse" />
+      )}
+    </>
+  );
 };
 
 const AIChat = () => {
@@ -123,6 +146,8 @@ const AIChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const [isGreetingTyping, setIsGreetingTyping] = useState(true);
+  // ID of the AI message currently being typed out (null = none animating)
+  const [typingMessageId, setTypingMessageId] = useState<string | null>('1');
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -165,6 +190,7 @@ const AIChat = () => {
         timestamp: new Date()
       };
 
+      setTypingMessageId(aiMessage.id);
       setMessages(prev => [...prev, aiMessage]);
 
       // Update conversation history for context
@@ -271,12 +297,16 @@ const AIChat = () => {
                         <p className="text-sm leading-relaxed">
                           {message.isUser ? (
                             <span className="whitespace-pre-wrap">{message.text}</span>
-                          ) : message.id === '1' && isGreetingTyping ? (
+                          ) : typingMessageId === message.id ? (
                             <Typewriter
-                              text={greetingText}
-                              speed={20}
+                              text={message.text}
+                              speed={message.id === '1' ? 20 : 12}
                               onUpdate={() => {
                                 setTimeout(() => scrollToBottom(), 10);
+                              }}
+                              onDone={() => {
+                                setTypingMessageId(null);
+                                if (message.id === '1') setIsGreetingTyping(false);
                               }}
                             />
                           ) : (
