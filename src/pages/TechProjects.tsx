@@ -67,7 +67,7 @@ const TechProjects = () => {
     {
       id: 1,
       title: "Snakebite Detection System",
-      description: "A Flutter mobile application for snakebite detection using machine learning. This project helps identify venomous snake species and provides immediate first-aid guidance. I contributed by developing the complete mobile frontend with an intuitive user interface for real-time snake identification and emergency response features.",
+      description: "A Flutter Mobile application for snakebite detection using machine learning. This project helps identify venomous snake species and provides immediate first-aid guidance. I contributed by developing the complete mobile frontend with an intuitive user interface for real-time snake identification and emergency response features.",
       technologies: ["Flutter", "Dart", "Machine Learning", "TensorFlow Lite", "Firebase", "Camera API", "Real-time Detection"],
       githubUrl: "https://github.com/manohari3299/AI_Based_SnakeBite_Detection_TreatmentAid.git",
       liveUrl: "https://github.com/manohari3299/AI_Based_SnakeBite_Detection_TreatmentAid/releases/latest",
