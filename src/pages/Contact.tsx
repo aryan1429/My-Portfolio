@@ -166,7 +166,7 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleInputChange}
                     className="bg-white/5 border-white/10 focus:ring-primary focus:border-primary transition-all resize-none min-h-[120px] text-base"
-                    placeholder="Express your feelings for me"
+                    placeholder="Type message here"
                   />
                 </div>
 
