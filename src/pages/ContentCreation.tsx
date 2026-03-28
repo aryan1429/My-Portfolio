@@ -28,6 +28,7 @@ const ContentCreation = () => {
   const spiderman_edit = `${baseUrl}/Spiderman_edit.mp4`;
   const salesman = `${baseUrl}/Salesman2.mp4`;
   const steve = `${baseUrl}/steve.mp4`;
+  const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_prob3.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -78,6 +79,13 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: salesman_thumbnail,
       videoUrl: salesman
+    },
+    {
+      id: 7,
+      title: "Spider x Doakes Edit",
+      category: "edits",
+      thumbnail: spiderman_thumbnail,
+      videoUrl: spiderxdoakes
     },
   ];
 
