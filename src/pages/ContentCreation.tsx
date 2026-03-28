@@ -12,6 +12,7 @@ import moon_thumbnail from '@/assets/moon_thumbnail.png';
 import ironman_thumbnail from '@/assets/Ironman.jpg';
 import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg';
 import salesman_thumbnail from '@/assets/salesman2.avif';
+import doakes_thumbnail from '@/assets/doakes.png';
 import steve_thumbnail from '/media/projects/steve.jpg';
 
 const ContentCreation = () => {
@@ -84,7 +85,7 @@ const ContentCreation = () => {
       id: 7,
       title: "Spider x Doakes Edit",
       category: "edits",
-      thumbnail: spiderman_thumbnail,
+      thumbnail: doakes_thumbnail,
       videoUrl: spiderxdoakes
     },
   ];
