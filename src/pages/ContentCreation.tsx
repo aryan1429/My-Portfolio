@@ -47,6 +47,13 @@ const ContentCreation = () => {
       videoUrl: steve
     },
     {
+      id: 7,
+      title: "Spider x Doakes Edit",
+      category: "edits",
+      thumbnail: doakes_thumbnail,
+      videoUrl: spiderxdoakes
+    },
+    {
       id: 2,
       title: "How did our Moon Formed",
       category: "shorts",
@@ -80,13 +87,6 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: salesman_thumbnail,
       videoUrl: salesman
-    },
-    {
-      id: 7,
-      title: "Spider x Doakes Edit",
-      category: "edits",
-      thumbnail: doakes_thumbnail,
-      videoUrl: spiderxdoakes
     },
   ];
 
