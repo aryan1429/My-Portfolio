@@ -311,7 +311,7 @@ const ContentCreation = () => {
                           </button>
                         </>
                       )}
-                      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/80 to-transparent text-white pointer-events-none rounded-t-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/80 to-transparent text-white pointer-events-none rounded-t-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[20]">
                         <h3 className="font-semibold text-sm mb-1 line-clamp-2 font-heading">
                           {video.title}
                         </h3>

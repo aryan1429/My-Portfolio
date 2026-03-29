@@ -547,7 +547,7 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
       )}
 
       {/* Title Overlay */}
-      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/70 to-transparent z-20">
+      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/70 to-transparent z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
         <h3 className="text-white font-semibold text-sm line-clamp-2">
           {title}
         </h3>
