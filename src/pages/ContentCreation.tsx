@@ -205,7 +205,7 @@ const ContentCreation = () => {
   const spiderman_edit = `${baseUrl}/Spiderman_edit.mp4`;
   const salesman = `${baseUrl}/Salesman2.mp4`;
   const steve = `${baseUrl}/steve.mp4`;
-  const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_prob3.mp4`;
+  const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_optimized.mp4`;
   const samplebetter = `${baseUrl}/sample%20bettermp4.mp4`;
 
   const filters = [
