@@ -59,6 +59,8 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
   const [wasPlayingBeforePause, setWasPlayingBeforePause] = useState(false);
   const [showDoubleTapHint, setShowDoubleTapHint] = useState(false);
 
+  const waitingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const videoRef = useRef<ExtendedHTMLVideoElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -92,8 +94,8 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
         }
       },
       {
-        threshold: 0.25, // Load when 25% visible
-        rootMargin: '50px' // Start loading slightly before entering viewport
+        threshold: 0.1, // Load when 10% visible
+        rootMargin: '300px' // Start loading well before entering viewport
       }
     );
 
@@ -424,12 +426,22 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
           onPause={handleVideoPause}
           onEnded={handleVideoEnded}
           onError={handleError}
-          onWaiting={() => setIsLoading(true)}
-          onPlaying={() => setIsLoading(false)}
+          onWaiting={() => {
+            // Debounce the buffering spinner to prevent flicker on micro-stutters
+            if (waitingTimerRef.current) clearTimeout(waitingTimerRef.current);
+            waitingTimerRef.current = setTimeout(() => setIsLoading(true), 400);
+          }}
+          onPlaying={() => {
+            if (waitingTimerRef.current) {
+              clearTimeout(waitingTimerRef.current);
+              waitingTimerRef.current = null;
+            }
+            setIsLoading(false);
+          }}
           onClick={handleVideoClick}
           style={{
             backgroundColor: 'black',
-            willChange: 'transform'
+            willChange: 'auto'
           }}
         >
           <source src={src} type="video/mp4" />

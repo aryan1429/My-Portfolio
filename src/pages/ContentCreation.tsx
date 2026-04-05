@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Play, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,6 +16,181 @@ import doakes_thumbnail from '@/assets/doakes.png';
 import steve_thumbnail from '/media/projects/steve.jpg';
 import brokegirls_thumbnail from '@/assets/brokegirls.jpg';
 
+// ---- Lazy Desktop Video Card ----
+// Only loads video source when card is near viewport
+interface LazyDesktopVideoProps {
+  video: { id: number; title: string; category: string; thumbnail: string; videoUrl: string };
+  index: number;
+}
+
+const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video, index }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const waitingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [isNearViewport, setIsNearViewport] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [ended, setEnded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  // Lazy-load: only set the video source when the card is near the viewport
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px', threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Debounced waiting/buffering handler to prevent spinner flicker
+  const handleWaiting = useCallback(() => {
+    if (waitingTimerRef.current) clearTimeout(waitingTimerRef.current);
+    waitingTimerRef.current = setTimeout(() => setLoading(true), 300);
+  }, []);
+
+  const handlePlaying = useCallback(() => {
+    if (waitingTimerRef.current) {
+      clearTimeout(waitingTimerRef.current);
+      waitingTimerRef.current = null;
+    }
+    setLoading(false);
+  }, []);
+
+  const handleCanPlay = useCallback(() => {
+    if (waitingTimerRef.current) {
+      clearTimeout(waitingTimerRef.current);
+      waitingTimerRef.current = null;
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (waitingTimerRef.current) clearTimeout(waitingTimerRef.current);
+    };
+  }, []);
+
+  const handlePlay = useCallback(() => {
+    setPlaying(true);
+    setEnded(false);
+    setLoading(true);
+  }, []);
+
+  const handlePause = useCallback(() => {
+    setPlaying(false);
+    setLoading(false);
+  }, []);
+
+  const handleEnded = useCallback(() => {
+    setPlaying(false);
+    setEnded(true);
+    setLoading(false);
+  }, []);
+
+  const handleError = useCallback(() => {
+    setPlaying(false);
+    setLoading(false);
+    console.error(`Error loading video: ${video.title}`);
+  }, [video.title]);
+
+  const handleClickPlay = useCallback(() => {
+    const el = videoRef.current;
+    if (el) el.play();
+  }, []);
+
+  const showOverlay = ended || (!playing && !hovered);
+
+  return (
+    <div
+      ref={containerRef}
+      className="absolute inset-0 w-full h-full"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {isNearViewport ? (
+        <video
+          ref={videoRef}
+          controls
+          poster={video.thumbnail || undefined}
+          className="w-full h-full object-contain rounded-md"
+          onPlay={handlePlay}
+          onPause={handlePause}
+          onEnded={handleEnded}
+          onCanPlay={handleCanPlay}
+          onError={handleError}
+          onWaiting={handleWaiting}
+          onPlaying={handlePlaying}
+          preload="none"
+          playsInline
+          muted
+          style={{
+            backgroundColor: 'black',
+            imageRendering: 'auto',
+            willChange: 'auto',
+          }}
+        >
+          <source src={video.videoUrl} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        // Before intersection: show only poster image, no video element at all
+        <img
+          src={video.thumbnail}
+          alt={video.title}
+          className="w-full h-full object-cover object-center rounded-md"
+          style={{ backgroundColor: 'black' }}
+        />
+      )}
+
+      {/* Buffering spinner */}
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+        </div>
+      )}
+
+      {/* Thumbnail overlay + play button */}
+      {isNearViewport && showOverlay && (
+        <>
+          <img
+            src={video.thumbnail}
+            alt={video.title}
+            className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity"
+            style={{ zIndex: 2, backgroundColor: 'black' }}
+          />
+          <button
+            className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ zIndex: 3 }}
+            onClick={handleClickPlay}
+            tabIndex={0}
+            aria-label="Play"
+          >
+            <Play className="h-14 w-14 text-white drop-shadow-lg bg-primary/80 backdrop-blur-sm rounded-full p-3 hover:scale-110 transition-transform" />
+          </button>
+        </>
+      )}
+
+      {/* Title on hover */}
+      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/80 to-transparent text-white pointer-events-none rounded-t-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[20]">
+        <h3 className="font-semibold text-sm mb-1 line-clamp-2 font-heading">
+          {video.title}
+        </h3>
+      </div>
+    </div>
+  );
+};
+
+// ---- Main Page ----
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
@@ -103,101 +278,6 @@ const ContentCreation = () => {
     ? videos
     : videos.filter(video => video.category === activeFilter);
 
-  // --- NEW STATE FOR VIDEO THUMBNAIL LOGIC ---
-  const [videoStates, setVideoStates] = useState(
-    videos.map(() => ({ playing: false, hovered: false, ended: false, loading: false }))
-  );
-
-  const handlePlay = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, playing: true, ended: false, loading: true } : s
-      )
-    );
-  };
-
-  const handlePause = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, playing: false, loading: false } : s
-      )
-    );
-  };
-
-  const handleEnded = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, playing: false, ended: true, loading: false } : s
-      )
-    );
-  };
-
-  const handleCanPlay = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, loading: false } : s
-      )
-    );
-  };
-
-  const handleError = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, playing: false, loading: false } : s
-      )
-    );
-    console.error(`Error loading video ${idx}: ${videos[idx].title}`);
-    console.error(`Video URL: ${videos[idx].videoUrl}`);
-  };
-
-  const handleLoadStart = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, loading: true } : s
-      )
-    );
-  };
-
-  const handleLoadedData = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, loading: false } : s
-      )
-    );
-  };
-
-  const handleWaiting = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, loading: true } : s
-      )
-    );
-  };
-
-  const handlePlaying = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, loading: false } : s
-      )
-    );
-  };
-
-  const handleMouseEnter = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, hovered: true } : s
-      )
-    );
-  };
-
-  const handleMouseLeave = (idx: number) => {
-    setVideoStates(states =>
-      states.map((s, i) =>
-        i === idx ? { ...s, hovered: false } : s
-      )
-    );
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden pt-20 pb-20">
       {/* Animated Background Elements */}
@@ -243,94 +323,28 @@ const ContentCreation = () => {
             ? 'grid-cols-2 xs:grid-cols-2'
             : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
           }`}>
-          {filteredVideos.map((video, index) => {
-            const originalIdx = videos.findIndex(v => v.id === video.id);
-
-            return (
-              <Card
-                key={video.id}
-                className="glass border-white/10 hover:bg-white/5 hover:shadow-glow transition-all duration-300 hover:-translate-y-1 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <CardContent className="p-0 relative w-full h-full">
-                  {isMobile ? (
-                    // Use lazy loading component for mobile devices
-                    <LazyVideo
-                      src={video.videoUrl}
-                      poster={video.thumbnail}
-                      title={video.title}
-                      className="w-full h-full"
-                      aspectRatio="vertical"
-                      onError={(error) => console.error('Video error:', error)}
-                    />
-                  ) : (
-                    // Keep existing video implementation for desktop
-                    <div className="absolute inset-0 w-full h-full">
-                      <video
-                        src={video.videoUrl}
-                        controls
-                        poster={video.thumbnail || undefined}
-                        className="w-full h-full object-contain rounded-md"
-                        onPlay={() => handlePlay(originalIdx)}
-                        onPause={() => handlePause(originalIdx)}
-                        onEnded={() => handleEnded(originalIdx)}
-                        onCanPlay={() => handleCanPlay(originalIdx)}
-                        onError={() => handleError(originalIdx)}
-                        onLoadStart={() => handleLoadStart(originalIdx)}
-                        onLoadedData={() => handleLoadedData(originalIdx)}
-                        onWaiting={() => handleWaiting(originalIdx)}
-                        onPlaying={() => handlePlaying(originalIdx)}
-                        preload="metadata"
-                        playsInline
-                        muted
-                        style={{
-                          backgroundColor: "black",
-                          imageRendering: "auto",
-                          willChange: "transform"
-                        }}
-                      >
-                        <source src={video.videoUrl} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                      {videoStates[originalIdx]?.loading && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                        </div>
-                      )}
-                      {((videoStates[originalIdx]?.ended || (!videoStates[originalIdx]?.playing && !videoStates[originalIdx]?.hovered))) && (
-                        <>
-                          <img
-                            src={video.thumbnail}
-                            alt={video.title}
-                            className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity"
-                            style={{ zIndex: 2, backgroundColor: "black" }}
-                          />
-                          <button
-                            className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            style={{ zIndex: 3 }}
-                            onClick={() => {
-                              const videoEls = document.querySelectorAll('video');
-                              const el = videoEls[originalIdx] as HTMLVideoElement;
-                              if (el) el.play();
-                            }}
-                            tabIndex={0}
-                            aria-label="Play"
-                          >
-                            <Play className="h-14 w-14 text-white drop-shadow-lg bg-primary/80 backdrop-blur-sm rounded-full p-3 hover:scale-110 transition-transform" />
-                          </button>
-                        </>
-                      )}
-                      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/80 to-transparent text-white pointer-events-none rounded-t-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[20]">
-                        <h3 className="font-semibold text-sm mb-1 line-clamp-2 font-heading">
-                          {video.title}
-                        </h3>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
+          {filteredVideos.map((video, index) => (
+            <Card
+              key={video.id}
+              className="glass border-white/10 hover:bg-white/5 hover:shadow-glow transition-all duration-300 hover:-translate-y-1 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <CardContent className="p-0 relative w-full h-full">
+                {isMobile ? (
+                  <LazyVideo
+                    src={video.videoUrl}
+                    poster={video.thumbnail}
+                    title={video.title}
+                    className="w-full h-full"
+                    aspectRatio="vertical"
+                    onError={(error) => console.error('Video error:', error)}
+                  />
+                ) : (
+                  <LazyDesktopVideo video={video} index={index} />
+                )}
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Call to Action */}
