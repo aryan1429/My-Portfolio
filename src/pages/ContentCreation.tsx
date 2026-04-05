@@ -14,6 +14,7 @@ import spiderman_thumbnail from '@/assets/spiderman_thumbnail.jpg';
 import salesman_thumbnail from '@/assets/salesman2.avif';
 import doakes_thumbnail from '@/assets/doakes.png';
 import steve_thumbnail from '/media/projects/steve.jpg';
+import brokegirls_thumbnail from '@/assets/brokegirls.jpg';
 
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -39,6 +40,13 @@ const ContentCreation = () => {
   ];
 
   const videos = [
+    {
+      id: 8,
+      title: "2 Broke Girls Edit",
+      category: "edits",
+      thumbnail: brokegirls_thumbnail,
+      videoUrl: "" // Placeholder, video will be provided later
+    },
     {
       id: 1,
       title: "Steve Edit",
