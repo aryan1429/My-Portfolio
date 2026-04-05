@@ -63,6 +63,13 @@ const ContentCreation = () => {
       videoUrl: samplebetter
     },
     {
+      id: 5,
+      title: "Spiderman Edit",
+      category: "edits",
+      thumbnail: spiderman_thumbnail,
+      videoUrl: spiderman_edit
+    },
+    {
       id: 2,
       title: "How did our Moon Formed",
       category: "shorts",
@@ -82,13 +89,6 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: ironman_thumbnail,
       videoUrl: ironman_edit
-    },
-    {
-      id: 5,
-      title: "Spiderman Edit",
-      category: "edits",
-      thumbnail: spiderman_thumbnail,
-      videoUrl: spiderman_edit
     },
     {
       id: 6,
