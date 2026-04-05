@@ -42,13 +42,6 @@ const ContentCreation = () => {
 
   const videos = [
     {
-      id: 8,
-      title: "2 Broke Girls Edit",
-      category: "edits",
-      thumbnail: brokegirls_thumbnail,
-      videoUrl: samplebetter
-    },
-    {
       id: 1,
       title: "Steve Edit",
       category: "edits",
@@ -61,6 +54,13 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: doakes_thumbnail,
       videoUrl: spiderxdoakes
+    },
+    {
+      id: 8,
+      title: "2 Broke Girls Edit",
+      category: "edits",
+      thumbnail: brokegirls_thumbnail,
+      videoUrl: samplebetter
     },
     {
       id: 2,
