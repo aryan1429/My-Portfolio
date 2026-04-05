@@ -31,6 +31,7 @@ const ContentCreation = () => {
   const salesman = `${baseUrl}/Salesman2.mp4`;
   const steve = `${baseUrl}/steve.mp4`;
   const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_prob3.mp4`;
+  const samplebetter = `${baseUrl}/sample%20bettermp4.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -45,7 +46,7 @@ const ContentCreation = () => {
       title: "2 Broke Girls Edit",
       category: "edits",
       thumbnail: brokegirls_thumbnail,
-      videoUrl: "" // Placeholder, video will be provided later
+      videoUrl: samplebetter
     },
     {
       id: 1,
