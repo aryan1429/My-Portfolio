@@ -30,6 +30,7 @@ interface LazyVideoProps {
   poster?: string;
   title: string;
   className?: string;
+  posterClassName?: string;
   aspectRatio?: 'video' | 'square' | 'vertical';
   onPlay?: () => void;
   onPause?: () => void;
@@ -41,6 +42,7 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
   poster,
   title,
   className = '',
+  posterClassName = 'object-center',
   aspectRatio = 'vertical',
   onPlay,
   onPause,
@@ -473,7 +475,7 @@ export const LazyVideo: React.FC<LazyVideoProps> = ({
           <img
             src={poster}
             alt={title}
-            className="w-full h-full object-cover"
+            className={`w-full h-full object-cover ${posterClassName}`}
             loading="lazy"
           />
           <button

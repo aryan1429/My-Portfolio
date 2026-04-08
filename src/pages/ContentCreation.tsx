@@ -15,11 +15,12 @@ import salesman_thumbnail from '@/assets/salesman2.avif';
 import doakes_thumbnail from '@/assets/doakes.png';
 import steve_thumbnail from '/media/projects/steve.jpg';
 import brokegirls_thumbnail from '@/assets/brokegirls.jpg';
+import jonsnow_thumbnail from '@/assets/JonSnow.png';
 
 // ---- Lazy Desktop Video Card ----
 // Only loads video source when card is near viewport
 interface LazyDesktopVideoProps {
-  video: { id: number; title: string; category: string; thumbnail: string; videoUrl: string };
+  video: { id: number; title: string; category: string; thumbnail: string; videoUrl: string; thumbnailClassName?: string; };
   index: number;
 }
 
@@ -147,7 +148,7 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video, index }) => 
         <img
           src={video.thumbnail}
           alt={video.title}
-          className="w-full h-full object-cover object-center rounded-md"
+          className={`w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-md`}
           style={{ backgroundColor: 'black' }}
         />
       )}
@@ -165,7 +166,7 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video, index }) => 
           <img
             src={video.thumbnail}
             alt={video.title}
-            className="absolute inset-0 w-full h-full object-cover object-center rounded-md pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity"
+            className={`absolute inset-0 w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-md pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity`}
             style={{ zIndex: 2, backgroundColor: 'black' }}
           />
           <button
@@ -207,6 +208,7 @@ const ContentCreation = () => {
   const steve = `${baseUrl}/steve.mp4`;
   const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_optimized.mp4`;
   const samplebetter = `${baseUrl}/sample%20bettermp4.mp4`;
+  const jonsnow = `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -222,6 +224,14 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: steve_thumbnail,
       videoUrl: steve
+    },
+    {
+      id: 9,
+      title: "Jon Snow Edit",
+      category: "edits",
+      thumbnail: jonsnow_thumbnail,
+      videoUrl: jonsnow,
+      thumbnailClassName: "object-[20%_center]"
     },
     {
       id: 7,
@@ -336,6 +346,7 @@ const ContentCreation = () => {
                     poster={video.thumbnail}
                     title={video.title}
                     className="w-full h-full"
+                    posterClassName={video.thumbnailClassName}
                     aspectRatio="vertical"
                     onError={(error) => console.error('Video error:', error)}
                   />
