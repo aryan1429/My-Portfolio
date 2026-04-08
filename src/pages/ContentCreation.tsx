@@ -231,7 +231,7 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: jonsnow_thumbnail,
       videoUrl: jonsnow,
-      thumbnailClassName: "object-[35%_center]"
+      thumbnailClassName: "object-[26%_center]"
     },
     {
       id: 7,
