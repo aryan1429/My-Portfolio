@@ -16,6 +16,7 @@ import doakes_thumbnail from '@/assets/doakes.png';
 import steve_thumbnail from '/media/projects/steve.jpg';
 import brokegirls_thumbnail from '@/assets/brokegirls.jpg';
 import jonsnow_thumbnail from '@/assets/JonSnow.png';
+import soldierboy_thumbnail from '@/assets/Soldierboy.png';
 
 // ---- Lazy Desktop Video Card ----
 // Only loads video source when card is near viewport
@@ -209,6 +210,7 @@ const ContentCreation = () => {
   const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_optimized.mp4`;
   const samplebetter = `${baseUrl}/sample%20bettermp4.mp4`;
   const jonsnow = `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`;
+  const soldierboy = `${baseUrl}/SoldierBoy_bestCC.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -218,6 +220,14 @@ const ContentCreation = () => {
   ];
 
   const videos = [
+    {
+      id: 10,
+      title: "Soldier Boy Edit",
+      category: "edits",
+      thumbnail: soldierboy_thumbnail,
+      videoUrl: soldierboy,
+      thumbnailClassName: "object-[center_20%]"
+    },
     {
       id: 1,
       title: "Steve Edit",
