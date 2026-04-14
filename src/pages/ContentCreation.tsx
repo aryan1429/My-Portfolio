@@ -221,14 +221,6 @@ const ContentCreation = () => {
 
   const videos = [
     {
-      id: 10,
-      title: "Soldier Boy Edit",
-      category: "edits",
-      thumbnail: soldierboy_thumbnail,
-      videoUrl: soldierboy,
-      thumbnailClassName: "object-[center_20%]"
-    },
-    {
       id: 1,
       title: "Steve Edit",
       category: "edits",
@@ -242,6 +234,14 @@ const ContentCreation = () => {
       thumbnail: jonsnow_thumbnail,
       videoUrl: jonsnow,
       thumbnailClassName: "object-[26%_center]"
+    },
+    {
+      id: 10,
+      title: "Soldier Boy Edit",
+      category: "edits",
+      thumbnail: soldierboy_thumbnail,
+      videoUrl: soldierboy,
+      thumbnailClassName: "object-[center_20%]"
     },
     {
       id: 7,
