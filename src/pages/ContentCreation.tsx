@@ -211,6 +211,7 @@ const ContentCreation = () => {
   const samplebetter = `${baseUrl}/sample%20bettermp4.mp4`;
   const jonsnow = `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`;
   const soldierboy = `${baseUrl}/SoldierBoy_bestCC.mp4`;
+  const williambutcher = `${baseUrl}/William_Butcher_Final.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -234,6 +235,13 @@ const ContentCreation = () => {
       thumbnail: jonsnow_thumbnail,
       videoUrl: jonsnow,
       thumbnailClassName: "object-[26%_center]"
+    },
+    {
+      id: 11,
+      title: "William Butcher Edit",
+      category: "edits",
+      thumbnail: "",
+      videoUrl: williambutcher
     },
     {
       id: 10,
