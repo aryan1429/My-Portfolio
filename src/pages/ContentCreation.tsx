@@ -17,6 +17,7 @@ import steve_thumbnail from '/media/projects/steve.jpg';
 import brokegirls_thumbnail from '@/assets/brokegirls.jpg';
 import jonsnow_thumbnail from '@/assets/JonSnow.png';
 import soldierboy_thumbnail from '@/assets/Soldierboy.png';
+import butcher_thumbnail from '@/assets/butcher.jpg';
 
 // ---- Lazy Desktop Video Card ----
 // Only loads video source when card is near viewport
@@ -240,7 +241,7 @@ const ContentCreation = () => {
       id: 11,
       title: "William Butcher Edit",
       category: "edits",
-      thumbnail: "",
+      thumbnail: butcher_thumbnail,
       videoUrl: williambutcher
     },
     {
