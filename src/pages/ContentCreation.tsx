@@ -18,6 +18,7 @@ import brokegirls_thumbnail from '@/assets/brokegirls.jpg';
 import jonsnow_thumbnail from '@/assets/JonSnow.png';
 import soldierboy_thumbnail from '@/assets/Soldierboy.png';
 import butcher_thumbnail from '@/assets/butcher.jpg';
+import spiderman_comic_thumbnail from '@/assets/Spiderman_comic.jpg';
 
 // ---- Lazy Desktop Video Card ----
 // Only loads video source when card is near viewport
@@ -213,6 +214,7 @@ const ContentCreation = () => {
   const jonsnow = `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`;
   const soldierboy = `${baseUrl}/SoldierBoy_bestCC.mp4`;
   const williambutcher = `${baseUrl}/William_Butcher_Final.mp4`;
+  const spidermanxfunk = `${baseUrl}/SpidermanXFunk_FINALs.mp4`;
 
   const filters = [
     { id: 'all', label: 'All Content' },
@@ -243,6 +245,13 @@ const ContentCreation = () => {
       category: "edits",
       thumbnail: butcher_thumbnail,
       videoUrl: williambutcher
+    },
+    {
+      id: 12,
+      title: "Spiderman X Funk Edit",
+      category: "edits",
+      thumbnail: spiderman_comic_thumbnail,
+      videoUrl: spidermanxfunk
     },
     {
       id: 10,
