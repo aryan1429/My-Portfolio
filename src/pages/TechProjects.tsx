@@ -13,6 +13,7 @@ import gym1 from '@/assets/gym1.png';
 import gym2 from '@/assets/gym2.png';
 import gym3 from '@/assets/gym3.png';
 import gym4 from '@/assets/gym4.png';
+import chestxray from '@/assets/Chest-xray.png';
 import bro1 from '@/assets/bro1.png';
 import bro2 from '@/assets/bro2.png';
 import bro3 from '@/assets/bro3.png';
@@ -98,7 +99,7 @@ const TechProjects = () => {
       technologies: ["React", "Supabase", "Google Auth", "Frontend/UI", "Full-Stack Integration"],
       githubUrl: "https://github.com/aryan1429/CXR-report-generator.git",
       liveUrl: "https://chestxray.tech/",
-      image: ""
+      image: chestxray
     },
     {
       id: 5,
