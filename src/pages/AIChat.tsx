@@ -16,6 +16,24 @@ interface Message {
   timestamp: Date;
 }
 
+const greetingText = "Hello! I'm Aryan's AI assistant powered by Groq. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!";
+
+// Global state to persist chat across internal SPA navigations. 
+// This will automatically reset on a hard page reload (F5).
+const chatState = {
+  messages: [
+    {
+      id: '1',
+      text: greetingText,
+      isUser: false,
+      timestamp: new Date()
+    }
+  ] as Message[],
+  conversationHistory: [] as ConversationMessage[],
+  isGreetingTyping: true,
+  typingMessageId: '1' as string | null
+};
+
 // Component to render AI messages with clickable page links
 const MessageRenderer = ({ text }: { text: string }) => {
   const navigate = useNavigate();
@@ -77,13 +95,6 @@ const MessageRenderer = ({ text }: { text: string }) => {
   return <div className="whitespace-pre-wrap">{renderMessage()}</div>;
 };
 
-interface Message {
-  id: string;
-  text: string;
-  isUser: boolean;
-  timestamp: Date;
-}
-
 const Typewriter = ({
   text,
   onUpdate,
@@ -132,24 +143,58 @@ const Typewriter = ({
 };
 
 const AIChat = () => {
-  const greetingText = "Hello! I'm Aryan's AI assistant powered by Groq. I know everything about his portfolio, skills, projects, and experience. Feel free to ask me anything about Aryan Aligeti - his work, projects, skills, or anything else you'd like to know!";
-
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: greetingText,
-      isUser: false,
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessagesState] = useState<Message[]>(chatState.messages);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
-  const [isGreetingTyping, setIsGreetingTyping] = useState(true);
+  const [conversationHistory, setConversationHistoryState] = useState<ConversationMessage[]>(chatState.conversationHistory);
+  const [isGreetingTyping, setIsGreetingTypingState] = useState(chatState.isGreetingTyping);
   // ID of the AI message currently being typed out (null = none animating)
-  const [typingMessageId, setTypingMessageId] = useState<string | null>('1');
+  const [typingMessageId, setTypingMessageIdState] = useState<string | null>(chatState.typingMessageId);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // State wrappers that update both React local state and the global `chatState`
+  const setMessages = (val: Message[] | ((prev: Message[]) => Message[])) => {
+    setMessagesState((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val;
+      chatState.messages = next;
+      return next;
+    });
+  };
+
+  const setConversationHistory = (val: ConversationMessage[] | ((prev: ConversationMessage[]) => ConversationMessage[])) => {
+    setConversationHistoryState((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val;
+      chatState.conversationHistory = next;
+      return next;
+    });
+  };
+
+  const setIsGreetingTyping = (val: boolean | ((prev: boolean) => boolean)) => {
+    setIsGreetingTypingState((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val;
+      chatState.isGreetingTyping = next;
+      return next;
+    });
+  };
+
+  const setTypingMessageId = (val: string | null | ((prev: string | null) => string | null)) => {
+    setTypingMessageIdState((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val;
+      chatState.typingMessageId = next;
+      return next;
+    });
+  };
+
+  // If the user navigates away while typing, instantly finish the typing effect
+  useEffect(() => {
+    return () => {
+      if (chatState.typingMessageId) {
+        chatState.typingMessageId = null;
+        chatState.isGreetingTyping = false;
+      }
+    };
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     if (scrollAreaRef.current) {
