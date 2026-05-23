@@ -199,9 +199,7 @@ const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
 
-  // Video URLs - hosted on AWS S3 for reliable delivery
-  // S3 bucket: aryan-portfolio-videos in ap-south-1
-  const baseUrl = 'https://aryan-portfolio-videos.s3.ap-south-1.amazonaws.com';
+  const baseUrl = 'https://portfolio-videos.sgp1.digitaloceanspaces.com';
 
   const MoonFinal = `${baseUrl}/MoonFinal.mp4`;
   const Wolverine = `${baseUrl}/WolverineFinal.mp4`;
