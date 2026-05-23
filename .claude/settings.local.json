@@ -7,7 +7,11 @@
       "Bash(cp \"c:/Users/aryan/Desktop/my-portfolio/public/media/projects/WolverineFinal.mp4\" \"C:/Users/aryan/Downloads/Portfolio-Vid/\")",
       "Bash(cp \"c:/Users/aryan/Desktop/my-portfolio/public/media/projects/Ironman-edit.mp4\" \"C:/Users/aryan/Downloads/Portfolio-Vid/\")",
       "Bash(cp \"c:/Users/aryan/Desktop/my-portfolio/public/media/projects/Spiderman_edit.mp4\" \"C:/Users/aryan/Downloads/Portfolio-Vid/\")",
-      "Bash(cp \"c:/Users/aryan/Desktop/my-portfolio/public/media/projects/Salesman2.mp4\" \"C:/Users/aryan/Downloads/Portfolio-Vid/\")"
+      "Bash(cp \"c:/Users/aryan/Desktop/my-portfolio/public/media/projects/Salesman2.mp4\" \"C:/Users/aryan/Downloads/Portfolio-Vid/\")",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }

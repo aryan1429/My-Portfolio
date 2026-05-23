@@ -1,7 +1,16 @@
-import { ArrowRight, Download, Award, Star, ChevronDown } from 'lucide-react';
+import { ArrowRight, Download, Award, Star, ChevronDown, Github, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import ScrollReveal from '@/components/ScrollReveal';
+import TiltCard from '@/components/TiltCard';
+import SpinCard from '@/components/SpinCard';
+import TextSplit from '@/components/TextSplit';
+import MagneticButton from '@/components/MagneticButton';
+import Marquee from '@/components/Marquee';
+import FloatingVideos from '@/components/FloatingVideos';
+import { staggerContainer, fadeInUp, heroStagger, heroItem, slideInLeft, slideInRight } from '@/lib/animations';
 import profileHero from '@/assets/new-profile.jpeg';
 import aeLogo from '/media/projects/aelogo.png';
 import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
@@ -9,26 +18,79 @@ import ytLogo from '/media/projects/yt-logo.png';
 import fullstackLogo from '/media/projects/fullstack.png';
 import mobileLogo from '/media/projects/mobile.png';
 
+const CountUp = ({ target, suffix = '' }: { target: number; suffix?: string }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px 0px' });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    const duration = 1500;
+    const startTime = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [isInView, target]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+};
+
 const Index = () => {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  const techStack = [
+    'React', 'TypeScript', 'Next.js', 'Node.js', 'Python', 'Flutter', 'Dart',
+    'Firebase', 'MongoDB', 'PostgreSQL', 'Docker', 'AWS', 'GCP',
+    'After Effects', 'DaVinci Resolve', 'Premiere Pro', 'Tailwind CSS',
+    'Express.js', 'FastAPI', 'Supabase',
+  ];
+
   const skills = [
-    { name: "Full-Stack Development", level: "Intermediate", icon: fullstackLogo, isImage: true },
-    { name: "App Development", level: "Intermediate", icon: mobileLogo, isImage: true, cropBottom: true },
-    { name: "Adobe After Effects", level: "Advanced", icon: aeLogo, isImage: true },
-    { name: "Davinci Resolve", level: "Intermediate", icon: davinciLogo, isImage: true },
-    { name: "Content Creation Script Writing", level: "Expert", icon: "🎥" },
-    { name: "YouTube Content Creation", level: "Expert", icon: ytLogo, isImage: true, imageSize: "w-14 h-14" },
+    { name: "Full-Stack Development", icon: fullstackLogo, isImage: true },
+    { name: "App Development", icon: mobileLogo, isImage: true, cropBottom: true },
+    { name: "Adobe After Effects", icon: aeLogo, isImage: true },
+    { name: "DaVinci Resolve", icon: davinciLogo, isImage: true },
+    { name: "Content Creation", icon: "🎥" },
+    { name: "YouTube", icon: ytLogo, isImage: true, imageSize: "w-14 h-14" },
   ];
 
-  const achievements = [
-    { title: "Video Editing Projects Completed", count: "100+", icon: "🎯" },
-    { title: "Content Creation Experience", count: "3+ Years", icon: "📅" },
-    { title: "Won Multiple Hackathons(Web Dev Competetion)", count: "5+", icon: "⭐" },
-    { title: "Experienced in running YT channels", count: "3+", icon: "📱" }
+  const stats = [
+    { label: "Projects Completed", value: 100, suffix: "+" },
+    { label: "Years Experience", value: 3, suffix: "+" },
+    { label: "Hackathons Won", value: 5, suffix: "+" },
+    { label: "YT Channels Run", value: 3, suffix: "+" },
   ];
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
+  const featuredProjects = [
+    {
+      title: "Bro - AI Study Buddy",
+      desc: "Web-based AI study buddy with notes, quizzes, and flashcards. Deployed on AWS EC2.",
+      tech: ["Next.js", "Python", "FastAPI", "Docker", "AWS"],
+      link: "/tech-projects",
+    },
+    {
+      title: "Chest X-ray Report Generator",
+      desc: "Complete Frontend/UI with full-stack integration, Supabase, and Google Auth.",
+      tech: ["React", "Supabase", "Google Auth"],
+      link: "/tech-projects",
+    },
+    {
+      title: "Cinematic Video Edits",
+      desc: "100+ professional video edits for YouTube, social media, and creative projects.",
+      tech: ["After Effects", "DaVinci Resolve"],
+      link: "/content-creation",
+    },
+  ];
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const downloadResume = () => {
@@ -42,168 +104,352 @@ const Index = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center pt-24 sm:pt-20 px-4">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            {/* Left: Profile Image */}
-            <div className="order-2 lg:order-1 animate-fade-in">
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mx-auto rounded-2xl overflow-hidden shadow-hero border border-border/20">
-                <img
-                  src={profileHero}
-                  alt="Aryan Aligeti - Video Editor & Content Creator"
-                  className="w-full h-full object-cover object-center rounded-2xl"
-                  style={{ imageRendering: 'auto' }}
-                  loading="eager"
-                />
-              </div>
-            </div>
-            {/* Right: Hero Content */}
-            <div className="order-1 lg:order-2 text-center lg:text-left animate-fade-in-up">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-                Hi, I'm{' '}
-                <span className="bg-gradient-primary bg-clip-text text-transparent text-glow">
-                  Aryan Aligeti
-                </span>
-              </h1>
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 leading-relaxed text-glow-white">
-                A Full Stack Developer, video editor, and content creator passionate about storytelling and innovation. Bringing creative visions to life through cinematic editing, engaging content, and impactful digital solutions
-              </p>
+      {/* ======= HERO ======= */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pt-20">
+        {/* Gradient orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full bg-[hsl(263_70%_58%/0.12)] blur-[150px]"
+            animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+            transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full bg-[hsl(187_80%_48%/0.08)] blur-[120px]"
+            animate={{ y: [0, 25, 0], x: [0, -20, 0] }}
+            transition={{ repeat: Infinity, duration: 10, ease: 'easeInOut', delay: 2 }}
+          />
+        </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 sm:mb-12">
-                <Button
-                  size="lg"
-                  className="shadow-glow transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_60px_hsl(270_90%_60%/_0.6)] w-full sm:w-auto touch-target"
+        <motion.div
+          className="container mx-auto max-w-7xl relative z-10"
+          style={{ y: heroY, opacity: heroOpacity }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Text content */}
+            <motion.div
+              className="lg:col-span-7 text-center lg:text-left"
+              variants={heroStagger}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div variants={heroItem} className="mb-4">
+                <motion.span
+                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium"
+                  animate={{ boxShadow: ['0 0 0px hsl(263 70% 58% / 0)', '0 0 20px hsl(263 70% 58% / 0.15)', '0 0 0px hsl(263 70% 58% / 0)'] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Available for work
+                </motion.span>
+              </motion.div>
+
+              <TextSplit
+                text="Aryan Aligeti"
+                as="h1"
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.9] mb-6"
+                delay={0.3}
+              />
+
+              <motion.p variants={heroItem} className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
+                Full Stack Developer <span className="text-primary">&</span> Video Editor crafting
+                digital experiences that blend <span className="text-gradient font-semibold">code</span> with <span className="text-gradient font-semibold">creativity</span>.
+              </motion.p>
+
+              <motion.div variants={heroItem} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
+                <MagneticButton
                   onClick={() => scrollToSection('contact')}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-semibold text-base shadow-glow hover:shadow-[0_0_60px_hsl(263_70%_58%/0.5)] transition-all duration-300"
                 >
                   Let's Work Together
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button variant="outline" size="lg" onClick={downloadResume} className="glass glass-hover border-primary/20 hover:bg-white/10 w-full sm:w-auto touch-target">
-                  <Download className="mr-2 h-5 w-5" />
-                  Download Resume
-                </Button>
-              </div>
+                  <ArrowRight className="h-5 w-5" />
+                </MagneticButton>
+                <MagneticButton
+                  onClick={downloadResume}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/10 bg-white/[0.03] text-white font-semibold text-base hover:bg-white/[0.08] transition-all duration-300"
+                >
+                  <Download className="h-5 w-5" />
+                  Resume
+                </MagneticButton>
+              </motion.div>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
+              <motion.div variants={heroItem} className="flex items-center gap-6 text-sm text-muted-foreground justify-center lg:justify-start">
                 <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-accent animate-pulse" />
+                  <Star className="h-4 w-4 text-primary" />
                   <span>3+ Years Experience</span>
                 </div>
+                <div className="w-1 h-1 rounded-full bg-muted-foreground/30" />
                 <div className="flex items-center gap-2">
-                  <Award className="h-4 w-4 text-accent animate-pulse" />
+                  <Award className="h-4 w-4 text-primary" />
                   <span>50+ Projects</span>
                 </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Profile image — 3D spin card */}
+            <motion.div
+              className="lg:col-span-5 flex justify-center"
+              initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <SpinCard
+                className="w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96"
+                hintRock
+                front={
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-hero border-gradient">
+                    <img
+                      src={profileHero}
+                      alt="Aryan Aligeti"
+                      className="w-full h-full object-cover"
+                      loading="eager"
+                      draggable={false}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  </div>
+                }
+                back={
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-hero bg-gradient-to-br from-[hsl(263_70%_12%)] via-[hsl(250_25%_6%)] to-[hsl(187_50%_8%)] flex items-center justify-center">
+                    <div className="text-center p-8">
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-gradient font-heading">A</span>
+                      </div>
+                      <p className="text-2xl font-bold font-heading text-gradient mb-2">Aryan Aligeti</p>
+                      <p className="text-sm text-muted-foreground mb-4">Developer & Creator</p>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        <span className="px-2.5 py-1 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">Full Stack</span>
+                        <span className="px-2.5 py-1 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">Video Editor</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              />
+            </motion.div>
+          </div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, y: [0, 12, 0] }}
+            transition={{ opacity: { delay: 2 }, y: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } }}
+          >
+            <ChevronDown
+              className="h-8 w-8 text-primary/60 cursor-pointer hover:text-primary transition-colors"
+              onClick={() => scrollToSection('marquee')}
+            />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ======= TECH MARQUEE ======= */}
+      <section id="marquee" className="py-8 border-y border-white/[0.04] relative overflow-hidden">
+        <Marquee items={techStack} speed={25} className="text-xl sm:text-2xl font-heading font-semibold text-white/10" />
+      </section>
+
+      {/* ======= ABOUT / BENTO GRID ======= */}
+      <section id="about" className="py-20 sm:py-28 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <ScrollReveal>
+            <div className="flex items-center gap-4 mb-16">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-primary to-transparent" />
+              <span className="text-primary font-mono text-sm uppercase tracking-widest">About Me</span>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* Large intro card */}
+            <ScrollReveal variants={slideInLeft} className="md:col-span-2 lg:col-span-2">
+              <TiltCard tiltAmount={4}>
+                <div className="glass glass-hover rounded-2xl p-8 sm:p-10 h-full border-gradient">
+                  <h2 className="text-3xl sm:text-4xl font-bold mb-6 font-heading">
+                    I build things for the <span className="text-gradient">web</span> and edit things for the <span className="text-gradient">screen</span>.
+                  </h2>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    I'm a Full Stack Developer and Video Editor with 3+ years of experience building web apps,
+                    mobile apps, and creating cinematic video content. I love combining technical skills with
+                    creative storytelling to deliver impactful digital experiences.
+                  </p>
+                </div>
+              </TiltCard>
+            </ScrollReveal>
+
+            {/* Stats card */}
+            <ScrollReveal variants={slideInRight}>
+              <TiltCard tiltAmount={6}>
+                <div className="glass glass-hover rounded-2xl p-8 h-full border-gradient grid grid-cols-2 gap-6">
+                  {stats.map((stat) => (
+                    <div key={stat.label} className="text-center">
+                      <div className="text-3xl sm:text-4xl font-bold text-gradient font-heading mb-1">
+                        <CountUp target={stat.value} suffix={stat.suffix} />
+                      </div>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </TiltCard>
+            </ScrollReveal>
+
+            {/* Skills cards */}
+            {skills.map((skill, i) => (
+              <ScrollReveal key={skill.name} delay={i * 0.05}>
+                <TiltCard tiltAmount={8} className="h-full">
+                  <motion.div
+                    className="glass glass-hover rounded-2xl p-6 h-full flex flex-col items-center justify-center gap-3 text-center border-gradient min-h-[140px]"
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  >
+                    <div className="flex items-center justify-center w-14 h-14">
+                      {skill.isImage ? (
+                        skill.cropBottom ? (
+                          <div className="w-12 h-12 overflow-hidden">
+                            <img src={skill.icon} alt={skill.name} className="w-12 object-cover object-top" />
+                          </div>
+                        ) : (
+                          <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-12 h-12'} object-contain`} />
+                        )
+                      ) : (
+                        <span className="text-4xl">{skill.icon}</span>
+                      )}
+                    </div>
+                    <h3 className="text-sm font-semibold">{skill.name}</h3>
+                  </motion.div>
+                </TiltCard>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ======= MY EDITS (FLOATING VIDEOS) ======= */}
+      <FloatingVideos />
+
+      {/* ======= FEATURED WORK ======= */}
+      <section id="work" className="py-20 sm:py-28 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <ScrollReveal>
+            <div className="flex items-center gap-4 mb-16">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-primary to-transparent" />
+              <span className="text-primary font-mono text-sm uppercase tracking-widest">Featured Work</span>
+            </div>
+          </ScrollReveal>
+
+          <motion.div
+            className="space-y-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px 0px' }}
+          >
+            {featuredProjects.map((project, i) => (
+              <motion.div key={project.title} variants={fadeInUp}>
+                <Link to={project.link}>
+                  <TiltCard tiltAmount={3}>
+                    <motion.div
+                      className="glass glass-hover rounded-2xl p-8 sm:p-10 border-gradient group cursor-pointer"
+                      whileHover={{ y: -4, boxShadow: '0 0 40px hsl(263 70% 58% / 0.12)' }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                    >
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                        <div className="flex-1">
+                          <span className="text-muted-foreground font-mono text-sm mb-2 block">0{i + 1}</span>
+                          <h3 className="text-2xl sm:text-3xl font-bold font-heading mb-3 group-hover:text-gradient transition-all duration-300">
+                            {project.title}
+                          </h3>
+                          <p className="text-muted-foreground max-w-xl mb-4">{project.desc}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {project.tech.map((t) => (
+                              <span key={t} className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <motion.div
+                          className="flex items-center gap-2 text-primary"
+                          whileHover={{ x: 8 }}
+                          transition={{ type: 'spring', stiffness: 300 }}
+                        >
+                          <span className="text-sm font-medium hidden sm:block">View</span>
+                          <ArrowRight className="h-5 w-5" />
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </TiltCard>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <ScrollReveal className="mt-12 flex gap-4 justify-center">
+            <MagneticButton
+              as="a"
+              href="/tech-projects"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/[0.03] text-white font-medium hover:bg-white/[0.08] transition-all duration-300"
+            >
+              <Github className="h-4 w-4" />
+              Tech Projects
+            </MagneticButton>
+            <MagneticButton
+              as="a"
+              href="/content-creation"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/[0.03] text-white font-medium hover:bg-white/[0.08] transition-all duration-300"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Video Work
+            </MagneticButton>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ======= REVERSE MARQUEE ======= */}
+      <section className="py-8 border-y border-white/[0.04] relative overflow-hidden">
+        <Marquee
+          items={['Full Stack Dev', 'Video Editor', 'Content Creator', 'UI/UX', 'Mobile Dev', 'Script Writer']}
+          speed={20}
+          reverse
+          className="text-4xl sm:text-5xl font-heading font-bold text-white/[0.04]"
+          separator="✦"
+        />
+      </section>
+
+      {/* ======= CTA ======= */}
+      <section id="contact" className="py-20 sm:py-28">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+          <ScrollReveal>
+            <div className="text-center">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading mb-6">
+                Let's create something <span className="text-gradient">amazing</span> together.
+              </h2>
+              <motion.div
+                className="absolute -inset-20 bg-[hsl(263_70%_58%/0.06)] rounded-full blur-[100px] -z-10"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.7, 0.4] }}
+                transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
+              />
+              <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+                Whether you need a developer, a video editor, or a creative partner —
+                I'd love to hear about your project.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <MagneticButton className="inline-block">
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 px-10 py-5 rounded-full bg-primary text-white font-semibold text-lg shadow-glow hover:shadow-[0_0_60px_hsl(263_70%_58%/0.5)] transition-all duration-300"
+                  >
+                    Get In Touch
+                    <ArrowRight className="h-5 w-5" />
+                  </Link>
+                </MagneticButton>
+                <MagneticButton className="inline-block">
+                  <Link
+                    to="/content-creation"
+                    className="inline-flex items-center gap-2 px-10 py-5 rounded-full border border-white/10 bg-white/[0.03] text-white font-semibold text-lg hover:bg-white/[0.08] transition-all duration-300"
+                  >
+                    View My Work
+                  </Link>
+                </MagneticButton>
               </div>
             </div>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <ChevronDown
-              className="h-8 w-8 text-primary cursor-pointer hover:text-accent transition-colors"
-              onClick={() => scrollToSection('skills')}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
-        {/* Decorative background element */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 opacity-30"></div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-glow-white">Skills & Expertise</h2>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              Specialized in Full Stack Development, Video Editing, Content Creation, and Script Writing across multiple platforms.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {skills.map((skill, index) => (
-              <Card
-                key={skill.name}
-                className="glass glass-hover border-white/10 animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <CardContent className="p-5 sm:p-6 text-center">
-                  <div className="text-4xl mb-3 sm:mb-4 flex justify-center items-center">
-                    {skill.isImage ? (
-                      skill.cropBottom ? (
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 overflow-hidden">
-                          <img src={skill.icon} alt={skill.name} className="w-12 sm:w-14 object-cover object-top" />
-                        </div>
-                      ) : (
-                        <img src={skill.icon} alt={skill.name} className={`${skill.imageSize || 'w-10 h-10 sm:w-12 sm:h-12'} object-contain`} />
-                      )
-                    ) : (
-                      skill.icon
-                    )}
-                  </div>
-                  <h3 className="text-base sm:text-lg font-semibold">{skill.name}</h3>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Achievements Section */}
-      <section id="achievements" className="py-12 sm:py-16 md:py-20 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-glow-white">Achievements & Impact</h2>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-              Proven track record of delivering exceptional results and creating meaningful impact.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {achievements.map((achievement, index) => (
-              <Card
-                key={achievement.title}
-                className="glass glass-hover border-white/10 animate-fade-in-up"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                <CardContent className="p-5 sm:p-6 text-center">
-                  <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 transform group-hover:scale-110 transition-transform duration-300">{achievement.icon}</div>
-                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-2 text-glow">{achievement.count}</div>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-snug">{achievement.title}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section id="contact" className="py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <Card className="glass border-white/10 shadow-hero max-w-4xl mx-auto animate-fade-in relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-primary opacity-10 blur-3xl -z-10"></div>
-            <CardContent className="p-6 sm:p-8 md:p-12 text-center relative z-10">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-glow-white">
-                Ready to create something amazing?
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
-                Whether you need video editing, content creation, or technical development,
-                let's collaborate to bring your vision to life.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <Button asChild size="lg" className="shadow-glow hover:scale-105 transition-transform duration-300 w-full sm:w-auto touch-target">
-                  <Link to="/contact">
-                    Get In Touch
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button variant="outline" size="lg" asChild className="glass glass-hover border-primary/20 hover:bg-white/10 w-full sm:w-auto touch-target">
-                  <Link to="/ContentCreation">View My Work</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          </ScrollReveal>
         </div>
       </section>
     </div>

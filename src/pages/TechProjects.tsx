@@ -1,9 +1,13 @@
-import { useState, useRef, useCallback } from 'react';
-import { Github, ExternalLink, Code, ArrowLeft, X } from 'lucide-react';
+import { useState, useCallback, useRef } from 'react';
+import { Github, ExternalLink, X, ArrowUpRight } from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ScrollReveal from '@/components/ScrollReveal';
+import TiltCard from '@/components/TiltCard';
+import TextSplit from '@/components/TextSplit';
+import MagneticButton from '@/components/MagneticButton';
+import { staggerContainer, fadeInUp, modalOverlay, modalContent } from '@/lib/animations';
 import expense from '@/assets/expense.png';
-import ironman from '@/assets/Ironman.jpg';
 import textmood from '@/assets/textmood.png';
 import sarcastic from '@/assets/mrsarcastic.png';
 import snakebite from '@/assets/snakebitethumbnail.png';
@@ -27,428 +31,253 @@ interface Project {
   githubUrl: string;
   liveUrl: string;
   image: string;
-}
-
-interface CardRect {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
+  images?: string[];
 }
 
 const TechProjects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [cardRect, setCardRect] = useState<CardRect | null>(null);
-  const [isClosing, setIsClosing] = useState(false);
-  const cardRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const headerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: headerRef, offset: ['start start', 'end start'] });
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  const handleCardClick = useCallback((project: Project, cardElement: HTMLDivElement | null) => {
-    if (cardElement) {
-      const rect = cardElement.getBoundingClientRect();
-      setCardRect({
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-      });
-    }
-    setSelectedProject(project);
-    setIsClosing(false);
-  }, []);
+  const handleClose = useCallback(() => setSelectedProject(null), []);
 
-  const handleClose = useCallback(() => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setSelectedProject(null);
-      setCardRect(null);
-      setIsClosing(false);
-    }, 400); // Match animation duration
-  }, []);
-  const projects = [
+  const projects: Project[] = [
+    {
+      id: 3,
+      title: "Bro - AI Study Buddy",
+      description: "Bro is a web-based AI study buddy that lets users upload notes and interact with them through a clean, modern chat interface with source-style references and a dedicated Study Mode for quizzes and flashcards. Built with scalable architecture, containerized with Docker, deployed on AWS EC2.",
+      technologies: ["Next.js", "TypeScript", "Python", "FastAPI", "Docker", "AWS EC2", "Qdrant", "PostgreSQL", "Groq LLM"],
+      githubUrl: "https://github.com/aryan1429/Bro-StudyBuddy.git",
+      liveUrl: "https://brostudybuddy.live/",
+      image: bro3,
+      images: [bro1, bro2, bro3, bro4],
+    },
     {
       id: 1,
       title: "Snakebite Detection System",
-      description: "A Flutter Mobile application for snakebite detection using machine learning. This project helps identify venomous snake species and provides immediate first-aid guidance. I contributed by developing the complete mobile frontend with an intuitive user interface for real-time snake identification and emergency response features.",
-      technologies: ["Flutter", "Dart", "Machine Learning", "TensorFlow Lite", "Firebase", "Camera API", "Real-time Detection"],
+      description: "A Flutter mobile application for snakebite detection using machine learning. Identifies venomous snake species and provides immediate first-aid guidance. Developed complete mobile frontend with real-time snake identification and emergency response features.",
+      technologies: ["Flutter", "Dart", "Machine Learning", "TensorFlow Lite", "Firebase", "Camera API"],
       githubUrl: "https://github.com/manohari3299/AI_Based_SnakeBite_Detection_TreatmentAid.git",
       liveUrl: "https://github.com/manohari3299/AI_Based_SnakeBite_Detection_TreatmentAid/releases/latest",
-      image: snakebite
+      image: snakebite,
+      images: [snakebite, snakebite2, snakebite3],
+    },
+    {
+      id: 4,
+      title: "Chest X-ray Report Generator",
+      description: "Built the complete Frontend/UI for a Chest X-ray report generation system. Handled full integration of backend and frontend, database setup with Supabase, and authentication via Google Auth.",
+      technologies: ["React", "Supabase", "Google Auth", "Full-Stack Integration"],
+      githubUrl: "https://github.com/aryan1429/CXR-report-generator.git",
+      liveUrl: "https://chestxray.tech/",
+      image: chestxray,
     },
     {
       id: 2,
       title: "Gym Tracker",
-      description: "A beautiful Flutter mobile application for tracking gym workouts, featuring a premium Glass & Neon UI design with smooth animations. The app includes workout planning, calendar integration, progress photos, weather-based smart timers, and an intuitive dark theme interface for an engaging fitness tracking experience.",
-      technologies: ["Flutter", "Dart", "Firebase", "Weather API", "Material Design", "Glassmorphism"],
+      description: "Flutter mobile application for tracking gym workouts with premium Glass & Neon UI. Includes workout planning, calendar integration, progress photos, weather-based smart timers.",
+      technologies: ["Flutter", "Dart", "Firebase", "Weather API", "Glassmorphism"],
       githubUrl: "https://github.com/aryan1429/gym-tracker",
       liveUrl: "https://github.com/aryan1429/gym-tracker/releases/latest",
-      image: gym1
-    },
-    {
-      id: 3,
-      title: "Bro - AI Study Buddy",
-      description: "Bro is a web-based AI study buddy that lets users upload notes and interact with them through a clean, modern chat interface with source-style references and a dedicated Study Mode for quizzes and flashcards. The application is built using a scalable, backend-ready architecture and containerized with Docker for consistent development and deployment. It is deployed on AWS EC2, demonstrating real-world hosting, environment management, and production-style setup suitable for full-stack AI applications.",
-      technologies: ["Next.js", "TypeScript", "Python", "FastAPI", "Docker", "AWS EC2", "Qdrant", "PostgreSQL", "Groq LLM"],
-      githubUrl: "https://github.com/aryan1429/Bro-StudyBuddy.git",
-      liveUrl: "https://brostudybuddy.live/",
-      image: bro3
-    },
-    {
-      id: 4,
-      title: "Chest Xray Generation System",
-      description: "Built the complete Frontend/UI for a Chest X-ray report generation system and handled the full integration of backend and frontend, along with database setup using Supabase and authentication via Google Auth.",
-      technologies: ["React", "Supabase", "Google Auth", "Frontend/UI", "Full-Stack Integration"],
-      githubUrl: "https://github.com/aryan1429/CXR-report-generator.git",
-      liveUrl: "https://chestxray.tech/",
-      image: chestxray
+      image: gym1,
+      images: [gym1, gym2, gym3, gym4],
     },
     {
       id: 5,
       title: "Mr Sarcastic",
-      description: "An AI-powered chatbot with a sarcastic personality that detects user mood and provides personalized music recommendations. Features Firebase Authentication for Google sign-in, real-time chat, and mood-based song suggestions.",
-      technologies: ["React", "TypeScript", "Node.js", "Express", "Google Cloud Storage", "JWT", "Tailwind CSS"],
+      description: "AI-powered chatbot with sarcastic personality that detects user mood and provides personalized music recommendations. Features Firebase Auth, real-time chat, and mood-based song suggestions.",
+      technologies: ["React", "TypeScript", "Node.js", "Express", "GCP", "JWT"],
       githubUrl: "https://github.com/aryan1429/mr-sarcastic",
       liveUrl: "https://www.mrsarcastic.me/",
-      image: sarcastic
+      image: sarcastic,
     },
     {
       id: 6,
       title: "Expense Tracker",
-      description: "This is a full-stack personal expense tracker built with the MERN (MongoDB, Express, React, Node.js) stack. It allows users to add, view, and delete their daily expenses, which are then visualized in a chart to show spending by category.",
-      technologies: ["React", "MongoDb", "Express", "Node.js"],
+      description: "Full-stack personal expense tracker built with MERN stack. Add, view, and delete daily expenses, visualized in charts by category.",
+      technologies: ["React", "MongoDB", "Express", "Node.js"],
       githubUrl: "https://github.com/aryan1429/Expense_tracker.git",
       liveUrl: "https://expense-tracker-sigma-green.vercel.app/",
-      image: expense
+      image: expense,
     },
     {
       id: 7,
       title: "TextMoodDJ",
-      description: "ABuilt an AI-powered mood-based music assistant that detects emotions from text or voice and recommends matching songs/memes using sentiment analysis, speech-to-text, and YouTube Music API, with a dynamic React UI for an engaging experience.",
-      technologies: ["Python", "Flask/FastAPI", "React.js", "Tailwind CSS", "Hugging Face Transformers", "YouTube Music API (ytmusicapi)", "Redis / SQLite",],
+      description: "AI-powered mood-based music assistant. Detects emotions from text or voice, recommends matching songs/memes using sentiment analysis and YouTube Music API.",
+      technologies: ["Python", "FastAPI", "React", "Hugging Face", "YouTube Music API"],
       githubUrl: "https://github.com/aryan1429/Text-MoodDJ.git",
       liveUrl: "https://text-mood-dj.vercel.app/",
-      image: textmood
-    }
+      image: textmood,
+    },
   ];
 
   return (
     <div className="min-h-screen relative overflow-hidden pt-20 tech-projects-bg">
-      {/* Animated Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: '4s' }} />
+      {/* Background orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-[10%] right-[15%] w-[500px] h-[500px] bg-[hsl(263_50%_15%/0.25)] rounded-full blur-[150px]"
+          animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+          transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-[20%] left-[5%] w-[400px] h-[400px] bg-[hsl(187_50%_12%/0.2)] rounded-full blur-[130px]"
+          animate={{ y: [0, 25, 0], x: [0, -20, 0] }}
+          transition={{ repeat: Infinity, duration: 11, ease: 'easeInOut', delay: 3 }}
+        />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 relative z-10 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight">
-            Tech Projects
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A showcase of my technical projects and development work. Each project represents
-            a unique challenge and learning experience.
-          </p>
-        </div>
+        <motion.div ref={headerRef} className="mb-20" style={{ y: headerY, opacity: headerOpacity }}>
+          <ScrollReveal>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-primary to-transparent" />
+              <span className="text-primary font-mono text-sm uppercase tracking-widest">Portfolio</span>
+            </div>
+          </ScrollReveal>
+          <TextSplit
+            text="Tech Projects"
+            as="h1"
+            className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6"
+            delay={0.1}
+          />
+          <ScrollReveal delay={0.3}>
+            <p className="text-xl text-muted-foreground max-w-2xl">
+              Each project represents a unique challenge — from AI-powered apps to full-stack platforms.
+            </p>
+          </ScrollReveal>
+        </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Project list */}
+        <motion.div
+          className="space-y-4"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px 0px' }}
+        >
           {projects.map((project, index) => (
-            <div
-              key={project.id}
-              ref={(el) => { cardRefs.current[project.id] = el; }}
-              className="h-full"
-            >
-              <Card
-                className="h-full flex flex-col border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 group animate-fade-in-up overflow-hidden rounded-xl relative cursor-pointer"
-                style={{ animationDelay: `${index * 200}ms` }}
-                onClick={() => handleCardClick(project, cardRefs.current[project.id])}
-              >
-                {/* Background Image */}
-                <div
-                  className="absolute inset-0 z-0"
-                  style={{
-                    backgroundImage: 'linear-gradient(to bottom, rgba(30, 41, 59, 0.85), rgba(30, 41, 59, 0.9)), url(/background.jpeg)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center top',
-                    backgroundRepeat: 'no-repeat'
-                  }}
-                />
-                <CardHeader className="relative z-10">
-                  <div className="w-full h-48 bg-black/40 rounded-lg mb-4 flex items-center justify-center overflow-hidden border border-white/5 group-hover:border-primary/30 transition-colors">
-                    {project.image ? (
-                      project.id === 1 ? (
-                        // Snakebite project - show all three thumbnails side by side
-                        <div className="flex w-full h-full">
-                          <img
-                            src={snakebite}
-                            alt={`${project.title} - Screen 1`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500"
-                          />
-                          <img
-                            src={snakebite2}
-                            alt={`${project.title} - Screen 2`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-75"
-                          />
-                          <img
-                            src={snakebite3}
-                            alt={`${project.title} - Screen 3`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-150"
-                          />
+            <motion.div key={project.id} variants={fadeInUp}>
+              <TiltCard tiltAmount={3}>
+                <motion.div
+                  className="glass glass-hover rounded-2xl overflow-hidden border-gradient cursor-pointer group"
+                  onClick={() => setSelectedProject(project)}
+                  whileHover={{ y: -6, boxShadow: '0 0 40px hsl(263 70% 58% / 0.12)' }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                >
+                  <div className="flex flex-col md:flex-row">
+                    {/* Image */}
+                    <div className="md:w-80 lg:w-96 h-56 md:h-64 bg-black/30 flex-shrink-0 overflow-hidden">
+                      <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    </div>
+                    {/* Content */}
+                    <div className="flex-1 p-6 sm:p-8 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div>
+                            <span className="text-muted-foreground font-mono text-xs mb-1 block">0{index + 1}</span>
+                            <h3 className="text-xl sm:text-2xl font-bold font-heading group-hover:text-gradient transition-all duration-300">
+                              {project.title}
+                            </h3>
+                          </div>
+                          <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-1" />
                         </div>
-                      ) : project.id === 2 ? (
-                        // Gym Tracker project - show all four thumbnails side by side
-                        <div className="flex w-full h-full">
-                          <img
-                            src={gym1}
-                            alt={`${project.title} - Screen 1`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500"
-                          />
-                          <img
-                            src={gym2}
-                            alt={`${project.title} - Screen 2`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-75"
-                          />
-                          <img
-                            src={gym3}
-                            alt={`${project.title} - Screen 3`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-150"
-                          />
-                          <img
-                            src={gym4}
-                            alt={`${project.title} - Screen 4`}
-                            className="flex-1 h-full object-contain hover:scale-110 transition-transform duration-500 delay-200"
-                          />
-                        </div>
-                      ) : (
-                        // Other projects - single image
-                        <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                        />
-                      )
-                    ) : (
-                      <Code className="h-16 w-16 text-primary/50" />
-                    )}
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2">{project.description}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.slice(0, 5).map((tech) => (
+                          <span key={tech} className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                            {tech}
+                          </span>
+                        ))}
+                        {project.technologies.length > 5 && (
+                          <span className="px-2.5 py-1 rounded-full text-xs font-medium text-muted-foreground">+{project.technologies.length - 5}</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <CardTitle className="text-xl font-heading group-hover:text-primary transition-colors">
-                    {project.title}
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground line-clamp-3">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
+                </motion.div>
+              </TiltCard>
+            </motion.div>
+          ))}
+        </motion.div>
 
-                <CardContent className="relative z-10 flex-grow flex flex-col">
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20 hover:bg-primary/20 transition-colors"
-                      >
-                        {tech}
-                      </span>
+        {/* GitHub CTA */}
+        <ScrollReveal className="mt-16 text-center">
+          <MagneticButton
+            as="a"
+            href="https://github.com/aryan1429"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-semibold shadow-glow hover:shadow-[0_0_60px_hsl(263_70%_58%/0.5)] transition-all duration-300"
+          >
+            <Github className="h-5 w-5" />
+            View GitHub Profile
+          </MagneticButton>
+        </ScrollReveal>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={handleClose} variants={modalOverlay} initial="hidden" animate="visible" exit="exit">
+            <div className="absolute inset-0 bg-black/85 backdrop-blur-lg" />
+            <motion.div
+              className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[hsl(250_25%_6%)] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              variants={modalContent}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <button onClick={handleClose} className="absolute top-4 right-4 z-10 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all hover:rotate-90 duration-300">
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="h-56 bg-black/40 flex items-center justify-center overflow-hidden rounded-t-2xl">
+                {selectedProject.images ? (
+                  <div className="flex w-full h-full gap-1 p-3">
+                    {selectedProject.images.map((img, i) => (
+                      <img key={i} src={img} alt="" className="flex-1 h-full object-contain rounded-lg" />
                     ))}
                   </div>
+                ) : (
+                  <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-contain p-4" />
+                )}
+              </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-3 mt-auto pt-2">
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1"
-                    >
-                      <Button variant="outline" size="sm" className="w-full glass hover:bg-white/20 border-white/10">
-                        <Github className="h-4 w-4 mr-2" />
-                        Code
-                      </Button>
-                    </a>
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1"
-                    >
-                      <Button variant="default" size="sm" className="w-full shadow-glow hover:scale-105 transition-transform">
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        {(project.id === 1 || project.id === 2) ? '📱 APK' : 'Live Demo'}
-                      </Button>
-                    </a>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </div>
+              <div className="p-6 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gradient font-heading mb-4">{selectedProject.title}</h2>
+                <p className="text-muted-foreground leading-relaxed mb-6">{selectedProject.description}</p>
 
-        {/* CTA Section */}
-        <div className="text-center mt-20 animate-fade-in">
-          <h3 className="text-2xl font-bold mb-4 font-heading">Want to see more?</h3>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Check out my GitHub for additional projects and contributions.
-          </p>
-          <a href="https://github.com/aryan1429" target="_blank" rel="noopener noreferrer">
-            <Button variant="default" size="lg" className="shadow-glow hover:scale-105 transition-transform rounded-full px-8">
-              <Github className="h-5 w-5 mr-2" />
-              View GitHub Profile
-            </Button>
-          </a>
-        </div>
-      </div>
+                <motion.div className="flex flex-wrap gap-2 mb-8" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.03, delayChildren: 0.2 } } }}>
+                  {selectedProject.technologies.map((tech) => (
+                    <motion.span key={tech} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20" variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}>
+                      {tech}
+                    </motion.span>
+                  ))}
+                </motion.div>
 
-      {/* Project Detail Modal - Shared Element Transition */}
-      {selectedProject && cardRect && (
-        <div
-          className={`fixed inset-0 z-50 ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`}
-          onClick={handleClose}
-        >
-          {/* Backdrop */}
-          <div className={`absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-400 ${isClosing ? 'opacity-0' : 'opacity-100'}`} />
-
-          {/* Back Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClose();
-            }}
-            className={`absolute top-6 left-6 z-[60] flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-lg rounded-full border border-white/20 text-white transition-all duration-300 hover:scale-105 group ${isClosing ? 'opacity-0 -translate-x-4' : 'opacity-100'}`}
-          >
-            <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Projects</span>
-          </button>
-
-          {/* Modal Content with Shared Element Transition */}
-          <div
-            className={`fixed z-[55] overflow-visible rounded-2xl border border-white/20 ${isClosing ? 'project-zoom-out' : 'project-zoom-in'}`}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              '--start-top': `${cardRect.top}px`,
-              '--start-left': `${cardRect.left}px`,
-              '--start-width': `${cardRect.width}px`,
-              '--start-height': `${cardRect.height}px`,
-              backgroundImage: 'linear-gradient(to bottom, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98)), url(/background.jpeg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            } as React.CSSProperties}
-          >
-            {/* Close Button (X) */}
-            <button
-              onClick={handleClose}
-              className={`absolute top-4 right-4 z-10 p-2 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 text-white transition-all duration-300 hover:scale-110 hover:rotate-90 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {/* Project Images */}
-            <div className="w-full h-48 md:h-56 bg-black/40 flex items-center justify-center overflow-hidden rounded-t-2xl">
-              {selectedProject.id === 1 ? (
-                // Snakebite project - show all three thumbnails
-                <div className="flex w-full h-full gap-2 p-4">
-                  <img
-                    src={snakebite}
-                    alt={`${selectedProject.title} - Screen 1`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                  <img
-                    src={snakebite2}
-                    alt={`${selectedProject.title} - Screen 2`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                  <img
-                    src={snakebite3}
-                    alt={`${selectedProject.title} - Screen 3`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                </div>
-              ) : selectedProject.id === 2 ? (
-                // Gym Tracker project - show all four thumbnails
-                <div className="flex w-full h-full gap-2 p-4">
-                  <img
-                    src={gym1}
-                    alt={`${selectedProject.title} - Screen 1`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                  <img
-                    src={gym2}
-                    alt={`${selectedProject.title} - Screen 2`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                  <img
-                    src={gym3}
-                    alt={`${selectedProject.title} - Screen 3`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                  <img
-                    src={gym4}
-                    alt={`${selectedProject.title} - Screen 4`}
-                    className="flex-1 h-full object-contain rounded-lg"
-                  />
-                </div>
-              ) : (
-                // Other projects - single image
-                <img
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  className="w-full h-full object-contain p-4"
-                />
-              )}
-            </div>
-
-            {/* Project Details */}
-            <div className="p-5">
-              {/* Title and Actions Row */}
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <h2 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-primary">
-                  {selectedProject.title}
-                </h2>
-                <div className="flex gap-2 flex-shrink-0">
-                  <a
-                    href={selectedProject.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Button variant="outline" size="sm" className="glass hover:bg-white/20 border-white/10">
-                      <Github className="h-4 w-4 mr-1" />
-                      Code
+                <div className="flex gap-3">
+                  <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                    <Button variant="outline" className="w-full glass hover:bg-white/10 border-white/10">
+                      <Github className="h-4 w-4 mr-2" /> Code
                     </Button>
                   </a>
-                  <a
-                    href={selectedProject.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Button variant="default" size="sm" className="shadow-glow hover:scale-105 transition-transform">
-                      <ExternalLink className="h-4 w-4 mr-1" />
-                      {(selectedProject.id === 1 || selectedProject.id === 2) ? 'APK' : 'Demo'}
+                  <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                    <Button className="w-full shadow-glow hover:scale-[1.02] transition-transform">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      {(selectedProject.id === 1 || selectedProject.id === 2) ? 'Download APK' : 'Live Demo'}
                     </Button>
                   </a>
                 </div>
               </div>
-
-              {/* Full Description */}
-              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                {selectedProject.description}
-              </p>
-
-              {/* Technologies */}
-              <div className="flex flex-wrap gap-2 pb-4">
-                {selectedProject.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2 py-1 bg-primary/15 text-primary rounded-full text-xs font-medium border border-primary/30"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

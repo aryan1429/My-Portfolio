@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Play } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
 import LazyVideo from '@/components/LazyVideo';
-import MobileDebugPanel from '@/components/MobileDebugPanel';
+import ScrollReveal from '@/components/ScrollReveal';
+import TiltCard from '@/components/TiltCard';
+import TextSplit from '@/components/TextSplit';
+import MagneticButton from '@/components/MagneticButton';
+import { filterItem } from '@/lib/animations';
 
-// Import thumbnails
 import wolverine_thumbnail from '@/assets/wolverine_thumbnail.png';
 import moon_thumbnail from '@/assets/moon_thumbnail.png';
 import ironman_thumbnail from '@/assets/Ironman.jpg';
@@ -20,14 +22,12 @@ import soldierboy_thumbnail from '@/assets/Soldierboy.png';
 import butcher_thumbnail from '@/assets/butcher.jpg';
 import spiderman_comic_thumbnail from '@/assets/Spiderman_comic.jpg';
 
-// ---- Lazy Desktop Video Card ----
-// Only loads video source when card is near viewport
 interface LazyDesktopVideoProps {
   video: { id: number; title: string; category: string; thumbnail: string; videoUrl: string; thumbnailClassName?: string; };
   index: number;
 }
 
-const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video, index }) => {
+const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const waitingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -38,79 +38,27 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video, index }) => 
   const [loading, setLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  // Lazy-load: only set the video source when the card is near the viewport
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsNearViewport(true);
-          observer.disconnect();
-        }
-      },
+      ([entry]) => { if (entry.isIntersecting) { setIsNearViewport(true); observer.disconnect(); } },
       { rootMargin: '200px', threshold: 0 }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  // Debounced waiting/buffering handler to prevent spinner flicker
   const handleWaiting = useCallback(() => {
     if (waitingTimerRef.current) clearTimeout(waitingTimerRef.current);
     waitingTimerRef.current = setTimeout(() => setLoading(true), 300);
   }, []);
-
-  const handlePlaying = useCallback(() => {
-    if (waitingTimerRef.current) {
-      clearTimeout(waitingTimerRef.current);
-      waitingTimerRef.current = null;
-    }
+  const clearWaiting = useCallback(() => {
+    if (waitingTimerRef.current) { clearTimeout(waitingTimerRef.current); waitingTimerRef.current = null; }
     setLoading(false);
   }, []);
 
-  const handleCanPlay = useCallback(() => {
-    if (waitingTimerRef.current) {
-      clearTimeout(waitingTimerRef.current);
-      waitingTimerRef.current = null;
-    }
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (waitingTimerRef.current) clearTimeout(waitingTimerRef.current);
-    };
-  }, []);
-
-  const handlePlay = useCallback(() => {
-    setPlaying(true);
-    setEnded(false);
-    setLoading(true);
-  }, []);
-
-  const handlePause = useCallback(() => {
-    setPlaying(false);
-    setLoading(false);
-  }, []);
-
-  const handleEnded = useCallback(() => {
-    setPlaying(false);
-    setEnded(true);
-    setLoading(false);
-  }, []);
-
-  const handleError = useCallback(() => {
-    setPlaying(false);
-    setLoading(false);
-    console.error(`Error loading video: ${video.title}`);
-  }, [video.title]);
-
-  const handleClickPlay = useCallback(() => {
-    const el = videoRef.current;
-    if (el) el.play();
-  }, []);
+  useEffect(() => () => { if (waitingTimerRef.current) clearTimeout(waitingTimerRef.current); }, []);
 
   const showOverlay = ended || (!playing && !hovered);
 
@@ -126,280 +74,184 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video, index }) => 
           ref={videoRef}
           controls
           poster={video.thumbnail || undefined}
-          className="w-full h-full object-contain rounded-md"
-          onPlay={handlePlay}
-          onPause={handlePause}
-          onEnded={handleEnded}
-          onCanPlay={handleCanPlay}
-          onError={handleError}
+          className="w-full h-full object-contain rounded-xl"
+          onPlay={() => { setPlaying(true); setEnded(false); setLoading(true); }}
+          onPause={() => { setPlaying(false); setLoading(false); }}
+          onEnded={() => { setPlaying(false); setEnded(true); setLoading(false); }}
+          onCanPlay={clearWaiting}
+          onError={() => { setPlaying(false); setLoading(false); }}
           onWaiting={handleWaiting}
-          onPlaying={handlePlaying}
-          preload="none"
-          playsInline
-          muted
-          style={{
-            backgroundColor: 'black',
-            imageRendering: 'auto',
-            willChange: 'auto',
-          }}
+          onPlaying={clearWaiting}
+          preload="none" playsInline muted
+          style={{ backgroundColor: 'black' }}
         >
           <source src={video.videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
         </video>
       ) : (
-        // Before intersection: show only poster image, no video element at all
-        <img
-          src={video.thumbnail}
-          alt={video.title}
-          className={`w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-md`}
-          style={{ backgroundColor: 'black' }}
-        />
+        <img src={video.thumbnail} alt={video.title} className={`w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-xl`} style={{ backgroundColor: 'black' }} />
       )}
 
-      {/* Buffering spinner */}
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10 rounded-xl">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
         </div>
       )}
 
-      {/* Thumbnail overlay + play button */}
       {isNearViewport && showOverlay && (
         <>
-          <img
-            src={video.thumbnail}
-            alt={video.title}
-            className={`absolute inset-0 w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-md pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity`}
-            style={{ zIndex: 2, backgroundColor: 'black' }}
-          />
-          <button
-            className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{ zIndex: 3 }}
-            onClick={handleClickPlay}
-            tabIndex={0}
-            aria-label="Play"
-          >
+          <img src={video.thumbnail} alt={video.title} className={`absolute inset-0 w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-xl pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity`} style={{ zIndex: 2, backgroundColor: 'black' }} />
+          <button className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ zIndex: 3 }} onClick={() => videoRef.current?.play()} tabIndex={0} aria-label="Play">
             <Play className="h-14 w-14 text-white drop-shadow-lg bg-primary/80 backdrop-blur-sm rounded-full p-3 hover:scale-110 transition-transform" />
           </button>
         </>
       )}
 
-      {/* Title on hover */}
-      <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/80 to-transparent text-white pointer-events-none rounded-t-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[20]">
-        <h3 className="font-semibold text-sm mb-1 line-clamp-2 font-heading">
-          {video.title}
-        </h3>
+      <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent text-white pointer-events-none rounded-b-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[20]">
+        <h3 className="font-semibold text-sm font-heading">{video.title}</h3>
       </div>
     </div>
   );
 };
 
-// ---- Main Page ----
 const ContentCreation = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const isMobile = useIsMobile();
 
   const baseUrl = 'https://portfolio-videos.sgp1.digitaloceanspaces.com';
 
-  const MoonFinal = `${baseUrl}/MoonFinal.mp4`;
-  const Wolverine = `${baseUrl}/WolverineFinal.mp4`;
-  const ironman_edit = `${baseUrl}/Ironman-edit.mp4`;
-  const spiderman_edit = `${baseUrl}/Spiderman_edit.mp4`;
-  const salesman = `${baseUrl}/Salesman2.mp4`;
-  const steve = `${baseUrl}/steve.mp4`;
-  const spiderxdoakes = `${baseUrl}/finalspiderxdoakes_optimized.mp4`;
-  const samplebetter = `${baseUrl}/sample%20bettermp4.mp4`;
-  const jonsnow = `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`;
-  const soldierboy = `${baseUrl}/SoldierBoy_bestCC.mp4`;
-  const williambutcher = `${baseUrl}/William_Butcher_Final.mp4`;
-  const spidermanxfunk = `${baseUrl}/SpidermanXFunk_FINALs.mp4`;
-
   const filters = [
-    { id: 'all', label: 'All Content' },
-    // { id: 'reels', label: 'Reels' },
+    { id: 'all', label: 'All' },
     { id: 'shorts', label: 'Shorts' },
     { id: 'edits', label: 'Edits' }
   ];
 
   const videos = [
-    {
-      id: 1,
-      title: "Steve Edit",
-      category: "edits",
-      thumbnail: steve_thumbnail,
-      videoUrl: steve
-    },
-    {
-      id: 9,
-      title: "Jon Snow Edit",
-      category: "edits",
-      thumbnail: jonsnow_thumbnail,
-      videoUrl: jonsnow,
-      thumbnailClassName: "object-[26%_center]"
-    },
-    {
-      id: 11,
-      title: "William Butcher Edit",
-      category: "edits",
-      thumbnail: butcher_thumbnail,
-      videoUrl: williambutcher
-    },
-    {
-      id: 12,
-      title: "Spiderman X Funk Edit",
-      category: "edits",
-      thumbnail: spiderman_comic_thumbnail,
-      videoUrl: spidermanxfunk
-    },
-    {
-      id: 10,
-      title: "Soldier Boy Edit",
-      category: "edits",
-      thumbnail: soldierboy_thumbnail,
-      videoUrl: soldierboy,
-      thumbnailClassName: "object-[center_20%]"
-    },
-    {
-      id: 7,
-      title: "Spider x Doakes Edit",
-      category: "edits",
-      thumbnail: doakes_thumbnail,
-      videoUrl: spiderxdoakes
-    },
-    {
-      id: 8,
-      title: "2 Broke Girls Edit",
-      category: "edits",
-      thumbnail: brokegirls_thumbnail,
-      videoUrl: samplebetter
-    },
-    {
-      id: 5,
-      title: "Spiderman Edit",
-      category: "edits",
-      thumbnail: spiderman_thumbnail,
-      videoUrl: spiderman_edit
-    },
-    {
-      id: 2,
-      title: "How did our Moon Formed",
-      category: "shorts",
-      thumbnail: moon_thumbnail,
-      videoUrl: MoonFinal
-    },
-    {
-      id: 3,
-      title: "Can Wolverine Survive a Black Hole",
-      category: "shorts",
-      thumbnail: wolverine_thumbnail,
-      videoUrl: Wolverine
-    },
-    {
-      id: 4,
-      title: "IronMan Edit ",
-      category: "edits",
-      thumbnail: ironman_thumbnail,
-      videoUrl: ironman_edit
-    },
-    {
-      id: 6,
-      title: "Salesman Edit",
-      category: "edits",
-      thumbnail: salesman_thumbnail,
-      videoUrl: salesman
-    },
+    { id: 1, title: "Steve Edit", category: "edits", thumbnail: steve_thumbnail, videoUrl: `${baseUrl}/steve.mp4` },
+    { id: 9, title: "Jon Snow Edit", category: "edits", thumbnail: jonsnow_thumbnail, videoUrl: `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`, thumbnailClassName: "object-[26%_center]" },
+    { id: 11, title: "William Butcher Edit", category: "edits", thumbnail: butcher_thumbnail, videoUrl: `${baseUrl}/William_Butcher_Final.mp4` },
+    { id: 12, title: "Spiderman X Funk Edit", category: "edits", thumbnail: spiderman_comic_thumbnail, videoUrl: `${baseUrl}/SpidermanXFunk_FINALs.mp4` },
+    { id: 10, title: "Soldier Boy Edit", category: "edits", thumbnail: soldierboy_thumbnail, videoUrl: `${baseUrl}/SoldierBoy_bestCC.mp4`, thumbnailClassName: "object-[center_20%]" },
+    { id: 7, title: "Spider x Doakes Edit", category: "edits", thumbnail: doakes_thumbnail, videoUrl: `${baseUrl}/finalspiderxdoakes_optimized.mp4` },
+    { id: 8, title: "2 Broke Girls Edit", category: "edits", thumbnail: brokegirls_thumbnail, videoUrl: `${baseUrl}/sample%20bettermp4.mp4` },
+    { id: 5, title: "Spiderman Edit", category: "edits", thumbnail: spiderman_thumbnail, videoUrl: `${baseUrl}/Spiderman_edit.mp4` },
+    { id: 2, title: "How did our Moon Form?", category: "shorts", thumbnail: moon_thumbnail, videoUrl: `${baseUrl}/MoonFinal.mp4` },
+    { id: 3, title: "Can Wolverine Survive a Black Hole?", category: "shorts", thumbnail: wolverine_thumbnail, videoUrl: `${baseUrl}/WolverineFinal.mp4` },
+    { id: 4, title: "IronMan Edit", category: "edits", thumbnail: ironman_thumbnail, videoUrl: `${baseUrl}/Ironman-edit.mp4` },
+    { id: 6, title: "Salesman Edit", category: "edits", thumbnail: salesman_thumbnail, videoUrl: `${baseUrl}/Salesman2.mp4` },
   ];
 
-  const filteredVideos = activeFilter === 'all'
-    ? videos
-    : videos.filter(video => video.category === activeFilter);
+  const filteredVideos = activeFilter === 'all' ? videos : videos.filter(v => v.category === activeFilter);
 
   return (
     <div className="min-h-screen relative overflow-hidden pt-20 pb-20">
-      {/* Animated Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[30%] left-[20%] w-[30%] h-[30%] bg-primary/20 rounded-full blur-[100px] animate-float" />
-        <div className="absolute bottom-[30%] right-[20%] w-[30%] h-[30%] bg-secondary/20 rounded-full blur-[100px] animate-float" style={{ animationDelay: '5s' }} />
+      {/* Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-[hsl(263_50%_15%/0.3)] rounded-full blur-[150px]" animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }} />
+        <motion.div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] bg-[hsl(187_50%_15%/0.2)] rounded-full blur-[120px]" animate={{ y: [0, 20, 0] }} transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut', delay: 2 }} />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 relative z-10 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16 animate-fade-in">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-primary tracking-tight">
-            Video Editing & Content Creation
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
-            Showcasing my creative work in video editing, content creation, and visual storytelling
-            across various platforms and formats.
-          </p>
+        <div className="mb-16">
+          <ScrollReveal>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-primary to-transparent" />
+              <span className="text-primary font-mono text-sm uppercase tracking-widest">Creative Work</span>
+            </div>
+          </ScrollReveal>
+          <TextSplit text="Video Edits" as="h1" className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6" delay={0.1} />
+          <ScrollReveal delay={0.3}>
+            <p className="text-xl text-muted-foreground max-w-2xl">
+              Cinematic edits, visual storytelling, and creative content across platforms.
+            </p>
+          </ScrollReveal>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 animate-fade-in px-4">
-          {filters.map((filter) => (
-            <Button
-              key={filter.id}
-              variant={activeFilter === filter.id ? "default" : "outline"}
-              onClick={() => setActiveFilter(filter.id)}
-              className={`transition-all duration-300 rounded-full px-4 sm:px-6 touch-target text-sm sm:text-base ${
-                activeFilter === filter.id
-                  ? 'shadow-glow'
-                  : 'glass border-white/10 hover:bg-white/10'
+        {/* Filters */}
+        <ScrollReveal className="mb-10">
+          <div className="flex gap-2">
+            {filters.map((filter) => (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`relative px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeFilter === filter.id
+                    ? 'text-white'
+                    : 'text-muted-foreground hover:text-white bg-white/[0.03] hover:bg-white/[0.06]'
                 }`}
-            >
-              <Filter className="h-4 w-4 mr-2" />
-              {filter.label}
-            </Button>
-          ))}
-        </div>
-
-        {/* Video Grid - Mobile Optimized */}
-        <div className={`grid gap-3 sm:gap-4 ${
-          isMobile
-            ? 'grid-cols-2 xs:grid-cols-2'
-            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
-          }`}>
-          {filteredVideos.map((video, index) => (
-            <Card
-              key={video.id}
-              className="glass border-white/10 hover:bg-white/5 hover:shadow-glow transition-all duration-300 hover:-translate-y-1 group animate-fade-in-up aspect-[9/16] relative overflow-hidden"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <CardContent className="p-0 relative w-full h-full">
-                {isMobile ? (
-                  <LazyVideo
-                    src={video.videoUrl}
-                    poster={video.thumbnail}
-                    title={video.title}
-                    className="w-full h-full"
-                    posterClassName={video.thumbnailClassName}
-                    aspectRatio="vertical"
-                    onError={(error) => console.error('Video error:', error)}
+              >
+                {activeFilter === filter.id && (
+                  <motion.div
+                    layoutId="contentFilter"
+                    className="absolute inset-0 bg-primary rounded-full -z-10"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
-                ) : (
-                  <LazyDesktopVideo video={video} index={index} />
                 )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
 
-        {/* Call to Action */}
-        <div className="text-center mt-20 animate-fade-in">
-          <h3 className="text-2xl font-bold mb-4 font-heading">Ready to create something amazing?</h3>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Let's collaborate on your next video project or content creation campaign.
+        {/* Grid */}
+        <motion.div
+          layout
+          className={`grid gap-4 ${
+            isMobile ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
+          }`}
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredVideos.map((video, index) => (
+              <motion.div
+                key={video.id}
+                layout
+                variants={filterItem}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.3, delay: index * 0.03 }}
+              >
+                <TiltCard tiltAmount={5}>
+                  <motion.div
+                    className="glass rounded-2xl overflow-hidden group aspect-[9/16] relative border-gradient hover:shadow-glow transition-shadow duration-300"
+                    whileHover={{ y: -6, boxShadow: '0 0 35px hsl(263 70% 58% / 0.12)' }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                  >
+                    {isMobile ? (
+                      <LazyVideo
+                        src={video.videoUrl}
+                        poster={video.thumbnail}
+                        title={video.title}
+                        className="w-full h-full"
+                        posterClassName={video.thumbnailClassName}
+                        aspectRatio="vertical"
+                        onError={(error) => console.error('Video error:', error)}
+                      />
+                    ) : (
+                      <LazyDesktopVideo video={video} index={index} />
+                    )}
+                  </motion.div>
+                </TiltCard>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* CTA */}
+        <ScrollReveal className="mt-20 text-center">
+          <h3 className="text-3xl font-bold font-heading mb-4">Want to collaborate?</h3>
+          <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+            Let's create cinematic content for your next project.
           </p>
-          <Button variant="default" size="lg" className="shadow-glow hover:scale-105 transition-transform rounded-full px-8">
+          <MagneticButton
+            as="a"
+            href="/contact"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-semibold shadow-glow hover:shadow-[0_0_60px_hsl(263_70%_58%/0.5)] transition-all duration-300"
+          >
             Let's Work Together
-          </Button>
-        </div>
+          </MagneticButton>
+        </ScrollReveal>
       </div>
-
-      {/* Debug Panel for Development (only on mobile) */}
-      {isMobile && import.meta.env.DEV && (
-        <MobileDebugPanel />
-      )}
     </div>
   );
 };

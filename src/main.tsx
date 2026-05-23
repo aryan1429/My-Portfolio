@@ -1,24 +1,24 @@
 import { createRoot } from 'react-dom/client'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import App from './App.tsx'
 import './index.css'
 
-// Parallax scroll effect
-const updateParallax = () => {
-  document.body.style.setProperty('--scroll', `${window.scrollY}px`);
-};
-window.addEventListener('scroll', updateParallax, { passive: true });
-updateParallax();
+gsap.registerPlugin(ScrollTrigger);
 
-// Simple error boundary for debugging
-try {
-  const rootElement = document.getElementById("root");
-  if (rootElement) {
-    const root = createRoot(rootElement);
-    root.render(<App />);
-  } else {
-    document.body.innerHTML = '<h1>Error: Root element not found</h1>';
-  }
-} catch (error) {
-  console.error('Error rendering app:', error);
-  document.body.innerHTML = '<h1>Error loading application</h1>';
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  const root = createRoot(rootElement);
+  root.render(<App />);
+
+  // GSAP-based parallax for the body::before background
+  ScrollTrigger.create({
+    trigger: document.body,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => {
+      const scrollY = self.scroll();
+      document.body.style.setProperty('--scroll', `${scrollY}px`);
+    },
+  });
 }
