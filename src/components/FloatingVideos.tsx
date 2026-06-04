@@ -26,9 +26,9 @@ const ALL_VIDEOS = [
 ];
 
 const FLOAT_CONFIGS = [
-  { rotate: -4, floatDuration: 5, floatDelay: 0 },
-  { rotate: 2, floatDuration: 6, floatDelay: 1.5 },
-  { rotate: -3, floatDuration: 4.5, floatDelay: 0.8 },
+  { rotate: -4 },
+  { rotate: 2 },
+  { rotate: -3 },
 ];
 
 const VideoSpinCard = ({
@@ -39,24 +39,39 @@ const VideoSpinCard = ({
   index: number;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const config = FLOAT_CONFIGS[index];
 
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
-  }, []);
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const vid = videoRef.current;
+        if (!vid) return;
+        if (entry.isIntersecting) {
+          if (!vid.src) vid.src = video.url;
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [video.url]);
 
   const front = (
     <div className="w-full h-full rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl bg-black relative">
       <video
         ref={videoRef}
         className="w-full h-full object-cover"
-        src={video.url}
         poster={video.thumbnail}
         muted
         loop
         playsInline
-        autoPlay
-        preload="auto"
+        preload="none"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
       <div className="absolute bottom-3 left-4 right-4">
@@ -87,6 +102,7 @@ const VideoSpinCard = ({
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0, y: 40, rotate: config.rotate }}
       whileInView={{ opacity: 1, y: 0, rotate: config.rotate }}
       viewport={{ once: true }}
@@ -96,22 +112,14 @@ const VideoSpinCard = ({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-      <motion.div
-        animate={{ y: [0, -12, 0] }}
-        transition={{
-          repeat: Infinity,
-          duration: config.floatDuration,
-          ease: 'easeInOut',
-          delay: config.floatDelay,
-        }}
-      >
+      <div className={`anim-card-float-${index}`}>
         <SpinCard
           front={front}
           back={back}
           className="w-36 h-60 sm:w-44 sm:h-72 md:w-48 md:h-80"
           hintRock={index === 1}
         />
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

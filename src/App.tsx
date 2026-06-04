@@ -4,17 +4,19 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { lazy, Suspense } from "react";
 import Navigation from "./components/Navigation";
 import BottomNavigation from "./components/BottomNavigation";
 import SpotlightCursor from "./components/SpotlightCursor";
 import Particles from "./components/Particles";
 import AnimatedPage from "./components/AnimatedPage";
 import Index from "./pages/Index";
-import TechProjects from "./pages/TechProjects";
-import ContentCreation from "./pages/ContentCreation";
-import Contact from "./pages/Contact";
-import AIChat from "./pages/AIChat";
-import NotFound from "./pages/NotFound";
+
+const TechProjects = lazy(() => import("./pages/TechProjects"));
+const ContentCreation = lazy(() => import("./pages/ContentCreation"));
+const Contact = lazy(() => import("./pages/Contact"));
+const AIChat = lazy(() => import("./pages/AIChat"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -25,11 +27,11 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<AnimatedPage><Index /></AnimatedPage>} />
-        <Route path="/tech-projects" element={<AnimatedPage><TechProjects /></AnimatedPage>} />
-        <Route path="/content-creation" element={<AnimatedPage><ContentCreation /></AnimatedPage>} />
-        <Route path="/ai-chat" element={<AnimatedPage><AIChat /></AnimatedPage>} />
-        <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
-        <Route path="*" element={<AnimatedPage><NotFound /></AnimatedPage>} />
+        <Route path="/tech-projects" element={<AnimatedPage><Suspense><TechProjects /></Suspense></AnimatedPage>} />
+        <Route path="/content-creation" element={<AnimatedPage><Suspense><ContentCreation /></Suspense></AnimatedPage>} />
+        <Route path="/ai-chat" element={<AnimatedPage><Suspense><AIChat /></Suspense></AnimatedPage>} />
+        <Route path="/contact" element={<AnimatedPage><Suspense><Contact /></Suspense></AnimatedPage>} />
+        <Route path="*" element={<AnimatedPage><Suspense><NotFound /></Suspense></AnimatedPage>} />
       </Routes>
     </AnimatePresence>
   );

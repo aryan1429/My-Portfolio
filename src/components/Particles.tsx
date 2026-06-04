@@ -10,8 +10,11 @@ const Particles = ({ count = 50, className = '' }: { count?: number; className?:
     if (!ctx) return;
 
     let animId: number;
+    let lastFrame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // cap at 30fps
     const dpr = window.devicePixelRatio || 1;
-    const connectionDistSq = 120 * 120;
+    const connectionDist = 120;
+    const connectionDistSq = connectionDist * connectionDist;
 
     const resize = () => {
       canvas.width = window.innerWidth * dpr;
@@ -32,11 +35,18 @@ const Particles = ({ count = 50, className = '' }: { count?: number; className?:
       opacity: Math.random() * 0.5 + 0.1,
     }));
 
-    const draw = () => {
+    const draw = (now: number) => {
+      animId = requestAnimationFrame(draw);
+
+      if (now - lastFrame < FRAME_INTERVAL) return;
+      lastFrame = now;
+
       const w = window.innerWidth;
       const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
 
+      // batch particles by similar opacity to reduce fillStyle changes
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.3)';
       for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
@@ -45,32 +55,31 @@ const Particles = ({ count = 50, className = '' }: { count?: number; className?:
         if (p.y < 0) p.y = h;
         if (p.y > h) p.y = 0;
 
+        ctx.globalAlpha = p.opacity;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(139, 92, 246, ${p.opacity})`;
         ctx.fill();
       }
 
+      // draw connection lines in a single batch with one style
+      ctx.globalAlpha = 0.06;
+      ctx.strokeStyle = 'rgba(139, 92, 246, 1)';
       ctx.lineWidth = 0.5;
+      ctx.beginPath();
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const distSq = dx * dx + dy * dy;
-          if (distSq < connectionDistSq) {
-            const alpha = 0.08 * (1 - Math.sqrt(distSq) / 120);
-            ctx.beginPath();
+          if (dx * dx + dy * dy < connectionDistSq) {
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${alpha})`;
-            ctx.stroke();
           }
         }
       }
-
-      animId = requestAnimationFrame(draw);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
     };
-    draw();
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);

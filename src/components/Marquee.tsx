@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 interface MarqueeProps {
   items: string[];
   speed?: number;
@@ -14,20 +12,14 @@ const Marquee = ({ items, speed = 30, className = '', separator = '•', reverse
 
   return (
     <div className={`overflow-hidden whitespace-nowrap ${className}`}>
-      <motion.div
+      <div
         className="inline-block"
-        animate={{ x: reverse ? ['0%', '-50%'] : ['-50%', '0%'] }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: 'loop',
-            duration: speed,
-            ease: 'linear',
-          },
+        style={{
+          animation: `marquee-scroll ${speed}s linear infinite${reverse ? ' reverse' : ''}`,
         }}
       >
         <span className="inline-block">{doubled}</span>
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -107,18 +107,10 @@ const Index = () => {
     <div className="min-h-screen">
       {/* ======= HERO ======= */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pt-20">
-        {/* Gradient orbs */}
+        {/* Gradient orbs — CSS-driven for compositor-thread performance */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            className="absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full bg-[hsl(263_70%_58%/0.12)] blur-[80px] will-change-transform"
-            animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
-            transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full bg-[hsl(187_80%_48%/0.08)] blur-[60px] will-change-transform"
-            animate={{ y: [0, 25, 0], x: [0, -20, 0] }}
-            transition={{ repeat: Infinity, duration: 10, ease: 'easeInOut', delay: 2 }}
-          />
+          <div className="absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full bg-[hsl(263_70%_58%/0.12)] blur-[80px] anim-hero-orb-1" />
+          <div className="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full bg-[hsl(187_80%_48%/0.08)] blur-[60px] anim-hero-orb-2" />
         </div>
 
         <motion.div
@@ -135,9 +127,7 @@ const Index = () => {
             >
               <motion.div variants={heroItem} className="mb-4">
                 <motion.span
-                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium"
-                  animate={{ boxShadow: ['0 0 0px hsl(263 70% 58% / 0)', '0 0 20px hsl(263 70% 58% / 0.15)', '0 0 0px hsl(263 70% 58% / 0)'] }}
-                  transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                  className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium anim-badge-glow"
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   Available for work
@@ -226,10 +216,10 @@ const Index = () => {
 
           {/* Scroll indicator */}
           <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 anim-scroll-bounce"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, 12, 0] }}
-            transition={{ opacity: { delay: 2 }, y: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } }}
+            animate={{ opacity: 1 }}
+            transition={{ opacity: { delay: 2 } }}
           >
             <ChevronDown
               className="h-8 w-8 text-primary/60 cursor-pointer hover:text-primary transition-colors"
@@ -418,10 +408,8 @@ const Index = () => {
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading mb-6">
                 Let's create something <span className="text-gradient">amazing</span> together.
               </h2>
-              <motion.div
-                className="absolute -inset-20 bg-[hsl(263_70%_58%/0.06)] rounded-full blur-[60px] -z-10"
-                animate={{ scale: [1, 1.1, 1], opacity: [0.4, 0.7, 0.4] }}
-                transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
+              <div
+                className="absolute -inset-20 bg-[hsl(263_70%_58%/0.06)] rounded-full blur-[60px] -z-10 anim-cta-pulse"
               />
               <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
                 Whether you need a developer, a video editor, or a creative partner —

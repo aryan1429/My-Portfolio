@@ -23,6 +23,11 @@ const TiltCard = ({ children, className = '', tiltAmount = 8, glare = true }: Ti
   });
   const glareX = useTransform(x, [0, 1], [0, 100]);
   const glareY = useTransform(y, [0, 1], [0, 100]);
+  const glareBackground = useTransform(
+    [glareX, glareY],
+    ([gx, gy]: number[]) =>
+      `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
+  );
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -57,13 +62,7 @@ const TiltCard = ({ children, className = '', tiltAmount = 8, glare = true }: Ti
       {glare && (
         <motion.div
           className="pointer-events-none absolute inset-0 rounded-[inherit] z-10"
-          style={{
-            background: useTransform(
-              [glareX, glareY],
-              ([gx, gy]) =>
-                `radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
-            ),
-          }}
+          style={{ background: glareBackground }}
         />
       )}
     </motion.div>
