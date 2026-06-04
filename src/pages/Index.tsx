@@ -103,7 +103,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen">
       {/* ======= HERO ======= */}
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pt-20">
         {/* Gradient orbs */}
