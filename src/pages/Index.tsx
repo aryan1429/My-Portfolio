@@ -12,6 +12,7 @@ import Marquee from '@/components/Marquee';
 import FloatingVideos from '@/components/FloatingVideos';
 import { staggerContainer, fadeInUp, heroStagger, heroItem, slideInLeft, slideInRight } from '@/lib/animations';
 import profileHero from '@/assets/new-profile.jpeg';
+import profileBack from '@/assets/cool.jpeg';
 import aeLogo from '/media/projects/aelogo.png';
 import davinciLogo from '/media/projects/davinciresolve-removebg-preview.png';
 import ytLogo from '/media/projects/yt-logo.png';
@@ -208,18 +209,15 @@ const Index = () => {
                   </div>
                 }
                 back={
-                  <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-hero bg-gradient-to-br from-[hsl(263_70%_12%)] via-[hsl(250_25%_6%)] to-[hsl(187_50%_8%)] flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-gradient font-heading">A</span>
-                      </div>
-                      <p className="text-2xl font-bold font-heading text-gradient mb-2">Aryan Aligeti</p>
-                      <p className="text-sm text-muted-foreground mb-4">Developer & Creator</p>
-                      <div className="flex flex-wrap gap-2 justify-center">
-                        <span className="px-2.5 py-1 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">Full Stack</span>
-                        <span className="px-2.5 py-1 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">Video Editor</span>
-                      </div>
-                    </div>
+                  <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-hero border-gradient">
+                    <img
+                      src={profileBack}
+                      alt="Aryan Aligeti"
+                      className="w-full h-full object-cover"
+                      loading="eager"
+                      draggable={false}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   </div>
                 }
               />
