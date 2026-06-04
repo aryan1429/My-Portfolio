@@ -281,8 +281,8 @@ const AIChat = () => {
     <div className="min-h-screen relative overflow-hidden pt-20">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[10%] right-[30%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-[10%] left-[20%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: '3s' }} />
+        <div className="absolute top-[10%] right-[30%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[60px] animate-float" />
+        <div className="absolute bottom-[10%] left-[20%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[60px] animate-float" style={{ animationDelay: '3s' }} />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 max-w-4xl relative z-10">

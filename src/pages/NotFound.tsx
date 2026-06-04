@@ -15,8 +15,8 @@ const NotFound = () => {
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-float" />
-        <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: '3s' }} />
+        <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[60px] animate-float" />
+        <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[60px] animate-float" style={{ animationDelay: '3s' }} />
       </div>
 
       <div className="text-center relative z-10 p-8 glass rounded-2xl border-white/10 max-w-lg w-full mx-4 animate-fade-in-up">

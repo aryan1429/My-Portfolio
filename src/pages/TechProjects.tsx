@@ -117,12 +117,12 @@ const TechProjects = () => {
       {/* Background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-[10%] right-[15%] w-[500px] h-[500px] bg-[hsl(263_50%_15%/0.25)] rounded-full blur-[150px]"
+          className="absolute top-[10%] right-[15%] w-[500px] h-[500px] bg-[hsl(263_50%_15%/0.25)] rounded-full blur-[80px] will-change-transform"
           animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
           transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-[20%] left-[5%] w-[400px] h-[400px] bg-[hsl(187_50%_12%/0.2)] rounded-full blur-[130px]"
+          className="absolute bottom-[20%] left-[5%] w-[400px] h-[400px] bg-[hsl(187_50%_12%/0.2)] rounded-full blur-[60px] will-change-transform"
           animate={{ y: [0, 25, 0], x: [0, -20, 0] }}
           transition={{ repeat: Infinity, duration: 11, ease: 'easeInOut', delay: 3 }}
         />

@@ -43,7 +43,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <SpotlightCursor />
-          <Particles count={40} />
+          <Particles count={25} />
           <Navigation />
           <div className="pb-20 md:pb-0" style={{ paddingBottom: 'max(calc(4rem + env(safe-area-inset-bottom)), 4rem)' }}>
             <AnimatedRoutes />

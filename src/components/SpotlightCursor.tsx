@@ -1,19 +1,30 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useCallback } from 'react';
 
 const SpotlightCursor = () => {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [visible, setVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const spotRef = useRef<HTMLDivElement>(null);
+  const visible = useRef(false);
+
+  const updateVisibility = useCallback((show: boolean) => {
+    if (visible.current === show) return;
+    visible.current = show;
+    if (containerRef.current) {
+      containerRef.current.style.opacity = show ? '1' : '0';
+    }
+  }, []);
 
   useEffect(() => {
-    const move = (e: MouseEvent) => {
-      setPos({ x: e.clientX, y: e.clientY });
-      if (!visible) setVisible(true);
-    };
-    const leave = () => setVisible(false);
-    const enter = () => setVisible(true);
+    const spot = spotRef.current;
+    if (!spot) return;
 
-    window.addEventListener('mousemove', move);
+    const move = (e: MouseEvent) => {
+      spot.style.transform = `translate(${e.clientX - 300}px, ${e.clientY - 300}px)`;
+      updateVisibility(true);
+    };
+    const leave = () => updateVisibility(false);
+    const enter = () => updateVisibility(true);
+
+    window.addEventListener('mousemove', move, { passive: true });
     document.addEventListener('mouseleave', leave);
     document.addEventListener('mouseenter', enter);
     return () => {
@@ -21,23 +32,22 @@ const SpotlightCursor = () => {
       document.removeEventListener('mouseleave', leave);
       document.removeEventListener('mouseenter', enter);
     };
-  }, [visible]);
+  }, [updateVisibility]);
 
   return (
-    <motion.div
+    <div
+      ref={containerRef}
       className="pointer-events-none fixed inset-0 z-30 hidden md:block"
-      animate={{ opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.3 }}
+      style={{ opacity: 0, transition: 'opacity 0.3s' }}
     >
       <div
-        className="absolute w-[600px] h-[600px] rounded-full"
+        ref={spotRef}
+        className="absolute w-[600px] h-[600px] rounded-full will-change-transform"
         style={{
-          left: pos.x - 300,
-          top: pos.y - 300,
           background: 'radial-gradient(circle, rgba(139,92,246,0.07) 0%, rgba(6,182,212,0.03) 40%, transparent 70%)',
         }}
       />
-    </motion.div>
+    </div>
   );
 };
 

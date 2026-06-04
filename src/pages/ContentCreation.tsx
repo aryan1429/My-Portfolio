@@ -146,8 +146,8 @@ const ContentCreation = () => {
     <div className="min-h-screen relative overflow-hidden pt-20 pb-20">
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-[hsl(263_50%_15%/0.3)] rounded-full blur-[150px]" animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }} />
-        <motion.div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] bg-[hsl(187_50%_15%/0.2)] rounded-full blur-[120px]" animate={{ y: [0, 20, 0] }} transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut', delay: 2 }} />
+        <motion.div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-[hsl(263_50%_15%/0.3)] rounded-full blur-[80px] will-change-transform" animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut' }} />
+        <motion.div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] bg-[hsl(187_50%_15%/0.2)] rounded-full blur-[60px] will-change-transform" animate={{ y: [0, 20, 0] }} transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut', delay: 2 }} />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 relative z-10 max-w-7xl">
