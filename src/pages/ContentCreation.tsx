@@ -76,11 +76,11 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video }) => {
           controls
           poster={video.thumbnail || undefined}
           className="w-full h-full object-contain rounded-xl"
-          onPlay={() => { setPlaying(true); setEnded(false); setLoading(true); }}
+          onPlay={() => { setPlaying(true); setEnded(false); setLoading(false); }}
           onPause={() => { setPlaying(false); setLoading(false); }}
           onEnded={() => { setPlaying(false); setEnded(true); setLoading(false); }}
           onCanPlay={clearWaiting}
-          onError={() => { setPlaying(false); setLoading(false); }}
+          onError={(e) => { console.error('Desktop video error:', e, videoRef.current?.error); setPlaying(false); setLoading(false); }}
           onWaiting={handleWaiting}
           onPlaying={clearWaiting}
           preload="none" playsInline muted
@@ -101,7 +101,21 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video }) => {
       {isNearViewport && showOverlay && (
         <>
           <img src={video.thumbnail} alt={video.title} className={`absolute inset-0 w-full h-full object-cover ${video.thumbnailClassName || 'object-center'} rounded-xl pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity`} style={{ zIndex: 2, backgroundColor: 'black' }} />
-          <button className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ zIndex: 3 }} onClick={() => videoRef.current?.play()} tabIndex={0} aria-label="Play">
+          <button
+            className="absolute inset-0 flex items-center justify-center w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ zIndex: 3 }}
+            onClick={async () => {
+              try {
+                setLoading(true);
+                await videoRef.current?.play();
+              } catch (err) {
+                console.error('Play failed (desktop):', err, videoRef.current?.error);
+                setLoading(false);
+              }
+            }}
+            tabIndex={0}
+            aria-label="Play"
+          >
             <Play className="h-14 w-14 text-white drop-shadow-lg bg-primary/80 backdrop-blur-sm rounded-full p-3 hover:scale-110 transition-transform" />
           </button>
         </>
