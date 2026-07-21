@@ -12,7 +12,7 @@ import soldierboy_thumbnail from '@/assets/Soldierboy.png';
 import butcher_thumbnail from '@/assets/butcher.jpg';
 import spiderman_comic_thumbnail from '@/assets/Spiderman_comic.jpg';
 
-const BASE_URL = 'https://portfolio-videos.sgp1.digitaloceanspaces.com';
+const BASE_URL = 'https://portfolio-videos.sgp1.cdn.digitaloceanspaces.com';
 
 const ALL_VIDEOS = [
   { title: 'Steve Edit', thumbnail: steve_thumbnail, url: `${BASE_URL}/steve.mp4` },
