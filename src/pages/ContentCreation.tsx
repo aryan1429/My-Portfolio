@@ -107,6 +107,18 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video }) => {
             onClick={async () => {
               try {
                 setLoading(true);
+                // Diagnostic: log source URL and video element state
+                try {
+                  console.log('Attempting HEAD fetch for video URL:', video.videoUrl);
+                  const head = await fetch(video.videoUrl, { method: 'HEAD' });
+                  console.log('HEAD response:', head.status, head.type, head.ok);
+                } catch (fetchErr) {
+                  console.warn('HEAD fetch failed (could be CORS):', fetchErr);
+                }
+
+                const srcEl = videoRef.current?.querySelector('source') as HTMLSourceElement | null;
+                console.log('source.src=', srcEl?.src, 'video.currentSrc=', videoRef.current?.currentSrc, 'networkState=', videoRef.current?.networkState, 'readyState=', videoRef.current?.readyState);
+
                 await videoRef.current?.play();
               } catch (err) {
                 console.error('Play failed (desktop):', err, videoRef.current?.error);
