@@ -21,6 +21,7 @@ import jonsnow_thumbnail from '@/assets/JonSnow.png';
 import soldierboy_thumbnail from '@/assets/Soldierboy.png';
 import butcher_thumbnail from '@/assets/butcher.jpg';
 import spiderman_comic_thumbnail from '@/assets/Spiderman_comic.jpg';
+import cartoons_thumbnail from '@/assets/cartoons.png';
 
 interface LazyDesktopVideoProps {
   video: { id: number; title: string; category: string; thumbnail: string; videoUrl: string; thumbnailClassName?: string; };
@@ -126,6 +127,7 @@ const ContentCreation = () => {
   ];
 
   const videos = [
+    { id: 0, title: "Cartoons Finale", category: "edits", thumbnail: cartoons_thumbnail, videoUrl: `${baseUrl}/cartoons_finale.mp4` },
     { id: 1, title: "Steve Edit", category: "edits", thumbnail: steve_thumbnail, videoUrl: `${baseUrl}/steve.mp4` },
     { id: 9, title: "Jon Snow Edit", category: "edits", thumbnail: jonsnow_thumbnail, videoUrl: `${baseUrl}/Jon%20Snow%20-%20Funk%20Criminal.mp4`, thumbnailClassName: "object-[26%_center]" },
     { id: 11, title: "William Butcher Edit", category: "edits", thumbnail: butcher_thumbnail, videoUrl: `${baseUrl}/William_Butcher_Final.mp4` },
