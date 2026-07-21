@@ -32,6 +32,7 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const waitingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fallbackAttemptedRef = useRef(false);
 
   const [isNearViewport, setIsNearViewport] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -80,7 +81,38 @@ const LazyDesktopVideo: React.FC<LazyDesktopVideoProps> = ({ video }) => {
           onPause={() => { setPlaying(false); setLoading(false); }}
           onEnded={() => { setPlaying(false); setEnded(true); setLoading(false); }}
           onCanPlay={clearWaiting}
-          onError={(e) => { console.error('Desktop video error:', e, videoRef.current?.error); setPlaying(false); setLoading(false); }}
+          onError={async (e) => {
+            console.error('Desktop video error:', e, videoRef.current?.error);
+            setPlaying(false);
+            // Try a fetch->blob fallback once (helps when servers set odd headers)
+            if (!fallbackAttemptedRef.current) {
+              fallbackAttemptedRef.current = true;
+              try {
+                setLoading(true);
+                console.log('Attempting fetch fallback for:', video.videoUrl);
+                const resp = await fetch(video.videoUrl, { method: 'GET', mode: 'cors' });
+                console.log('Fallback fetch status:', resp.status, resp.type, resp.ok);
+                if (!resp.ok) {
+                  console.warn('Fallback fetch returned non-ok status');
+                  setLoading(false);
+                  return;
+                }
+                const blob = await resp.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const srcEl = videoRef.current?.querySelector('source') as HTMLSourceElement | null;
+                if (srcEl) srcEl.src = blobUrl;
+                else if (videoRef.current) videoRef.current.src = blobUrl;
+                await videoRef.current?.load();
+                await videoRef.current?.play();
+              } catch (fetchErr) {
+                console.warn('Fetch fallback failed:', fetchErr);
+              } finally {
+                setLoading(false);
+              }
+            } else {
+              setLoading(false);
+            }
+          }}
           onWaiting={handleWaiting}
           onPlaying={clearWaiting}
           preload="none" playsInline muted
